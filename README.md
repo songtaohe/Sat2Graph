@@ -9,4 +9,4 @@ In this paper, we propose a new method, Sat2Graph, which combines the advantages
 
 ![Overview](figures/Sat2Graph2.png)
 
-# We are still cleaning up the source code. The code in this repo is incomplete. 
+# Important! We are still cleaning up the source code. The code in this repo is incomplete. 
