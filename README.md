@@ -1,6 +1,8 @@
 # Sat2Graph 
 Sat2Graph: Road Graph Extraction through Graph-Tensor Encoding
 
+Paper: [arxiv.org/pdf/2007.09547.pdf](https://arxiv.org/pdf/2007.09547.pdf)
+
 ### Abstract
 
 Inferring road graphs from satellite imagery is a challenging computer vision task. Prior solutions fall into two categories: (1) pixel-wise segmentation-based approaches, which predict whether each pixel is on a road, and (2) graph-based approaches, which predict the road graph iteratively. We find that these two approaches have complementary strengths while suffering from their own inherent limitations. 

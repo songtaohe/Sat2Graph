@@ -21,8 +21,8 @@ import tf_common_layer as common
 MAX_DEGREE=6
 
 
-class HolisticGraphGenerationModel():
-	def __init__(self, sess, image_size=352, image_ch = 3, model = "HGG44", downsample_level = 1, batchsize = 8, resnet_step=8, train_seg=False, channel=12, mode = "train", model_name = "None", joint_with_seg=True):
+class Sat2GraphModel():
+	def __init__(self, sess, image_size=352, image_ch = 3, downsample_level = 1, batchsize = 8, resnet_step=8, train_seg=False, channel=12, mode = "train", model_name = "None", joint_with_seg=True):
 		self.sess = sess 
 		self.train_seg = train_seg
 		self.image_size = image_size
