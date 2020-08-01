@@ -12,14 +12,14 @@ In this paper, we propose a new method, Sat2Graph, which combines the advantages
 ![Overview](figures/Sat2Graph2.png)
 
 # Usage
-### Download the Dataset
+## Download the Dataset
 
 ```bash
 ./download.sh
 ```
 This script will download the full 20-city dataset we used in the paper as well as the pre-trained model. It will also download the dataset partition (which tiles are used for training/validating/testing) we used in the paper for SpaceNet Road dataset. 
 
-### Generate outputs from the pre-trained model
+## Generate outputs from the pre-trained model
 **20-city dataset**
 ```bash
 cd model
@@ -27,15 +27,17 @@ python train.py -model_save tmp -instance_id test -image_size 352 -model_recover
 ```
 This command will generate the output graphs for the testing dataset. You can check out the graphs and visualizations in the 'output' folder. 
 
+
 **SpaceNet TODO**
 
-### Training 
+## Training Sat2Graph Model
 **20-city dataset**
 
-To train the model, use the following command. 
+To train the model on the 20-city dataset, use the following command. 
 ```
 python train.py -model_save tmp -instance_id test -image_size 352
 ```   
+
 
 **SpaceNet TODO**
 
