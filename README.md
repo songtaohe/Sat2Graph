@@ -33,7 +33,7 @@ This command will generate the output graphs for the testing dataset. You can ch
 
 To train the model, use the following command. 
 ```
-time python train.py -model_save tmp -instance_id test -image_size 352
+python train.py -model_save tmp -instance_id test -image_size 352
 ```   
 
 **SpaceNet TODO**
