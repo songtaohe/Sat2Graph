@@ -28,7 +28,10 @@ python train.py -model_save tmp -instance_id test -image_size 352 -model_recover
 This command will generate the output graphs for the testing dataset. You can check out the graphs and visualizations in the 'output' folder. 
 
 
-**SpaceNet TODO**
+**SpaceNet dataset**
+
+TODO
+
 
 ## Training Sat2Graph Model
 **20-city dataset**
@@ -39,7 +42,9 @@ python train.py -model_save tmp -instance_id test -image_size 352
 ```   
 
 
-**SpaceNet TODO**
+**SpaceNet dataset**
+
+TODO
 
 
 
