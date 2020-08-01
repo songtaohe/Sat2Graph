@@ -74,8 +74,8 @@ def create_conv_layer(name, input_tensor, in_channels, out_channels, is_training
 		size = tf.shape(input_tensor)[1]
 
 
-		print(input_tensor)
-		print(tf.transpose(weights,perm=[0,1,3,2]))
+		#print(input_tensor)
+		#print(tf.transpose(weights,perm=[0,1,3,2]))
 
 
 
@@ -92,9 +92,16 @@ def create_conv_layer(name, input_tensor, in_channels, out_channels, is_training
 		s = s + add 
 
 	if batchnorm:
-		print("use batchnorm ", name)
+		#print("use batchnorm ", name)
 		#n = batch_norm(s, decay = 0.99, center=True, scale=True, updates_collections=None, is_training=is_training, epsilon=0.01)
-		n = batch_norm(s, decay = 0.99, center=True, scale=True, updates_collections=None, is_training=is_training, scope = name, fused = False)
+		# fused = False
+		#n = batch_norm(s, decay = 0.99, center=True, scale=True, updates_collections=None, is_training=is_training, scope = name, fused = False)
+		n = batch_norm(s, decay = 0.99, center=True, scale=True, updates_collections=None, is_training=is_training, fused = False)
+
+		# remove 'scope = name' to support old checkpoints. 
+
+
+
 		#n = tf.layers.batch_normalization(s, training=is_training, renorm=True)
 	else:
 		n = s 

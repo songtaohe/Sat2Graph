@@ -11,4 +11,31 @@ In this paper, we propose a new method, Sat2Graph, which combines the advantages
 
 ![Overview](figures/Sat2Graph2.png)
 
-# Important! We are still cleaning up the source code. The code in this repo is incomplete. 
+# Download the Dataset
+
+```bash
+./download.sh
+```
+This script will download the full 20-city dataset we used in the paper as well as the pre-trained model. It will also download the dataset partition (which tiles are used for training/validating/testing) we used in the paper for SpaceNet Road dataset. 
+
+# Generate outputs from the pre-trained model
+**20-city dataset**
+```bash
+cd model
+python train.py -model_save tmp -instance_id test -image_size 352 -model_recover ../data/20citiesModel/model -mode test
+```
+This command will generate the output graphs for the testing dataset. You can check out the graphs and visualizations in the 'output' folder. 
+
+**SpaceNet TODO**
+
+# Training 
+**20-city dataset**
+To train the model, use the following command. 
+```
+time python train.py -model_save tmp -instance_id test -image_size 352
+```   
+
+**SpaceNet TODO**
+
+
+

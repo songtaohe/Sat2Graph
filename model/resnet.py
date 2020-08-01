@@ -131,7 +131,7 @@ def relu(x):
 
 def batch_norm(x, is_training=True, scope='batch_norm'):
     #return x 
-    print("resnet batch norm hit!")
+    #print("resnet batch norm hit!")
     return tf_contrib.layers.batch_norm(x,
                                        decay=0.99, epsilon=1e-05,
                                        center=True, scale=True, updates_collections=None,

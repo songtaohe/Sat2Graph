@@ -22,15 +22,15 @@ MAX_DEGREE=6
 
 
 class Sat2GraphModel():
-	def __init__(self, sess, image_size=352, image_ch = 3, downsample_level = 1, batchsize = 8, resnet_step=8, train_seg=False, channel=12, mode = "train", model_name = "None", joint_with_seg=True):
+	def __init__(self, sess, image_size=352, image_ch = 3, downsample_level = 1, batchsize = 8, resnet_step=8, channel=12, mode = "train", joint_with_seg=True):
 		self.sess = sess 
-		self.train_seg = train_seg
+		self.train_seg = False
 		self.image_size = image_size
 		self.image_ch = image_ch 
 		self.channel = channel
 		self.joint_with_seg = joint_with_seg
 		self.mode = mode 
-		self.model_name = model_name
+		#self.model_name = model_name
 		self.batchsize = batchsize
 		self.resnet_step = resnet_step
 
@@ -429,7 +429,7 @@ class Sat2GraphModel():
 
 	def TrainSegmentation(self, inputdata, target_prob, target_vector, input_seg_gt, lr):
 		feed_dict = {
-			self.input_seg : inputdata,
+			self.input_sat : inputdata,
 			self.target_prob : target_prob,
 			self.target_vector : target_vector,
 			self.input_seg_gt : input_seg_gt, 
@@ -443,7 +443,7 @@ class Sat2GraphModel():
 
 	def Evaluate(self, inputdata, target_prob, target_vector, input_seg_gt):
 		feed_dict = {
-			self.input_seg : inputdata,
+			self.input_sat : inputdata,
 			self.target_prob : target_prob,
 			self.target_vector : target_vector,
 			self.input_seg_gt : input_seg_gt, 
@@ -456,7 +456,7 @@ class Sat2GraphModel():
 
 	def EvaluateSegmentation(self, inputdata, target_prob, target_vector, input_seg_gt):
 		feed_dict = {
-			self.input_seg : inputdata,
+			self.input_sat : inputdata,
 			self.target_prob : target_prob,
 			self.target_vector : target_vector,
 			self.input_seg_gt : input_seg_gt, 
