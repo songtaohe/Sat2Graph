@@ -8,6 +8,7 @@ import scipy.ndimage
 import math 
 import cv2
 import numpy as np 
+import tensorflow as tf 
 
 from model import Sat2GraphModel
 from decoder import DecodeAndVis 
