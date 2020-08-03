@@ -766,6 +766,10 @@ def DecodeAndVis(imagegraph, filename, imagesize=256, max_degree=6, thr=0.5, edg
 		spurs_thr = 25
 		isolated_thr = 100
 
+	if imagesize < 400:
+		spurs_thr = 25
+		isolated_thr = 100
+
 	if use_graph_refine:
 		graph = graph_refine(neighbors, isolated_thr=isolated_thr, spurs_thr=spurs_thr)
 		
@@ -776,10 +780,18 @@ def DecodeAndVis(imagegraph, filename, imagesize=256, max_degree=6, thr=0.5, edg
 			if spacenet :
 				isolated_thr = 0
 				spurs_thr = 0
+			
+			if imagesize < 400:
+				spurs_thr = 25
+				isolated_thr = 100
 
 			graph, rc = graph_refine_deloop(graph_refine(graph, isolated_thr=isolated_thr, spurs_thr=spurs_thr))
 
 		if spacenet :
+			spurs_thr = 25
+			isolated_thr = 100
+		
+		if imagesize < 400:
 			spurs_thr = 25
 			isolated_thr = 100
 
