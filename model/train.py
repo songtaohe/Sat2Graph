@@ -144,8 +144,8 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 
 
 		print("training set", len(indrange_train))
-		print("testing set", len(indrange_train))
-		print("validation set", len(indrange_train))
+		print("testing set", len(indrange_test))
+		print("validation set", len(indrange_validation))
 		
 
 		if args.mode == "train":
@@ -292,7 +292,7 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 
 	validation_data = []
 
-	test_size = 32
+	test_size = 96
 
 	for j in range(test_size/batch_size):
 		input_sat, gt_prob, gt_vector, gt_seg= dataloader_test.getBatch(batch_size)

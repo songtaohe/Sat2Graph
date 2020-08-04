@@ -17,7 +17,7 @@ from decoder import DecodeAndVis
 gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.45)
 sess = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options))
 
-model = Sat2GraphModel(sess, image_size=352, resnet_step = 8, batchsize = 1, channel = 12, mode = "test")
+model = Sat2GraphModel(sess, image_size=352, resnet_step = 12, batchsize = 1, channel = 18, mode = "test")
 model.restoreModel("../data/20citiesModel/model")
 
 gt_prob_placeholder = np.zeros((1,352,352,14))
