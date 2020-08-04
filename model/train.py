@@ -13,17 +13,10 @@ import json
 import argparse
 
 
-# This file supports training and testing Sat2Graph models on both the 20cities dataset and Spacenet dataset.  
-# 
-# -> Train Sat2Graph model on the 20cities dataset
+
+# -> Train Sat2Graph model on the global dataset (938 2k by 2k tiles)
 # time python train.py -model_save tmp -instance_id test -image_size 352
-# 
-# -> Train Sat2Graph model on the 20cities dataset from the pre-trained model
-# time python train.py -model_save tmp -instance_id test -image_size 352 -model_recover ../data/20citiesModel/model
-#
-# -> Test Sat2Graph model on the 20cities dataset
-# time python train.py -model_save tmp -instance_id test -image_size 352 -model_recover ../data/20citiesModel/model -mode test
-# 
+
 
 parser = argparse.ArgumentParser()
 
@@ -47,7 +40,7 @@ parser.add_argument('-lr_decay', action='store', dest='lr_decay', type=float,
                     help='learning rate decay', required =False, default=0.5)
 
 parser.add_argument('-lr_decay_step', action='store', dest='lr_decay_step', type=int,
-                    help='learning rate decay step', required =False, default=50000)
+                    help='learning rate decay step', required =False, default=150000)
 
 parser.add_argument('-init_step', action='store', dest='init_step', type=int,
                     help='initial step size ', required =False, default=0)
@@ -57,7 +50,7 @@ parser.add_argument('-init_step', action='store', dest='init_step', type=int,
 #                     help='instance_id ', required =False, default="UNET_resnet")
 
 parser.add_argument('-resnet_step', action='store', dest='resnet_step', type=int,
-                    help='instance_id ', required =False, default=8)
+                    help='instance_id ', required =False, default=12)
 
 # parser.add_argument('-train_segmentation', action='store', dest='train_segmentation', type=bool,
 #                     help='train_segmentation', required =False, default=False)
@@ -66,7 +59,7 @@ parser.add_argument('-spacenet', action='store', dest='spacenet', type=str,
                     help='spacenet folder', required =False, default="")
 
 parser.add_argument('-channel', action='store', dest='channel', type=int,
-                    help='channel', required =False, default=12)
+                    help='channel', required =False, default=18)
 
 parser.add_argument('-mode', action='store', dest='mode', type=str,
                     help='mode [train][test][validate]', required =False, default="train")
@@ -83,6 +76,7 @@ run = "run-"+datetime.today().strftime('%Y-%m-%d-%H-%M-%S')+"-"+instance_id
 
 
 osmdataset = "../data/20cities/"
+osmdataset = "/data/songtao/Sat2GraphLib/download/global_dataset/"
 spacenetdataset = "../data/spacenet/"
 
 image_size = args.image_size
@@ -138,9 +132,20 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 			if x % 20 == 8:
 				indrange_test.append(x)
 
-		print("training set", indrange_train)
-		print("testing set", indrange_test)
-		print("validation set", indrange_validation)
+		for x in range(180, 938):
+			if x % 50 < 48 :
+				indrange_train.append(x)
+
+			if x % 50 == 48:
+				indrange_test.append(x)
+
+			if x % 50 == 49:
+				indrange_validation.append(x)
+
+
+		print("training set", len(indrange_train))
+		print("testing set", len(indrange_train))
+		print("validation set", len(indrange_train))
 		
 
 		if args.mode == "train":
@@ -397,8 +402,6 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 		if step > 0 and step % 400 == 0:
 			dataloader_train.preload(num=1024)
 
-
-
 		if step > 0 and step %2000 == 0:
 			
 			print(time() - t_last, t_load, t_train)
@@ -413,5 +416,5 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 			lr = lr * args.lr_decay
 
 		step += 1
-		if step == 300000+2:
+		if step == 600000+2:
 			break 
