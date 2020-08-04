@@ -18,7 +18,7 @@ import argparse
 # time python train.py -model_save tmp -instance_id test -image_size 352
 
 # python train.py -model_save /data/songtao/Sat2GraphLib/globalmodel -instance_id 20200804v1 -image_size 352 
-# python train.py -model_save /data/songtao/Sat2GraphLib/globalmodel -instance_id 20200804v2UNET -image_size 352 -channel 32
+# python train.py -model_save /data/songtao/Sat2GraphLib/globalmodel -instance_id 20200804v2UNET -image_size 352 -channel 32 -model_name unet
 
 parser = argparse.ArgumentParser()
 
