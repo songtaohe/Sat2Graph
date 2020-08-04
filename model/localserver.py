@@ -48,7 +48,6 @@ class S(BaseHTTPRequestHandler):
 		return_str = ""
 
 		try:
-
 			data = json.loads(post_data.decode('utf-8'))
 
 			input_file = data["img_in"]
@@ -70,7 +69,7 @@ class S(BaseHTTPRequestHandler):
 			# graph to json 
 
 			
-			return_str = json.dumps({"success":"true"})
+			return_str = json.dumps({"graph":graph, "success":"true"})
 
 		except:
 			return_str = json.dumps({"success":"false"})
