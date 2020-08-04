@@ -22,7 +22,7 @@ MAX_DEGREE=6
 
 
 class Sat2GraphModel():
-	def __init__(self, sess, image_size=352, image_ch = 3, downsample_level = 1, batchsize = 8, resnet_step=8, channel=12, mode = "train", joint_with_seg=True):
+	def __init__(self, sess, model_name = "DLA", image_size=352, image_ch = 3, downsample_level = 1, batchsize = 8, resnet_step=8, channel=12, mode = "train", joint_with_seg=True):
 		self.sess = sess 
 		self.train_seg = False
 		self.image_size = image_size
@@ -30,7 +30,7 @@ class Sat2GraphModel():
 		self.channel = channel
 		self.joint_with_seg = joint_with_seg
 		self.mode = mode 
-		#self.model_name = model_name
+		self.model_name = model_name
 		self.batchsize = batchsize
 		self.resnet_step = resnet_step
 
@@ -62,8 +62,12 @@ class Sat2GraphModel():
 			self.train_op = tf.train.AdamOptimizer(learning_rate=self.lr).minimize(self.loss)
 
 		else:
+			if self.model_name == "DLA":
+				self.imagegraph_output = self.BuildDeepLayerAggregationNetWithResnet(self.input_sat, input_ch = image_ch, output_ch =2 + MAX_DEGREE * 4 + (2 if self.joint_with_seg==True else 0), ch=channel)
+			else: # UNET 
+				print("use unet")
+				self.imagegraph_output = self.BuildUNET(self.input_sat, input_ch = image_ch, output_ch =2 + MAX_DEGREE * 4 + (2 if self.joint_with_seg==True else 0), ch=channel)
 			
-			self.imagegraph_output = self.BuildDeepLayerAggregationNetWithResnet(self.input_sat, input_ch = image_ch, output_ch =2 + MAX_DEGREE * 4 + (2 if self.joint_with_seg==True else 0), ch=channel)
 
 			x = self.imagegraph_output
 
@@ -284,6 +288,55 @@ class Sat2GraphModel():
 
 		return tf.concat(new_outputs, axis=3)
 
+	def BuildUNET(self, net_input, input_ch = 3, output_ch = 26, ch = 32):
+		## 
+		conv1, _, _ = common.create_conv_layer('cnn_l1', net_input, input_ch, ch*2, kx = 5, ky = 5, stride_x = 1, stride_y = 1, is_training = self.is_training, batchnorm = False)
+		conv2, _, _ = common.create_conv_layer('cnn_l2', conv1, ch*2, ch*2, kx = 5, ky = 5, stride_x = 2, stride_y = 2, is_training = self.is_training, batchnorm = True)
+		# 2s * 2ch
+
+		def reduce_block(x, in_ch, out_ch, name, repeat = 1):
+			for i in range(repeat):
+				x, _, _ = common.create_conv_layer(name+"_%d" % i, x, in_ch, in_ch, kx = 3, ky = 3, stride_x = 1, stride_y = 1, is_training = self.is_training, batchnorm = True)
+			x, _, _ = common.create_conv_layer(name+"_reduce", x, in_ch, out_ch, kx = 3, ky = 3, stride_x = 2, stride_y = 2, is_training = self.is_training, batchnorm = True)
+
+			return x 
+
+
+		def aggregate_block(x1, x2, in_ch1, in_ch2, out_ch, name, batchnorm=True, repeat = 0):
+			x2, _, _ = common.create_conv_layer(name+"_1", x2, in_ch2, in_ch2, kx = 3, ky = 3, stride_x = 2, stride_y = 2, is_training = self.is_training, batchnorm = batchnorm, deconv=True)
+			
+			x = tf.concat([x1,x2], axis=3) # in_ch1 + in_ch2
+
+			x, _, _ = common.create_conv_layer(name+"_2", x, in_ch1 + in_ch2, in_ch1 + in_ch2, kx = 3, ky = 3, stride_x = 1, stride_y = 1, is_training = self.is_training, batchnorm = batchnorm)
+			x, _, _ = common.create_conv_layer(name+"_3", x, in_ch1 + in_ch2, out_ch, kx = 3, ky = 3, stride_x = 1, stride_y = 1, is_training = self.is_training, batchnorm = batchnorm)
+
+			for i in range(repeat):
+				x, _, _ = common.create_conv_layer(name+"_%d" % (4+i), x, out_ch, out_ch, kx = 3, ky = 3, stride_x = 1, stride_y = 1, is_training = self.is_training, batchnorm = batchnorm)
+
+
+			return x 
+
+
+		x_4s = reduce_block(conv2, ch*2, ch*4, "x_4s", repeat = 3)
+		x_8s = reduce_block(x_4s, ch*4, ch*8, "x_8s", repeat = 3)
+		x_16s = reduce_block(x_8s, ch*8, ch*16, "x_16s", repeat = 3)
+		x_32s = reduce_block(x_16s, ch*16, ch*32, "x_32s", repeat = 3)
+
+		
+		a1_16s = aggregate_block(x_16s, x_32s, ch*16, ch*32, ch*32, "a1_16s", repeat=3)		
+		a2_8s = aggregate_block(x_8s, a1_16s, ch*8, ch*32, ch*16, "a2_8s", repeat=3)
+		a3_4s = aggregate_block(x_4s, a2_8s, ch*4, ch*16, ch*8, "a3_4s", repeat=3)
+		a4_2s = aggregate_block(conv2, a3_4s, ch*2, ch*8, ch*8, "a4_2s", repeat=3) # 2s 8ch 
+
+
+		a5_2s, _, _ = common.create_conv_layer('a5_2s', a4_2s, ch*8, ch*4, kx = 3, ky = 3, stride_x = 1, stride_y = 1, is_training = self.is_training, batchnorm = True)
+		
+		a_out = aggregate_block(conv1, a5_2s, ch, ch*4, ch*4, "a_out", batchnorm=False,, repeat=3)
+		
+		a_out, _, _ = common.create_conv_layer('out', a_out, ch*4, output_ch, kx = 3, ky = 3, stride_x = 1, stride_y = 1, is_training = self.is_training, batchnorm = False, activation = "linear")
+		
+
+		return a_out 
 
 
 	def BuildDeepLayerAggregationNetUNET(self, net_input, input_ch = 3, output_ch = 26, ch = 32):

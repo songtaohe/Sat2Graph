@@ -17,6 +17,8 @@ import argparse
 # -> Train Sat2Graph model on the global dataset (938 2k by 2k tiles)
 # time python train.py -model_save tmp -instance_id test -image_size 352
 
+# python train.py -model_save /data/songtao/Sat2GraphLib/globalmodel -instance_id 20200804v1 -image_size 352 
+# python train.py -model_save /data/songtao/Sat2GraphLib/globalmodel -instance_id 20200804v2UNET -image_size 352 -channel 32
 
 parser = argparse.ArgumentParser()
 
@@ -40,14 +42,14 @@ parser.add_argument('-lr_decay', action='store', dest='lr_decay', type=float,
                     help='learning rate decay', required =False, default=0.5)
 
 parser.add_argument('-lr_decay_step', action='store', dest='lr_decay_step', type=int,
-                    help='learning rate decay step', required =False, default=150000)
+                    help='learning rate decay step', required =False, default=100000)
 
 parser.add_argument('-init_step', action='store', dest='init_step', type=int,
                     help='initial step size ', required =False, default=0)
 
 
-# parser.add_argument('-model_name', action='store', dest='model_name', type=str,
-#                     help='instance_id ', required =False, default="UNET_resnet")
+parser.add_argument('-model_name', action='store', dest='model_name', type=str,
+                    help='instance_id ', required =False, default="DLA")
 
 parser.add_argument('-resnet_step', action='store', dest='resnet_step', type=int,
                     help='instance_id ', required =False, default=12)
@@ -100,7 +102,7 @@ Popen("mkdir -p %s" % model_save_folder, shell=True).wait()
 
 gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.95)
 with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
-	model = Sat2GraphModel(sess, image_size=image_size, resnet_step = args.resnet_step, batchsize = batch_size, channel = args.channel, mode = args.mode)
+	model = Sat2GraphModel(sess, image_size=image_size, resnet_step = args.resnet_step, batchsize = batch_size, channel = args.channel, mode = args.mode, model_name = args.model_name)
 	
 	if args.model_recover is not None:
 		print("model recover", args.model_recover)
@@ -399,7 +401,7 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 			sum_loss = 0 
 
 
-		if step > 0 and step % 400 == 0:
+		if step > 0 and step % 200 == 0:
 			dataloader_train.preload(num=1024)
 
 		if step > 0 and step %2000 == 0:
