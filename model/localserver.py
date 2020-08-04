@@ -9,7 +9,7 @@ import math
 import cv2
 import numpy as np 
 import tensorflow as tf 
-
+ 
 from model import Sat2GraphModel
 from decoder import DecodeAndVis 
 
@@ -40,6 +40,11 @@ class S(BaseHTTPRequestHandler):
 		self.wfile.write("GET request for {}".format(self.path).encode('utf-8'))
 
 	def do_POST(self):
+		global model 
+		global gt_prob_placeholder
+		global gt_vector_placeholder
+		global gt_seg_placeholder
+		
 		content_length = int(self.headers['Content-Length']) # <--- Gets the size of data
 		post_data = self.rfile.read(content_length) # <--- Gets the data itself
 		logging.info("POST request,\nPath: %s\nHeaders:\n%s\n\n\n",
@@ -47,33 +52,33 @@ class S(BaseHTTPRequestHandler):
 
 		return_str = ""
 
-		try:
-			data = json.loads(post_data.decode('utf-8'))
+		#try:
+		data = json.loads(post_data.decode('utf-8'))
 
-			input_file = data["img_in"]
-			output_file = data["output_json"]
+		input_file = data["img_in"]
+		output_file = data["output_json"]
 
-			# run the model 
+		# run the model 
 
-			sat_img = scipy.ndimage.imread(input_file).astype(np.float)
-			max_v = 255
-			sat_img = (sat_img.astype(np.float)/ max_v - 0.5) * 0.9 
-			sat_img = sat_img.reshape((1,352,352,3))
+		sat_img = scipy.ndimage.imread(input_file).astype(np.float)
+		max_v = 255
+		sat_img = (sat_img.astype(np.float)/ max_v - 0.5) * 0.9 
+		sat_img = sat_img.reshape((1,352,352,3))
 
 
-			alloutputs  = model.Evaluate(sat_img, gt_prob_placeholder, gt_vector_placeholder, gt_seg_placeholder)
-			output = alloutputs[1]
+		alloutputs  = model.Evaluate(sat_img, gt_prob_placeholder, gt_vector_placeholder, gt_seg_placeholder)
+		output = alloutputs[1]
 
-			graph = DecodeAndVis(output, output_file, thr=0.05, snap=True, imagesize = 352)
+		graph = DecodeAndVis(output, output_file, thr=0.05, snap=True, imagesize = 352)
 
-			# graph to json 
+		# graph to json 
 
-			
-			return_str = json.dumps({"graph":graph, "success":"true"})
+		
+		return_str = json.dumps({"graph":graph, "success":"true"})
 
-		except:
-			return_str = json.dumps({"success":"false"})
-			print("parse json data failed")
+		# except:
+		# 	return_str = json.dumps({"success":"false"})
+		# 	print("parse json data failed")
 
 
 		self._set_response()
