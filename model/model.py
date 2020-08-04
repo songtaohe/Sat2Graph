@@ -317,21 +317,21 @@ class Sat2GraphModel():
 			return x 
 
 
-		x_4s = reduce_block(conv2, ch*2, ch*4, "x_4s", repeat = 3)
-		x_8s = reduce_block(x_4s, ch*4, ch*8, "x_8s", repeat = 3)
-		x_16s = reduce_block(x_8s, ch*8, ch*16, "x_16s", repeat = 3)
+		x_4s = reduce_block(conv2, ch*2, ch*4, "x_4s", repeat = 1)
+		x_8s = reduce_block(x_4s, ch*4, ch*8, "x_8s", repeat = 1)
+		x_16s = reduce_block(x_8s, ch*8, ch*16, "x_16s", repeat = 1)
 		x_32s = reduce_block(x_16s, ch*16, ch*32, "x_32s", repeat = 3)
 
 		
 		a1_16s = aggregate_block(x_16s, x_32s, ch*16, ch*32, ch*32, "a1_16s", repeat=3)		
-		a2_8s = aggregate_block(x_8s, a1_16s, ch*8, ch*32, ch*16, "a2_8s", repeat=3)
-		a3_4s = aggregate_block(x_4s, a2_8s, ch*4, ch*16, ch*8, "a3_4s", repeat=3)
-		a4_2s = aggregate_block(conv2, a3_4s, ch*2, ch*8, ch*8, "a4_2s", repeat=3) # 2s 8ch 
+		a2_8s = aggregate_block(x_8s, a1_16s, ch*8, ch*32, ch*16, "a2_8s", repeat=1)
+		a3_4s = aggregate_block(x_4s, a2_8s, ch*4, ch*16, ch*8, "a3_4s", repeat=1)
+		a4_2s = aggregate_block(conv2, a3_4s, ch*2, ch*8, ch*8, "a4_2s", repeat=1) # 2s 8ch 
 
 
 		a5_2s, _, _ = common.create_conv_layer('a5_2s', a4_2s, ch*8, ch*4, kx = 3, ky = 3, stride_x = 1, stride_y = 1, is_training = self.is_training, batchnorm = True)
 		
-		a_out = aggregate_block(conv1, a5_2s, ch*2, ch*4, ch*4, "a_out", batchnorm=False, repeat=3)
+		a_out = aggregate_block(conv1, a5_2s, ch*2, ch*4, ch*4, "a_out", batchnorm=False, repeat=1)
 		
 		a_out, _, _ = common.create_conv_layer('out', a_out, ch*4, output_ch, kx = 3, ky = 3, stride_x = 1, stride_y = 1, is_training = self.is_training, batchnorm = False, activation = "linear")
 		
