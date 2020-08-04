@@ -331,7 +331,7 @@ class Sat2GraphModel():
 
 		a5_2s, _, _ = common.create_conv_layer('a5_2s', a4_2s, ch*8, ch*4, kx = 3, ky = 3, stride_x = 1, stride_y = 1, is_training = self.is_training, batchnorm = True)
 		
-		a_out = aggregate_block(conv1, a5_2s, ch, ch*4, ch*4, "a_out", batchnorm=False,, repeat=3)
+		a_out = aggregate_block(conv1, a5_2s, ch, ch*4, ch*4, "a_out", batchnorm=False, repeat=3)
 		
 		a_out, _, _ = common.create_conv_layer('out', a_out, ch*4, output_ch, kx = 3, ky = 3, stride_x = 1, stride_y = 1, is_training = self.is_training, batchnorm = False, activation = "linear")
 		
