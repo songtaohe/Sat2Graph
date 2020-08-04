@@ -44,7 +44,7 @@ class S(BaseHTTPRequestHandler):
 		global gt_prob_placeholder
 		global gt_vector_placeholder
 		global gt_seg_placeholder
-		
+
 		content_length = int(self.headers['Content-Length']) # <--- Gets the size of data
 		post_data = self.rfile.read(content_length) # <--- Gets the data itself
 		logging.info("POST request,\nPath: %s\nHeaders:\n%s\n\n\n",
@@ -71,10 +71,25 @@ class S(BaseHTTPRequestHandler):
 
 		graph = DecodeAndVis(output, output_file, thr=0.05, snap=True, imagesize = 352)
 
+		lines = []
+		points = []
+
+		
+
+		for nid, nei in graph.iteritems():
+			for nn in nei:
+				edge = (nid, nn)
+				edge_ = (nn, nid)
+				if edge not in lines and edge_ not in lines:
+					lines.append(edge)  
+
+			points.append(nid)
+
+
 		# graph to json 
 
 		
-		return_str = json.dumps({"graph":graph, "success":"true"})
+		return_str = json.dumps({"graph":[lines, points], "success":"true"})
 
 		# except:
 		# 	return_str = json.dumps({"success":"false"})
