@@ -342,7 +342,7 @@ class Sat2GraphDataLoader():
 
 				coin = random.randint(0,99)
 
-				if coin < 20: # 20%
+				if coin < 60: # 20%
 					while True:
 						
 						x = random.randint(256, self.dataset_image_size-256-image_size)
@@ -352,7 +352,7 @@ class Sat2GraphDataLoader():
 						if self.rotmask[tile_id,x,y] > 0.5:
 							break
 
-				elif coin < 40: # complicated intersections 
+				elif coin < 75: # complicated intersections 
 					sps =  self.samplepoints[tile_id]['complicated_intersections']
 
 					if len(sps) == 0:
@@ -367,7 +367,7 @@ class Sat2GraphDataLoader():
 					x = np.clip(x, 256, self.dataset_image_size-256-image_size)
 					y = np.clip(y, 256, self.dataset_image_size-256-image_size)
 					
-				elif coin < 60: # parallel roads 
+				elif coin < 90: # parallel roads 
 					sps =  self.samplepoints[tile_id]['parallel_road']
 
 					if len(sps) == 0:
