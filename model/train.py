@@ -52,7 +52,7 @@ parser.add_argument('-model_name', action='store', dest='model_name', type=str,
                     help='instance_id ', required =False, default="DLA")
 
 parser.add_argument('-resnet_step', action='store', dest='resnet_step', type=int,
-                    help='instance_id ', required =False, default=12)
+                    help='instance_id ', required =False, default=8)
 
 # parser.add_argument('-train_segmentation', action='store', dest='train_segmentation', type=bool,
 #                     help='train_segmentation', required =False, default=False)
@@ -61,7 +61,7 @@ parser.add_argument('-spacenet', action='store', dest='spacenet', type=str,
                     help='spacenet folder', required =False, default="")
 
 parser.add_argument('-channel', action='store', dest='channel', type=int,
-                    help='channel', required =False, default=18)
+                    help='channel', required =False, default=24)
 
 parser.add_argument('-mode', action='store', dest='mode', type=str,
                     help='mode [train][test][validate]', required =False, default="train")
@@ -84,6 +84,7 @@ spacenetdataset = "../data/spacenet/"
 image_size = args.image_size
 
 batch_size = 2 # 352 * 352 
+batch_divide = 32 # 32*2  
 
 # if args.image_size == 384:
 # 	batch_size = 4
@@ -102,7 +103,7 @@ Popen("mkdir -p %s" % model_save_folder, shell=True).wait()
 
 gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.65)
 with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
-	model = Sat2GraphModel(sess, image_size=image_size, resnet_step = args.resnet_step, batchsize = batch_size, channel = args.channel, mode = args.mode, model_name = args.model_name)
+	model = Sat2GraphModel(sess, image_size=image_size, resnet_step = args.resnet_step, batchsize = batch_size, batchdivide=batch_divide, channel = args.channel, mode = args.mode, model_name = args.model_name)
 	
 	if args.model_recover is not None:
 		print("model recover", args.model_recover)
@@ -327,6 +328,10 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 
 		loss, grad_max, prob_loss, vector_loss,seg_loss, _ = model.Train(input_sat, gt_prob, gt_vector, gt_seg, lr)
 
+		if step > 0 and step % batch_divide == 0 :
+			model.ApplyGradient(lr)
+
+
 		sum_loss += loss
 
 		sum_prob_loss += prob_loss
@@ -394,6 +399,9 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 			print("")
 			print("step", step, "loss", sum_loss, "test_loss", test_loss, "prob_loss", sum_prob_loss/200.0, "vector_loss", sum_vector_loss/200.0, "seg_loss", sum_seg_loss/200.0)
 			
+			summary = model.addLog(test_loss, sum_loss, 0)
+			writer.add_summary(summary, step)
+
 
 			sum_prob_loss = 0
 			sum_vector_loss = 0

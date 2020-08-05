@@ -22,7 +22,7 @@ MAX_DEGREE=6
 
 
 class Sat2GraphModel():
-	def __init__(self, sess, model_name = "DLA", image_size=352, image_ch = 3, downsample_level = 1, batchsize = 8, resnet_step=8, channel=12, mode = "train", joint_with_seg=True):
+	def __init__(self, sess, model_name = "DLA", image_size=352, image_ch = 3, downsample_level = 1, batchsize = 8, batchdivide=16, resnet_step=8, channel=12, mode = "train", joint_with_seg=True):
 		self.sess = sess 
 		self.train_seg = False
 		self.image_size = image_size
@@ -89,7 +89,25 @@ class Sat2GraphModel():
 			self.l2loss_grad = tf.gradients(self.loss, tf.trainable_variables())
 			self.l2loss_grad_max = tf.reduce_max(self.l2loss_grad[0])
 			#self.train_op = tf.train.AdamOptimizer(learning_rate=self.lr).apply_gradients(zip(self.l2loss_grad, tf.trainable_variables()))
-			self.train_op = tf.train.AdamOptimizer(learning_rate=self.lr).minimize(self.loss)
+			
+
+			optimizer = tf.train.AdamOptimizer(learning_rate=self.lr)
+			gradients, variables = zip(*optimizer.compute_gradients(self.loss))
+
+			tvs = tf.trainable_variables()
+			self.tvs = tvs
+
+			accum_vars = [tf.Variable(tf.zeros_like(tv.initialized_value()), trainable=False) for tv in tvs]
+
+			self.zero_ops = [tv.assign(tf.zeros_like(tv)) for tv in accum_vars]
+			self.accum_ops = [accum_vars[i].assign_add(g) for i, g in enumerate(gradients)]
+
+			self.gradients = [tf.clip_by_value(grad/batchdivide, -10., 10.) for grad in accum_vars]
+
+			self.train_op = optimizer.apply_gradients(zip(self.gradients, variables))
+
+
+			#self.train_op = tf.train.AdamOptimizer(learning_rate=self.lr).minimize(self.loss)
 
 
 		self.sess.run(tf.global_variables_initializer())
@@ -465,7 +483,7 @@ class Sat2GraphModel():
 		return a_out 
 
 	
-	def Train(self, inputdata, target_prob, target_vector, input_seg_gt, lr):
+	def Train(self, inputdata, target_prob, target_vector, input_seg_gt, lr, accum = True):
 		feed_dict = {
 			self.input_sat : inputdata,
 			self.target_prob : target_prob,
@@ -475,9 +493,25 @@ class Sat2GraphModel():
 			self.is_training : True
 		}
 
-		ops = [self.loss, self.l2loss_grad_max, self.prob_loss, self.direction_vector_loss, self.seg_loss, self.train_op]
+		ops = [self.loss, self.l2loss_grad_max, self.prob_loss, self.direction_vector_loss, self.seg_loss]
 		
+		if accum == True:
+			ops.append(self.accum_ops)
+		else:
+			ops.append(self.train_op)
+
 		return self.sess.run(ops, feed_dict=feed_dict)
+
+	def ApplyGradient(self, lr):
+
+		feed_dict = {
+			self.lr:lr,
+		}
+
+		grad, _ = self.sess.run([self.gradients[0], self.train_op], feed_dict = feed_dict)
+		self.sess.run([self.zero_ops])
+
+		return grad
 
 
 	def TrainSegmentation(self, inputdata, target_prob, target_vector, input_seg_gt, lr):
