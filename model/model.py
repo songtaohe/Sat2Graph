@@ -66,7 +66,7 @@ class Sat2GraphModel():
 				self.imagegraph_output = self.BuildDeepLayerAggregationNetWithResnet(self.input_sat, input_ch = image_ch, output_ch =2 + MAX_DEGREE * 4 + (2 if self.joint_with_seg==True else 0), ch=channel)
 			else: # UNET 
 				print("use unet")
-				self.imagegraph_output = self.BuildUNET(self.input_sat, input_ch = image_ch, output_ch =2 + MAX_DEGREE * 4 + (2 if self.joint_with_seg==True else 0), ch=channel)
+				self.imagegraph_output = self.BuildDeepLayerAggregationNetUNET(self.input_sat, input_ch = image_ch, output_ch =2 + MAX_DEGREE * 4 + (2 if self.joint_with_seg==True else 0), ch=channel)
 			
 
 			x = self.imagegraph_output
