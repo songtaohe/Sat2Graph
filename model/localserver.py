@@ -102,7 +102,7 @@ class S(BaseHTTPRequestHandler):
 		biasy = -102
 
 		def addbias(loc):
-			return (loc[0]+biasx loc[1]+biasy)
+			return (loc[0]+biasx, loc[1]+biasy)
 
 		def inrange(loc):
 			if loc[0] > 102 and loc[0] < 602 and loc[1] > 102 and loc[1] < 602:
