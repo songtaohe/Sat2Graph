@@ -34,7 +34,7 @@ def douglasPeucker(node_list, e = 5):
 			best_i = i 
 
 	if best_d <= e:
-		return node_list
+		return [node_list[0], node_list[-1]]
 
 	new_list = douglasPeucker(node_list[0:best_i+1], e=e)
 	new_list = new_list[:-1] + douglasPeucker(node_list[best_i:len(node_list)], e=e)
