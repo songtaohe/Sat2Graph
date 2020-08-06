@@ -33,8 +33,8 @@ def douglasPeucker(node_list, e = 5):
 			best_d = d 
 			best_i = i 
 
-	if best_d <= 5:
-		return new_list
+	if best_d <= e:
+		return node_list
 
 	new_list = douglasPeucker(node_list[0:best_i+1])
 	new_list = new_list[:-1] + douglasPeucker(node_list[best_i:len(node_list)])
@@ -108,7 +108,7 @@ def simpilfyGraph(node_neighbor):
 				for i in range(len(new_node_list)-1):
 					new_node_neighbor = graphInsert(new_node_neighbor, new_node_list[i],new_node_list[i+1])
 
-					
+
 
 			
 
