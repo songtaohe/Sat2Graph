@@ -95,16 +95,28 @@ class S(BaseHTTPRequestHandler):
 		lines = []
 		points = []
 
-		
+		biasx = -102
+		biasy = -102
+
+		def addbias(loc):
+			return (loc[0]+biasx loc[1]+biasy)
+
+		def inrange(loc):
+			if loc[0] > 102 and loc[0] < 602 and loc[1] > 102 and loc[1] < 602:
+				return True 
+			else:
+				return False 
 
 		for nid, nei in graph.iteritems():
 			for nn in nei:
-				edge = (nid, nn)
-				edge_ = (nn, nid)
-				if edge not in lines and edge_ not in lines:
-					lines.append(edge)  
+				if inrange(nn) or inrange(nid):
+					edge = (addbias(nid), addbias(nn))
+					edge_ = (addbias(nn), addbias(nid))
+					if edge not in lines and edge_ not in lines:
+						lines.append(edge)  
 
-			points.append(nid)
+			if inrange(nid):
+				points.append(addbias(nid))
 
 
 		# graph to json 
