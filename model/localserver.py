@@ -9,6 +9,7 @@ import math
 import cv2
 import numpy as np 
 import tensorflow as tf 
+from time import time 
  
 from model import Sat2GraphModel
 from decoder import DecodeAndVis 
@@ -75,7 +76,7 @@ class S(BaseHTTPRequestHandler):
 		mask = np.zeros((704, 704, 2+4*6 + 2))
 		output = np.zeros((704, 704, 2+4*6 + 2))
 
-
+		t0 = time()
 		for x in range(0,704-176-88,176/2):		
 			for y in range(0,704-176-88,176/2):
 
@@ -91,6 +92,8 @@ class S(BaseHTTPRequestHandler):
 		# output = alloutputs[1][0,:,:,:]
 
 		graph = DecodeAndVis(output, output_file, thr=0.05, snap=True, imagesize = 704)
+
+		print(time() - t0)
 
 		lines = []
 		points = []
