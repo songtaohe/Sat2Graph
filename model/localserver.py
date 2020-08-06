@@ -86,11 +86,11 @@ class S(BaseHTTPRequestHandler):
 				output[x:x+image_size, y:y+image_size,:] += np.multiply(_output[0,:,:,:], weights)
 
 		output = np.divide(output, mask)
-		
+
 		# alloutputs  = model.Evaluate(sat_img, gt_prob_placeholder, gt_vector_placeholder, gt_seg_placeholder)
 		# output = alloutputs[1][0,:,:,:]
 
-		graph = DecodeAndVis(output, output_file, thr=0.05, snap=True, imagesize = 352)
+		graph = DecodeAndVis(output, output_file, thr=0.05, snap=True, imagesize = 704)
 
 		lines = []
 		points = []
