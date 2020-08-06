@@ -94,7 +94,7 @@ class S(BaseHTTPRequestHandler):
 		# alloutputs  = model.Evaluate(sat_img, gt_prob_placeholder, gt_vector_placeholder, gt_seg_placeholder)
 		# output = alloutputs[1][0,:,:,:]
 
-		graph = DecodeAndVis(output, output_file, thr=0.05, snap=True, imagesize = 704)
+		graph = DecodeAndVis(output, output_file, thr=0.05, edge_thr = 0.15,angledistance_weight=50, snap=True, imagesize = 704)
 
 		print("Decode time:", time() - t0)
 		t0 = time()
