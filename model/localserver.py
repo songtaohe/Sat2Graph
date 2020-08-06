@@ -86,15 +86,23 @@ class S(BaseHTTPRequestHandler):
 				mask[x:x+image_size, y:y+image_size, :] += weights
 				output[x:x+image_size, y:y+image_size,:] += np.multiply(_output[0,:,:,:], weights)
 
+		print("GPU time:", time() - t0)
+		t0 = time()
+
 		output = np.divide(output, mask)
 
 		# alloutputs  = model.Evaluate(sat_img, gt_prob_placeholder, gt_vector_placeholder, gt_seg_placeholder)
 		# output = alloutputs[1][0,:,:,:]
 
 		graph = DecodeAndVis(output, output_file, thr=0.05, snap=True, imagesize = 704)
+
+		print("Decode time:", time() - t0)
+		t0 = time()
+
 		graph = simpilfyGraph(graph)
 
-		print(time() - t0)
+		print("Graph simpilfy time:", time() - t0)
+		t0 = time()
 
 		lines = []
 		points = []
@@ -127,6 +135,7 @@ class S(BaseHTTPRequestHandler):
 
 		
 		return_str = json.dumps({"graph":[lines, points], "success":"true"})
+
 
 		# except:
 		# 	return_str = json.dumps({"success":"false"})
