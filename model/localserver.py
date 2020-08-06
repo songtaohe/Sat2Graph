@@ -63,11 +63,32 @@ class S(BaseHTTPRequestHandler):
 		sat_img = scipy.ndimage.imread(input_file).astype(np.float)
 		max_v = 255
 		sat_img = (sat_img.astype(np.float)/ max_v - 0.5) * 0.9 
-		sat_img = sat_img.reshape((1,352,352,3))
+		sat_img = sat_img.reshape((1,704,704,3))
+
+		image_size = 352 
+
+		weights = np.ones((image_size,image_size, 2+4*6 + 2)) * 0.001 
+		weights[32:image_size-32,32:image_size-32, :] = 0.5 
+		weights[56:image_size-56,56:image_size-56, :] = 1.0 
+		weights[88:image_size-88,88:image_size-88, :] = 1.5 
+
+		mask = np.zeros((704, 704, 2+4*6 + 2))
+		output = np.zeros((704, 704, 2+4*6 + 2))
 
 
-		alloutputs  = model.Evaluate(sat_img, gt_prob_placeholder, gt_vector_placeholder, gt_seg_placeholder)
-		output = alloutputs[1][0,:,:,:]
+		for x in range(0,704-176-88,176/2):		
+			for y in range(0,704-176-88,176/2):
+
+				alloutputs  = model.Evaluate(sat_img[:,x:x+image_size, y:y+image_size,:], gt_prob_placeholder, gt_vector_placeholder, gt_seg_placeholder)
+				_output = alloutputs[1]
+
+				mask[x:x+image_size, y:y+image_size, :] += weights
+				output[x:x+image_size, y:y+image_size,:] += np.multiply(_output[0,:,:,:], weights)
+
+		output = np.divide(output, mask)
+		
+		# alloutputs  = model.Evaluate(sat_img, gt_prob_placeholder, gt_vector_placeholder, gt_seg_placeholder)
+		# output = alloutputs[1][0,:,:,:]
 
 		graph = DecodeAndVis(output, output_file, thr=0.05, snap=True, imagesize = 352)
 
