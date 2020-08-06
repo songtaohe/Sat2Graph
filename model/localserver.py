@@ -13,7 +13,7 @@ from time import time
  
 from model import Sat2GraphModel
 from decoder import DecodeAndVis 
-
+from douglasPeucker import simpilfyGraph 
 
 gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.3)
 sess = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options))
@@ -25,7 +25,7 @@ gt_prob_placeholder = np.zeros((1,352,352,14))
 gt_vector_placeholder = np.zeros((1,352,352,12))
 gt_seg_placeholder = np.zeros((1,352,352,1))
 
-    
+
 
 
 
@@ -92,6 +92,7 @@ class S(BaseHTTPRequestHandler):
 		# output = alloutputs[1][0,:,:,:]
 
 		graph = DecodeAndVis(output, output_file, thr=0.05, snap=True, imagesize = 704)
+		graph = simpilfyGraph(graph)
 
 		print(time() - t0)
 
@@ -118,7 +119,7 @@ class S(BaseHTTPRequestHandler):
 					if edge not in lines and edge_ not in lines:
 						lines.append(edge)  
 
-			if inrange(nid):
+			if inrange(nid) and len(nei)!=2:
 				points.append(addbias(nid))
 
 
