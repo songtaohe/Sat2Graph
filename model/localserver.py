@@ -27,8 +27,6 @@ gt_seg_placeholder = np.zeros((1,352,352,1))
 
 
 
-
-
 class S(BaseHTTPRequestHandler):
 	def _set_response(self):
 		self.send_response(200)
