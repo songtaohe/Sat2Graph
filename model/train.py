@@ -84,7 +84,7 @@ run = "run-"+datetime.today().strftime('%Y-%m-%d-%H-%M-%S')+"-"+instance_id
 
 osmdataset = "../data/20cities/"
 osmdataset = "/data/songtao/Sat2GraphLib/download/global_dataset/"
-osmdataset = "/data/songtao/Sat2GraphLib/download/global_dataset_mapbox_no_service_road/"
+#osmdataset = "/data/songtao/Sat2GraphLib/download/global_dataset_mapbox_no_service_road/"
 
 spacenetdataset = "../data/spacenet/"
 
