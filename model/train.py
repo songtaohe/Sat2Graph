@@ -20,6 +20,9 @@ import argparse
 # python train.py -model_save /data/songtao/Sat2GraphLib/globalmodel -instance_id 20200804v1 -image_size 352 
 # python train.py -model_save /data/songtao/Sat2GraphLib/globalmodel -instance_id 20200804v2UNET -image_size 352 -channel 32 -model_name unet
 
+# fine tune the unet 
+#python train.py -model_save /data/songtao/Sat2GraphLib/globalmodel -instance_id 20200804v3UNETMapBoxFineTune -image_size 352 -channel 24 -model_name unet -max_step 200002 -lr 0.00003
+
 parser = argparse.ArgumentParser()
 
 parser.add_argument('-model_save', action='store', dest='model_save', type=str,
@@ -47,6 +50,8 @@ parser.add_argument('-lr_decay_step', action='store', dest='lr_decay_step', type
 parser.add_argument('-init_step', action='store', dest='init_step', type=int,
                     help='initial step size ', required =False, default=0)
 
+parser.add_argument('-max_step', action='store', dest='max_step', type=int,
+                    help='initial step size ', required =False, default=600001)
 
 parser.add_argument('-model_name', action='store', dest='model_name', type=str,
                     help='instance_id ', required =False, default="DLA")
@@ -79,6 +84,8 @@ run = "run-"+datetime.today().strftime('%Y-%m-%d-%H-%M-%S')+"-"+instance_id
 
 osmdataset = "../data/20cities/"
 osmdataset = "/data/songtao/Sat2GraphLib/download/global_dataset/"
+osmdataset = "/data/songtao/Sat2GraphLib/download/global_dataset_mapbox_no_service_road/"
+
 spacenetdataset = "../data/spacenet/"
 
 image_size = args.image_size
@@ -136,6 +143,11 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 				indrange_test.append(x)
 
 		for x in range(180, 938):
+
+			# broken 
+			if x>= 777 and x <= 800:
+				continue
+
 			if x % 50 < 48 :
 				indrange_train.append(x)
 
@@ -427,5 +439,6 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 			lr = lr * args.lr_decay
 
 		step += 1
-		if step == 600000+2:
+		#if step == 600000+2:
+		if step == args.max_step:
 			break 
