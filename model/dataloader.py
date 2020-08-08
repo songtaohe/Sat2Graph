@@ -370,7 +370,7 @@ class Sat2GraphDataLoader():
 					y = np.clip(y, 256, self.dataset_image_size-256-image_size)
 					
 				#elif coin < 90: # parallel roads 
-			elif coin < 60:
+				elif coin < 60:
 					sps =  self.samplepoints[tile_id]['parallel_road']
 
 					if len(sps) == 0:
