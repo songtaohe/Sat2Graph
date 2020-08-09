@@ -484,7 +484,7 @@ def DrawKP(imagegraph, filename, imagesize=256, max_degree=6):
 
 
 # Main function 
-def DecodeAndVis(imagegraph, filename, imagesize=256, max_degree=6, thr=0.5, edge_thr = 0.5, snap=False, kp_limit = 500, drop=True, use_graph_refine=True, testing=False, spacenet = False, angledistance_weight = 100):
+def DecodeAndVis(imagegraph, filename, imagesize=256, max_degree=6, thr=0.5, edge_thr = 0.5, snap=False, kp_limit = 500, drop=True, use_graph_refine=True, testing=False, spacenet = False, angledistance_weight = 100, snap_dist = 15):
 	kp_limit = 10000000
 
 	# for training 
@@ -598,7 +598,7 @@ def DecodeAndVis(imagegraph, filename, imagesize=256, max_degree=6, thr=0.5, edg
 					# Pass-One (restrict distance metric)
 
 					best_candidate = -1 
-					min_distance = 15.0 
+					min_distance = snap_dist #15.0 
 
 					candidates = list(idx.intersection((x1-20,y1-20,x1+20,y1+20)))
 
@@ -650,7 +650,7 @@ def DecodeAndVis(imagegraph, filename, imagesize=256, max_degree=6, thr=0.5, edg
 							best_candidate = candidate
 
 					# Pass-Two (release the distance metric)
-					min_distance = 15.0 
+					min_distance = snap_dist #15.0 
 					# only need the second pass when there is no good candidate found in the first pass. 
 					if best_candidate == -1:
 						for candidate in candidates:
