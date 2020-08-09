@@ -15,6 +15,7 @@ from model import Sat2GraphModel
 from decoder import DecodeAndVis 
 from douglasPeucker import simpilfyGraph 
 
+
 gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.3)
 sess = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options))
 
@@ -57,6 +58,11 @@ class S(BaseHTTPRequestHandler):
 		input_file = data["img_in"]
 		output_file = data["output_json"]
 
+		v_thr = data["v_thr"]
+		e_thr = data["e_thr"]
+		snap_dist = data["snap_dist"]
+		snap_w = data["snap_w"]
+
 		# run the model 
 
 		sat_img = scipy.ndimage.imread(input_file).astype(np.float)
@@ -96,7 +102,7 @@ class S(BaseHTTPRequestHandler):
 		#graph = DecodeAndVis(output, output_file, thr=0.01, edge_thr = 0.1, angledistance_weight=50, snap=True, imagesize = 704)
 
 		# for global model
-		graph = DecodeAndVis(output, output_file, thr=0.05, edge_thr = 0.15, angledistance_weight=50, snap=True, imagesize = 704)
+		graph = DecodeAndVis(output, output_file, thr=v_thr, edge_thr = e_thr, angledistance_weight=snap_w, snap_dist = snap_dist, snap=True, imagesize = 704)
 
 		print("Decode time:", time() - t0)
 		t0 = time()
