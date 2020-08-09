@@ -84,7 +84,7 @@ run = "run-"+datetime.today().strftime('%Y-%m-%d-%H-%M-%S')+"-"+instance_id
 
 osmdataset = "../data/20cities/"
 osmdataset = "/data/songtao/Sat2GraphLib/download/global_dataset/"
-#osmdataset = "/data/songtao/Sat2GraphLib/download/global_dataset_mapbox_no_service_road/"
+osmdataset = "/data/songtao/Sat2GraphLib/download/global_dataset_mapbox_no_service_road/"
 
 spacenetdataset = "../data/spacenet/"
 
@@ -432,7 +432,7 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 			t_load = 0 
 			t_train = 0 
 
-		if step > 0 and (step % 10000 == 0):
+		if (step > 0 and step < 100000 and (step % 10000 == 0)) or (step >= 100000 and (step % 20000 == 0)):
 			model.saveModel(model_save_folder + "model%d" % step)
 
 		if step > 0 and step % args.lr_decay_step == 0:
