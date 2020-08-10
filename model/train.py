@@ -23,6 +23,8 @@ import argparse
 # fine tune the unet 
 #python train.py -model_save /data/songtao/Sat2GraphLib/globalmodel -instance_id 20200804v3UNETMapBoxFineTune -image_size 352 -channel 24 -model_name unet -max_step 200002 -lr 0.00003
 
+
+
 parser = argparse.ArgumentParser()
 
 parser.add_argument('-model_save', action='store', dest='model_save', type=str,
