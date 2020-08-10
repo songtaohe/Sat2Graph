@@ -96,10 +96,14 @@ def create_conv_layer(name, input_tensor, in_channels, out_channels, is_training
 		#n = batch_norm(s, decay = 0.99, center=True, scale=True, updates_collections=None, is_training=is_training, epsilon=0.01)
 		# fused = False
 		#n = batch_norm(s, decay = 0.99, center=True, scale=True, updates_collections=None, is_training=is_training, scope = name, fused = False)
-		n = batch_norm(s, decay = 0.99, center=True, scale=True, updates_collections=None, is_training=is_training, fused = False)
+		#n = batch_norm(s, decay = 0.99, center=True, scale=True, updates_collections=None, is_training=is_training, fused = False)
 
 		# remove 'scope = name' to support old checkpoints. 
 
+
+		# add 'scope name' for better compability
+
+		n = batch_norm(s, decay = 0.99, center=True, scale=True, updates_collections=None, is_training=is_training, scope = name, fused = False)
 
 
 		#n = tf.layers.batch_normalization(s, training=is_training, renorm=True)
