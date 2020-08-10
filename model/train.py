@@ -320,7 +320,7 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 
 	validation_data = []
 
-	test_size = 96
+	test_size = 32
 
 	for j in range(test_size/batch_size):
 		input_sat, gt_prob, gt_vector, gt_seg= dataloader_test.getBatch(batch_size)
@@ -415,7 +415,7 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 								
 							# todo 			
 							#ImageGraphVis(output[k,:,:,0:2 + 4*max_degree].reshape((image_size, image_size, 2 + 4*max_degree )), validation_folder+"/tile%d_output_graph_0.01.png" % (j*batch_size+k), thr=0.01, imagesize = image_size)
-							DecodeAndVis(output[k,:,:,0:2 + 4*max_degree].reshape((image_size, image_size, 2 + 4*max_degree )), validation_folder+"/tile%d_output_graph_0.01_snap.png" % (j*batch_size+k), thr=0.01, edge_thr=0.05, snap=True, imagesize = image_size, use_graph_refine=False)
+							DecodeAndVis(output[k,:,:,0:2 + 4*max_degree].reshape((image_size, image_size, 2 + 4*max_degree )), validation_folder+"/tile%d_output_graph_0.01_snap.png" % (j*batch_size+k), thr=0.05, edge_thr=0.05, snap=True, imagesize = image_size, use_graph_refine=False)
 							#ImageGraphVis(gt_imagegraph[k,:,:,:].reshape((image_size, image_size, 2 + 4*max_degree )), validation_folder+"/tile%d_output_graph_gt.png" % (j*batch_size+k), thr=0.5, imagesize = image_size)
 							DecodeAndVis(gt_imagegraph[k,:,:,:].reshape((image_size, image_size, 2 + 4*max_degree )), validation_folder+"/tile%d_output_graph_gt.png" % (j*batch_size+k), thr=0.5, snap=True, imagesize = image_size, use_graph_refine=False)
 							
