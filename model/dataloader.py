@@ -240,7 +240,7 @@ class Sat2GraphDataLoader():
 
 		self.samplepoints = []
 
-		highway_list = [x if x > 1000 else None for x in self.indrange]
+		highway_list = [x for x in self.indrange if x >= 1000]
 
 
 		for i in range(self.preload_tiles):
