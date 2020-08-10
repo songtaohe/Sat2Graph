@@ -240,8 +240,12 @@ class Sat2GraphDataLoader():
 
 		self.samplepoints = []
 
+		highway_list = [x if x > 1000 else None for x in self.indrange]
+
+
 		for i in range(self.preload_tiles):
-			ind = random.choice(self.indrange)
+			ind = random.choice(self.indrange + highway_list + highway_list + highway_list + highway_list + highway_list)
+
 
 			# load sample points 
 			samplepoints = json.load(open(self.folder + "/region_%d_refine_gt_graph_samplepoints.json" % ind,"r"))
