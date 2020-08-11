@@ -56,7 +56,7 @@ mask = np.zeros((2048+64, 2048+64, 2+4*6 + 2))
 output = np.zeros((2048+64, 2048+64, 2+4*6 + 2))
 sat_img = np.pad(sat_img, ((0,0),(32,32),(32,32),(0,0)), 'constant')
 				
-				
+
 t0 = time()
 for x in range(0,352*6-176-88,176/2):	
 	for y in range(0,352*6-176-88,176/2):
@@ -78,4 +78,4 @@ output = output[32:2048+32,32:2048+32,:]
 # output = alloutputs[1][0,:,:,:]
 
 #graph = DecodeAndVis(output, output_file, thr=0.01, edge_thr = 0.1, angledistance_weight=50, snap=True, imagesize = 704)
-graph = DecodeAndVis(output, output_file, thr=v_thr, edge_thr = e_thr, angledistance_weight=snap_w, snap_dist = snap_dist, snap=True, imagesize = 704)
+graph = DecodeAndVis(output, output_file, thr=v_thr, edge_thr = e_thr, angledistance_weight=snap_w, snap_dist = snap_dist, snap=True, imagesize = 2048)
