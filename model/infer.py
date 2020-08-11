@@ -102,7 +102,7 @@ for k,v in graph.iteritems():
 	for n2 in v:
 		cv2.line(sat_img, (n1[1], n1[0]), (n2[1], n2[0]), (0,255,255),3)
 
-cv2.imwrite(output_file+"_vis.png", sat_img)
+Image.fromarray(sat_img).save(output_file+"_vis.png")
 
 
 
