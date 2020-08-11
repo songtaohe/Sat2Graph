@@ -100,7 +100,7 @@ sat_img = scipy.misc.imresize(sat_img, (2048,2048))
 for k,v in graph.iteritems():
 	n1 = k 
 	for n2 in v:
-		cv2.line(sat_img, (n1[1], n1[0]), (n2[1], n2[0]), (0,255,255),3)
+		cv2.line(sat_img, (n1[1], n1[0]), (n2[1], n2[0]), (255,255,0),3)
 
 Image.fromarray(sat_img).save(output_file+"_vis.png")
 
