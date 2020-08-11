@@ -10,6 +10,7 @@ import numpy as np
 import tensorflow as tf 
 from time import time 
 import sys 
+
  
 from model import Sat2GraphModel
 from decoder import DecodeAndVis 
@@ -68,7 +69,6 @@ for x in range(0,352*6-176-88,176/2):
 		output[x:x+image_size, y:y+image_size,:] += np.multiply(_output[0,:,:,:], weights)
 
 
-
 print("GPU time:", time() - t0)
 t0 = time()
 
@@ -79,3 +79,37 @@ output = output[32:2048+32,32:2048+32,:]
 
 #graph = DecodeAndVis(output, output_file, thr=0.01, edge_thr = 0.1, angledistance_weight=50, snap=True, imagesize = 704)
 graph = DecodeAndVis(output, output_file, thr=v_thr, edge_thr = e_thr, angledistance_weight=snap_w, snap_dist = snap_dist, snap=True, imagesize = 2048)
+
+print("Decode time:", time() - t0)
+t0 = time()
+
+graph = simpilfyGraph(graph)
+
+print("Graph simpilfy time:", time() - t0)
+t0 = time()
+
+
+# vis 
+sat_img = scipy.ndimage.imread(input_file)
+sat_img = scipy.misc.imresize(sat_img, (2048,2048)).astype(np.float)
+
+for k,v in graph.iteritems():
+	n1 = k 
+	for n2 in v:
+		cv2.line(img, (n1[1], n1[0]), (n2[1], n2[0]), (0,255,255),3)
+
+cv2.imwrite(output_file+"_vis.png", sat_img)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
