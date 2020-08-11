@@ -43,7 +43,7 @@ sat_img = scipy.misc.imresize(sat_img, (2048,2048)).astype(np.float)
 
 max_v = 255
 sat_img = (sat_img.astype(np.float)/ max_v - 0.5) * 0.9 
-sat_img = sat_img.reshape((1,704,704,3))
+sat_img = sat_img.reshape((1,2048,2048,3))
 
 image_size = 352 
 
