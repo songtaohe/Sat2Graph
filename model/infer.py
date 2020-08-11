@@ -14,7 +14,7 @@ import numpy as np
 import tensorflow as tf 
 from time import time 
 import sys 
-
+from PIL import Image 
  
 from model import Sat2GraphModel
 from decoder import DecodeAndVis 
