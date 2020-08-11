@@ -95,7 +95,7 @@ t0 = time()
 
 # vis 
 sat_img = scipy.ndimage.imread(input_file)
-sat_img = scipy.misc.imresize(sat_img, (2048,2048)).astype(np.float)
+sat_img = scipy.misc.imresize(sat_img, (2048,2048))
 
 for k,v in graph.iteritems():
 	n1 = k 
