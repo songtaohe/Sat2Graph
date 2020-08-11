@@ -54,7 +54,9 @@ weights[88:image_size-88,88:image_size-88, :] = 1.5
 
 mask = np.zeros((2048+64, 2048+64, 2+4*6 + 2))
 output = np.zeros((2048+64, 2048+64, 2+4*6 + 2))
-
+sat_img = np.pad(sat_img, ((0,0),(32,32),(32,32),(0,0)), 'constant')
+				
+				
 t0 = time()
 for x in range(0,352*6-176-88,176/2):	
 	for y in range(0,352*6-176-88,176/2):
