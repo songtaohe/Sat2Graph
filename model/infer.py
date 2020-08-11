@@ -1,4 +1,8 @@
-# from http.server import BaseHTTPRequestHandler
+# usage
+# python infer.py input_image.png output_prefix
+#
+#
+
 import json 
 import os 
 import os.path  
@@ -96,7 +100,7 @@ sat_img = scipy.misc.imresize(sat_img, (2048,2048)).astype(np.float)
 for k,v in graph.iteritems():
 	n1 = k 
 	for n2 in v:
-		cv2.line(img, (n1[1], n1[0]), (n2[1], n2[0]), (0,255,255),3)
+		cv2.line(sat_img, (n1[1], n1[0]), (n2[1], n2[0]), (0,255,255),3)
 
 cv2.imwrite(output_file+"_vis.png", sat_img)
 
