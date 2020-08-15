@@ -23,7 +23,7 @@ import argparse
 # fine tune the unet 
 #python train.py -model_save /data/songtao/Sat2GraphLib/globalmodel -instance_id 20200804v3UNETMapBoxFineTune -image_size 352 -channel 24 -model_name unet -max_step 200002 -lr 0.00003
 
-# time python train.py -model_save /data/songtao/Sat2GraphLib/globalmodel -instance_id 20200810_dla_mapbox_highway -image_size 352 -channel 12 -max_step 1000000
+# time python train.py -model_save /data/songtao/Sat2GraphLib/globalmodel -instance_id 20200810_dla_mapbox_highway_new -image_size 352 -channel 24 -max_step 1000002 -lr_decay_step 200000
 # fine tune dla mapbox version with better gt graphs
 # time python train.py -model_save /data/songtao/Sat2GraphLib/globalmodel -instance_id 20200810_dla_mapbox_highway_finetune -image_size 352 -channel 12 -max_step 300002 -lr_decay_step 200000 -lr 0.00001 -model_recover /data/songtao/Sat2GraphLib/globalmodel20200810_dla_mapbox_highway_352_8__channel12/model980000
 

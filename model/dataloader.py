@@ -413,7 +413,8 @@ class Sat2GraphDataLoader():
 
 				self.input_sat[i,:,:,:] = self.tiles_input[tile_id, x:x+image_size, y:y+image_size,:]
 				
-				if random.randint(0,100) < 50 and self.random_mask==True:
+				#if random.randint(0,100) < 50 and self.random_mask==True:
+				if random.randint(0,100) < 10 and self.random_mask==True:
 
 					# add noise
 					for it in range(random.randint(1,5)):
