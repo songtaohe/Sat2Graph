@@ -161,13 +161,13 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 
 
 		for x in range(1000, 1061):
-			if x % 50 < 48 :
+			if x % 50 < 46:
 				indrange_train.append(x)
 
-			if x % 50 == 48:
+			if x % 50 == 46:
 				indrange_test.append(x)
 
-			if x % 50 == 49:
+			if x % 50 > 46:
 				indrange_validation.append(x)
 
 
