@@ -22,8 +22,8 @@ sess = tf.Session(config=tf.ConfigProto()) # gpu_options=gpu_options
 #model = Sat2GraphModel(sess, image_size=352, resnet_step = 8, batchsize = 1, channel = 24, mode = "test", model_name="unet")
 #model.restoreModel("/data/songtao/Sat2GraphLib/globalmodel20200804v3UNET_352_8__channel24/model600000")
 
-model = Sat2GraphModel(sess, image_size=352, resnet_step = 8, batchsize = 1, channel = 24, mode = "test")
-model.restoreModel("/data/songtao/Sat2GraphLib/globalmodel20200804v3DLA_352_8__channel24/model600000")
+model = Sat2GraphModel(sess, image_size=352, resnet_step = 8, batchsize = 1, channel = 12, mode = "test")
+model.restoreModel("/data/songtao/Sat2GraphLib/globalmodel20200810_dla_mapbox_highway_352_8__channel12/model980000")
 
 gt_prob_placeholder = np.zeros((1,352,352,14))
 gt_vector_placeholder = np.zeros((1,352,352,12))
