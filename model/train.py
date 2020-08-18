@@ -134,33 +134,33 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 		indrange_test = []
 		indrange_validation = []
 
-		for x in range(180):
-			if x % 10 < 8 :
-				indrange_train.append(x)
+		# for x in range(180):
+		# 	if x % 10 < 8 :
+		# 		indrange_train.append(x)
 
-			if x % 10 == 9:
-				indrange_test.append(x)
+		# 	if x % 10 == 9:
+		# 		indrange_test.append(x)
 
-			if x % 20 == 18:
-				indrange_validation.append(x)
+		# 	if x % 20 == 18:
+		# 		indrange_validation.append(x)
 
-			if x % 20 == 8:
-				indrange_test.append(x)
+		# 	if x % 20 == 8:
+		# 		indrange_test.append(x)
 
-		for x in range(180, 938):
+		# for x in range(180, 938):
 
-			# broken 
-			if x>= 777 and x <= 800:
-				continue
+		# 	# broken 
+		# 	if x>= 777 and x <= 800:
+		# 		continue
 
-			if x % 50 < 48 :
-				indrange_train.append(x)
+		# 	if x % 50 < 48 :
+		# 		indrange_train.append(x)
 
-			if x % 50 == 48:
-				indrange_test.append(x)
+		# 	if x % 50 == 48:
+		# 		indrange_test.append(x)
 
-			if x % 50 == 49:
-				indrange_validation.append(x)
+		# 	if x % 50 == 49:
+		# 		indrange_validation.append(x)
 
 
 		for x in range(1000, 1061):
@@ -418,7 +418,8 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 								
 							# todo 			
 							#ImageGraphVis(output[k,:,:,0:2 + 4*max_degree].reshape((image_size, image_size, 2 + 4*max_degree )), validation_folder+"/tile%d_output_graph_0.01.png" % (j*batch_size+k), thr=0.01, imagesize = image_size)
-							DecodeAndVis(output[k,:,:,0:2 + 4*max_degree].reshape((image_size, image_size, 2 + 4*max_degree )), validation_folder+"/tile%d_output_graph_0.01_snap.png" % (j*batch_size+k), thr=0.05, edge_thr=0.05, snap=True, imagesize = image_size, use_graph_refine=False)
+							DecodeAndVis(output[k,:,:,0:2 + 4*max_degree].reshape((image_size, image_size, 2 + 4*max_degree )), validation_folder+"/tile%d_output_graph_0.01_snap.png" % (j*batch_size+k), thr=0.05, edge_thr=0.05, snap=True, imagesize = image_size, use_graph_refine=True)
+							DecodeAndVis(output[k,:,:,0:2 + 4*max_degree].reshape((image_size, image_size, 2 + 4*max_degree )), validation_folder+"/tile%d_output_graph_0.01_nosnap.png" % (j*batch_size+k), thr=0.05, edge_thr=0.05, snap=False, imagesize = image_size, use_graph_refine=False)
 							#ImageGraphVis(gt_imagegraph[k,:,:,:].reshape((image_size, image_size, 2 + 4*max_degree )), validation_folder+"/tile%d_output_graph_gt.png" % (j*batch_size+k), thr=0.5, imagesize = image_size)
 							DecodeAndVis(gt_imagegraph[k,:,:,:].reshape((image_size, image_size, 2 + 4*max_degree )), validation_folder+"/tile%d_output_graph_gt.png" % (j*batch_size+k), thr=0.5, snap=True, imagesize = image_size, use_graph_refine=False)
 							
