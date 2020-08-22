@@ -14,7 +14,7 @@ from time import time
 from model import Sat2GraphModel
 from decoder import DecodeAndVis 
 from douglasPeucker import simpilfyGraph 
-
+import threading 
 
 gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.65)
 sess = tf.Session(config=tf.ConfigProto()) # gpu_options=gpu_options
@@ -22,9 +22,13 @@ sess = tf.Session(config=tf.ConfigProto()) # gpu_options=gpu_options
 #model = Sat2GraphModel(sess, image_size=352, resnet_step = 8, batchsize = 1, channel = 24, mode = "test", model_name="unet")
 #model.restoreModel("/data/songtao/Sat2GraphLib/globalmodel20200804v3UNET_352_8__channel24/model600000")
 
-model = Sat2GraphModel(sess, image_size=352, resnet_step = 8, batchsize = 1, channel = 12, mode = "test")
-#model.restoreModel("/data/songtao/Sat2GraphLib/globalmodel20200810_dla_mapbox_highway_352_8__channel12/model980000")
-model.restoreModel("/data/songtao/Sat2GraphLib/globalmodel20200810_dla_mapbox_highway_finetune2_352_8__channel12/model300000")
+#model = Sat2GraphModel(sess, image_size=352, resnet_step = 8, batchsize = 1, channel = 12, mode = "test")
+#model.restoreModel("/data/songtao/Sat2GraphLib/globalmodel20200810_dla_mapbox_highway_finetune2_352_8__channel12/model300000")
+
+# larger model 
+model = Sat2GraphModel(sess, image_size=352, resnet_step = 8, batchsize = 1, channel = 24, mode = "test")
+model.restoreModel("/data/songtao/Sat2GraphLib/globalmodel20200810_dla_mapbox_highway_new_352_8__channel24/model860000")
+
 
 
 gt_prob_placeholder = np.zeros((1,352,352,14))
@@ -49,6 +53,9 @@ class S(BaseHTTPRequestHandler):
 		global gt_prob_placeholder
 		global gt_vector_placeholder
 		global gt_seg_placeholder
+		global global_lock 
+
+
 
 		content_length = int(self.headers['Content-Length']) # <--- Gets the size of data
 		post_data = self.rfile.read(content_length) # <--- Gets the data itself
@@ -84,16 +91,23 @@ class S(BaseHTTPRequestHandler):
 
 		mask = np.zeros((704, 704, 2+4*6 + 2))
 		output = np.zeros((704, 704, 2+4*6 + 2))
-
+		
+		global_lock.acquire()
 		t0 = time()
-		for x in range(0,704-176-88,176/2):		
-			for y in range(0,704-176-88,176/2):
+		try:
+			for x in range(0,704-176-88,176/2):		
+				for y in range(0,704-176-88,176/2):
 
-				alloutputs  = model.Evaluate(sat_img[:,x:x+image_size, y:y+image_size,:], gt_prob_placeholder, gt_vector_placeholder, gt_seg_placeholder)
-				_output = alloutputs[1]
+					alloutputs  = model.Evaluate(sat_img[:,x:x+image_size, y:y+image_size,:], gt_prob_placeholder, gt_vector_placeholder, gt_seg_placeholder)
+					_output = alloutputs[1]
 
-				mask[x:x+image_size, y:y+image_size, :] += weights
-				output[x:x+image_size, y:y+image_size,:] += np.multiply(_output[0,:,:,:], weights)
+					mask[x:x+image_size, y:y+image_size, :] += weights
+					output[x:x+image_size, y:y+image_size,:] += np.multiply(_output[0,:,:,:], weights)
+			
+			global_lock.release()
+		except:
+			global_lock.release()
+
 
 		print("GPU time:", time() - t0)
 		t0 = time()
