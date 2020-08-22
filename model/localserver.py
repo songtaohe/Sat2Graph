@@ -16,6 +16,8 @@ from decoder import DecodeAndVis
 from douglasPeucker import simpilfyGraph 
 import threading 
 
+global_lock = threading.Lock()
+
 gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.65)
 sess = tf.Session(config=tf.ConfigProto()) # gpu_options=gpu_options
 
