@@ -1,7 +1,7 @@
 # Sat2Graph 
 Sat2Graph: Road Graph Extraction through Graph-Tensor Encoding
 
-Paper: [arxiv.org/pdf/2007.09547.pdf](https://arxiv.org/pdf/2007.09547.pdf)
+Paper: [arxiv.org/pdf/2007.09547.pdf](https://arxiv.org/pdf/2007.09547.pdf) (ECCV 2020)
 
 ### Abstract
 
@@ -10,6 +10,16 @@ Inferring road graphs from satellite imagery is a challenging computer vision ta
 In this paper, we propose a new method, Sat2Graph, which combines the advantages of the two prior categories into a unified framework. The key idea in Sat2Graph is a novel encoding scheme, graph-tensor encoding (GTE), which encodes the road graph into a tensor representation. GTE makes it possible to train a simple, non-recurrent, supervised model to predict a rich set of features that capture the graph structure directly from an image. We evaluate Sat2Graph using two large datasets. We find that Sat2Graph surpasses prior methods on two widely used metrics, TOPO and APLS. Furthermore, whereas prior work only infers planar road graphs, our approach is capable of inferring stacked roads (e.g., overpasses), and does so robustly.
 
 ![Overview](figures/Sat2Graph2.png)
+
+# Run Sat2Graph at any places on Earth!
+
+**Try Sat2Graph in iD editor [(link)](http://128.30.198.28:8080/#background=Mapbox&disable_features=points,traffic_roads,service_roads,paths,buildings,building_parts,indoor,landuse,boundaries,water,rail,pistes,aerialways,power,past_future,others&map=2.00/13.4/2.6).**
+
+**Watch the [demo](https://youtu.be/uqcGPVOBpGg).**
+
+<!-- ![Demo1](figures/demo.gif) -->
+
+![Demo2](figures/demo2.gif)
 
 # Usage
 ## Download the Dataset
@@ -47,15 +57,7 @@ python train.py -model_save tmp -instance_id test -image_size 352
 TODO
 
 
-# Run Sat2Graph at any places on Earth!
 
-**Try Sat2Graph in iD editor [(link)](http://128.30.198.28:8080/#background=Mapbox&disable_features=points,traffic_roads,service_roads,paths,buildings,building_parts,indoor,landuse,boundaries,water,rail,pistes,aerialways,power,past_future,others&map=2.00/13.4/2.6).**
-
-**Watch the [demo](https://youtu.be/uqcGPVOBpGg).**
-
-<!-- ![Demo1](figures/demo.gif) -->
-
-![Demo2](figures/demo2.gif)
 
 
 
