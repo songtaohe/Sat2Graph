@@ -21,7 +21,7 @@ In this paper, we propose a new method, Sat2Graph, which combines the advantages
 ![Demo2](figures/demo2.gif)
 
 # Usage
-## Download the Dataset
+## Download the Dataset and Pre-Trained Model
 
 ```bash
 ./download.sh
