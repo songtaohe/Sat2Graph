@@ -49,9 +49,11 @@ TODO
 
 # Run Sat2Graph at any places on Earth!
 
-**Public link is coming soon.**
+**Try Sat2Graph in iD editor [(link)](http://128.30.198.28:8080/#background=Mapbox&disable_features=points,traffic_roads,service_roads,paths,buildings,building_parts,indoor,landuse,boundaries,water,rail,pistes,aerialways,power,past_future,others&map=2.00/13.4/2.6).**
 
-![Demo1](figures/demo.gif)
+**Watch the [demo](https://youtu.be/uqcGPVOBpGg).**
+
+<!-- ![Demo1](figures/demo.gif) -->
 
 ![Demo2](figures/demo2.gif)
 
