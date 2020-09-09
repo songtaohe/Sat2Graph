@@ -29,7 +29,7 @@ sess = tf.Session(config=tf.ConfigProto()) # gpu_options=gpu_options
 
 # larger model 
 model = Sat2GraphModel(sess, image_size=352, resnet_step = 8, batchsize = 1, channel = 24, mode = "test")
-model.restoreModel("/data/songtao/Sat2GraphLib/globalmodel20200810_dla_mapbox_highway_new_352_8__channel24/model960000")
+model.restoreModel("/data/songtao/Sat2GraphLib/globalmodel20200810_dla_mapbox_highway_new_352_8__channel24/model1000000")
 
 
 
