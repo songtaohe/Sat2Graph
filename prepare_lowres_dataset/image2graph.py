@@ -55,7 +55,8 @@ in_fname = sys.argv[1]
 threshold = 0
 out_fname = sys.argv[2]
 
-im = scipy.ndimage.imread(in_fname)
+im = Image.open(in_fname)
+im = numpy.array(im)
 im = im[:,:,5]
 
 if len(im.shape) == 3:
