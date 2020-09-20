@@ -55,7 +55,7 @@ PADDING = 30
 
 in_fname = sys.argv[1]
 #threshold = int(sys.argv[2])
-threshold = 0
+threshold = 1
 out_fname = sys.argv[2]
 
 im = tifffile.imread(in_fname)
