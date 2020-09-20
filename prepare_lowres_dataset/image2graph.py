@@ -7,12 +7,14 @@ import os
 from PIL import Image
 import math
 import numpy
+import numpy as np 
 from multiprocessing import Pool
 import subprocess
 import sys
 from math import sqrt
 import pickle
 import tifffile 
+import json
 
 def distance(a, b):
     return  sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2)
@@ -64,7 +66,10 @@ if len(im.shape) == 3:
 	print 'warning: bad shape {}, using first channel only'.format(im.shape)
 	im = im[:, :, 0]
 im = numpy.swapaxes(im, 0, 1)
-im = im >= threshold
+im = (im >= threshold)
+
+print(np.amax(im))
+
 
 #bigim = numpy.zeros((im.shape[0] + 2*PADDING, im.shape[1] + 2*PADDING), dtype='bool')
 #bigim[PADDING:PADDING+im.shape[0], PADDING:PADDING+im.shape[1]] = im
