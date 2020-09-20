@@ -66,6 +66,9 @@ if len(im.shape) == 3:
 	print 'warning: bad shape {}, using first channel only'.format(im.shape)
 	im = im[:, :, 0]
 im = numpy.swapaxes(im, 0, 1)
+
+Image.fromarray(im*60).save("tmp0.png")
+
 im = (im >= threshold)
 
 #print(np.amax(im))
