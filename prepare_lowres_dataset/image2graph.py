@@ -12,6 +12,7 @@ import subprocess
 import sys
 from math import sqrt
 import pickle
+import tifffile 
 
 def distance(a, b):
     return  sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2)
@@ -55,7 +56,7 @@ in_fname = sys.argv[1]
 threshold = 0
 out_fname = sys.argv[2]
 
-im = Image.open(in_fname)
+im = tifffile.imread(in_fname)
 im = numpy.array(im)
 im = im[:,:,5]
 
