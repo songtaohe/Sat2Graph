@@ -67,10 +67,11 @@ if len(im.shape) == 3:
 	im = im[:, :, 0]
 im = numpy.swapaxes(im, 0, 1)
 
-Image.fromarray(im*60).save("tmp0.png")
+
 
 im = (im >= threshold)
 
+Image.fromarray(im.astype('uint8')*60).save("tmp0.png")
 #print(np.amax(im))
 
 
