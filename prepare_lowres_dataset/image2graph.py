@@ -68,7 +68,7 @@ if len(im.shape) == 3:
 im = numpy.swapaxes(im, 0, 1)
 im = (im >= threshold)
 
-print(np.amax(im))
+#print(np.amax(im))
 
 
 #bigim = numpy.zeros((im.shape[0] + 2*PADDING, im.shape[1] + 2*PADDING), dtype='bool')
@@ -185,7 +185,7 @@ for edge in edges:
 
 		#f.write('{} {}\n'.format(edge[0], edge[1]))
 		#f.write('{} {}\n'.format(edge[1], edge[0]))
-
+print(neighbors)
 pickle.dump(neighbors, open(out_fname, "w"))
 
 
