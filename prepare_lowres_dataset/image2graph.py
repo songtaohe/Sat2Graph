@@ -85,6 +85,8 @@ im = (im >= threshold)
 im = skimage.morphology.thin(im)
 im = im.astype('uint8')
 
+Image.fromarray(im*255).save("tmp.png")
+
 # extract a graph by placing vertices every THRESHOLD pixels, and at all intersections
 vertices = []
 edges = set()
