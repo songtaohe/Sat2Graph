@@ -152,6 +152,8 @@ while True:
 			break
 neighbors = {}
 
+print(vertices)
+
 #with open(out_fname, 'w') as f:
 	#for vertex in vertices:
 	#	f.write('{} {}\n'.format(vertex[0], vertex[1]))
