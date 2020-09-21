@@ -37,7 +37,7 @@ files = os.listdir(sys.argv[1])
 cmds = []
 for file in files:
 	if file.endswith(".tif"):
-		cmd = "python image2graph " + sys.argv[1]+"/"+file + " " + sys.argv[1]+"/"+file.replace(".tif",".p")
+		cmd = "python image2graph.py " + sys.argv[1]+"/"+file + " " + sys.argv[1]+"/"+file.replace(".tif",".p")
 		cmds.append(cmd)
 
 run_cmds_parallel(cmds)
