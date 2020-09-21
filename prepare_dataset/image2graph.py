@@ -73,7 +73,7 @@ im = numpy.swapaxes(im, 0, 1)
 
 im = (im >= threshold)
 
-Image.fromarray(im.astype('uint8')*60).save("tmp0.png")
+#Image.fromarray(im.astype('uint8')*60).save("tmp0.png")
 #print(np.amax(im))
 
 
@@ -91,7 +91,7 @@ Image.fromarray(im.astype('uint8')*60).save("tmp0.png")
 im = skimage.morphology.thin(im)
 im = im.astype('uint8')
 
-Image.fromarray(im*255).save("tmp.png")
+#Image.fromarray(im*255).save("tmp.png")
 
 # extract a graph by placing vertices every THRESHOLD pixels, and at all intersections
 vertices = []
@@ -196,21 +196,21 @@ for edge in edges:
 node_neighbor = graphlib.graphDensify(neighbors, density = 20, distFunc = graphlib.PixelDistance)
 
 
-img = np.zeros((250,250,3), dtype=np.uint8)
+# img = np.zeros((250,250,3), dtype=np.uint8)
 
-for node, nei in node_neighbor.iteritems():
-	x1,y1 = int(node[0]), int(node[1])
-	for n in nei:
-		x2,y2 = int(n[0]), int(n[1])
+# for node, nei in node_neighbor.iteritems():
+# 	x1,y1 = int(node[0]), int(node[1])
+# 	for n in nei:
+# 		x2,y2 = int(n[0]), int(n[1])
 
-		cv2.line(img, (x1,y1), (x2,y2), (255,255,255),2)
+# 		cv2.line(img, (x1,y1), (x2,y2), (255,255,255),2)
 
-for node, nei in node_neighbor.iteritems():
-	x1,y1 = int(node[0]), int(node[1])
+# for node, nei in node_neighbor.iteritems():
+# 	x1,y1 = int(node[0]), int(node[1])
 
-	cv2.circle(img, (x1,y1), 3, (0,0,255),2)
+# 	cv2.circle(img, (x1,y1), 3, (0,0,255),2)
 
-Image.fromarray(img).save("t.png")
+# Image.fromarray(img).save("t.png")
 
 
 pickle.dump(node_neighbor, open(out_fname, "w"))
