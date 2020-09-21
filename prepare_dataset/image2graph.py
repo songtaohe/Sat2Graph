@@ -193,7 +193,7 @@ for edge in edges:
 		#f.write('{} {}\n'.format(edge[0], edge[1]))
 		#f.write('{} {}\n'.format(edge[1], edge[0]))
 
-node_neighbor = graphlib.graphDensify(node_neighbor, density = 10, distFunc = graphlib.PixelDistance)
+node_neighbor = graphlib.graphDensify(neighbors, density = 10, distFunc = graphlib.PixelDistance)
 
 
 img = np.zeros((250,250,3), dtype=np.uint8)
@@ -213,7 +213,7 @@ for node, nei in node_neighbor.iteritems():
 Image.fromarray(img).save("t.png")
 
 
-pickle.dump(neighbors, open(out_fname, "w"))
+pickle.dump(node_neighbor, open(out_fname, "w"))
 
 
 
