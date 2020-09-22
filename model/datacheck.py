@@ -10,15 +10,15 @@ bad = 0
 for item in datafiles:
 	if item[-1] == 'train':
 		filepath = basefolder+item[1]
-		if os.isfile(filepath):
+		if os.path.isfile(filepath):
 			bad+= 1
 
 		trainfiles.append(basefolder+item[1].replace(".tif",""))
 	elif item[-1] == 'valid':
 		filepath = basefolder+item[1]
-		if os.isfile(filepath):
+		if os.path.isfile(filepath):
 			bad+= 1
-			
+
 		validfiles.append(basefolder+item[1].replace(".tif",""))
 
 print("train size", len(trainfiles))
