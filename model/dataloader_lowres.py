@@ -179,11 +179,11 @@ class Sat2GraphDataLoader():
 
 				bx,by = 3, 3
 
-				self.tiles_prob[i,loc[0]+bx,loc[1]+by,0] = 1
-				self.tiles_prob[i,loc[0]+bx,loc[1]+by,1] = 0
+				self.tiles_prob[i,int(loc[0])+bx,int(loc[1])+by,0] = 1
+				self.tiles_prob[i,int(loc[0])+bx,int(loc[1])+by,1] = 0
 
-				for x in range(loc[0]-r, loc[0]+r+1):
-					for y in range(loc[1]-r, loc[1]+r+1):
+				for x in range(int(loc[0])-r, int(loc[0])+r+1):
+					for y in range(int(loc[1])-r, int(loc[1])+r+1):
 
 						self.tiles_prob[i,x+bx,y+by,0] = 1
 						self.tiles_prob[i,x+bx,y+by,1] = 0
@@ -197,8 +197,8 @@ class Sat2GraphDataLoader():
 					d = math.atan2(n_loc[1] - loc[1], n_loc[0] - loc[0]) + math.pi 
 					j = int(d/(math.pi/3.0)) % self.max_degree
 
-					for x in range(loc[0]-r, loc[0]+r+1):
-						for y in range(loc[1]-r, loc[1]+r+1):
+					for x in range(int(loc[0])-r, int(loc[0])+r+1):
+						for y in range(int(loc[1])-r, int(loc[1])+r+1):
 							self.tiles_prob[i,x+bx,y+by,2+2*j] = 1
 							self.tiles_prob[i,x+bx,y+by,2+2*j+1] = 0
 
