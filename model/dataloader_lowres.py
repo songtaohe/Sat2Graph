@@ -148,7 +148,7 @@ class Sat2GraphDataLoader():
 		
 
 		for i in range(self.preload_tiles):
-			filename = random.choice(self.indrange)
+			filename = random.choice(self.filelist)
 
 			img = tifffile.imread(filename+".tif")
 
