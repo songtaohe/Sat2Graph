@@ -1,5 +1,6 @@
 from model import Sat2GraphModel
-from dataloader import Sat2GraphDataLoader as Sat2GraphDataLoaderOSM
+#from dataloader import Sat2GraphDataLoader as Sat2GraphDataLoaderOSM
+from dataloader_lowres import Sat2GraphDataLoader
 #from dataloader_spacenet import Sat2GraphDataLoader as Sat2GraphDataLoaderSpacenet
 from subprocess import Popen 
 import numpy as np 
@@ -87,7 +88,7 @@ spacenetdataset = "../data/spacenet/"
 
 image_size = args.image_size
 
-batch_size = 2 # 352 * 352 
+batch_size = 4 # 256 256  
 
 # if args.image_size == 384:
 # 	batch_size = 4
@@ -119,111 +120,27 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 	writer = tf.summary.FileWriter(log_folder+"/"+run, sess.graph)
 
 	if args.spacenet == "":
-		print("Use the 20-city datasets")
-		# dataset partition
-		indrange_train = []
-		indrange_test = []
-		indrange_validation = []
-
-		for x in range(180):
-			if x % 10 < 8 :
-				indrange_train.append(x)
-
-			if x % 10 == 9:
-				indrange_test.append(x)
-
-			if x % 20 == 18:
-				indrange_validation.append(x)
-
-			if x % 20 == 8:
-				indrange_test.append(x)
-
-		print("training set", indrange_train)
-		print("testing set", indrange_test)
-		print("validation set", indrange_validation)
-		
-
 		if args.mode == "train":
-			dataloader_train = Sat2GraphDataLoaderOSM(osmdataset, indrange_train, imgsize = image_size, preload_tiles = 4, testing = False, random_mask=True)
-			dataloader_train.preload(num=1024)
 
-			dataloader_test = Sat2GraphDataLoaderOSM(osmdataset, indrange_validation, imgsize = image_size, preload_tiles = len(indrange_validation), random_mask=False, testing=True)
-			dataloader_test.preload(num=128)
+			datafiles = json.load(open("train_prep_RE_18_20_CHN_KZN_250.json"))['data']
+			basefolder = "/data/songtao/harvardDataset5m/"
 
+			trainfiles = []
+			validfiles = []
+			for item in datafiles:
+				if item[-1] == 'train':
+					trainfiles.append(basefolder+item[1].replace(".tif",""))
+				elif item[-1] == 'valid':
+					validfiles.append(basefolder+item[1].replace(".tif",""))
 
-		else:
-			dataloader = Sat2GraphDataLoaderOSM(osmdataset, [], imgsize = image_size, preload_tiles = 1, random_mask=False)
+			print("train size", len(trainfiles))
+			print("valid size", len(validfiles))
 
-			tiles = indrange_test
-			if args.mode == "validate":
-				tiles = indrange_validation
-			
-			Popen("mkdir -p rawoutputs_%s" % (args.instance_id), shell=True).wait()
-			Popen("mkdir -p outputs", shell=True).wait() 
+			dataloader_train = Sat2GraphDataLoader(osmdataset, trainfiles, imgsize = image_size, preload_tiles = 100, testing = False, random_mask=True)
+			dataloader_train.preload()
 
-			for tile_id in tiles:
-				t0 = time()
-
-				input_sat, gt_prob, gt_vector = dataloader.loadtile(tile_id)
-				#print(np.shape(input_sat))
-				gt_seg = np.zeros((1,image_size,image_size,1))
-			
-
-				gt_imagegraph = np.zeros((2048,2048,26))
-
-				gt_imagegraph[:,:,0:2] = gt_prob[0,:,:,0:2]
-				for k in range(max_degree):
-					gt_imagegraph[:,:,2+k*4:2+k*4+2] = gt_prob[0,:,:,2+k*2:2+k*2+2]
-					gt_imagegraph[:,:,2+k*4+2:2+k*4+4] = gt_vector[0,:,:,k*2:k*2+2]
-
-				x, y = 0, 0 
-
-				output = np.zeros((2048+64, 2048+64, 2+4*6 + 2))
-
-				mask = np.ones((2048+64,2048+64, 2+4*6 + 2)) * 0.001
-				weights = np.ones((image_size,image_size, 2+4*6 + 2)) * 0.001 
-				weights[32:image_size-32,32:image_size-32, :] = 0.5 
-				weights[56:image_size-56,56:image_size-56, :] = 1.0 
-				weights[88:image_size-88,88:image_size-88, :] = 1.5 
-				
-				input_sat = np.pad(input_sat, ((0,0),(32,32),(32,32),(0,0)), 'constant')
-				gt_vector = np.pad(gt_vector, ((0,0),(32,32),(32,32),(0,0)), 'constant')
-				gt_prob = np.pad(gt_prob,((0,0),(32,32),(32,32),(0,0)), 'constant')
-				
-				for x in range(0,352*6-176-88,176/2):
-					
-					progress = x/88
-
-					sys.stdout.write("\rProcessing Tile %d ...  "%tile_id + ">>" * progress + "--" * (20-progress))
-					sys.stdout.flush()
-
-					for y in range(0,352*6-176-88,176/2):
-
-						alloutputs  = model.Evaluate(input_sat[:,x:x+image_size, y:y+image_size,:], gt_prob[:,x:x+image_size, y:y+image_size,:], gt_vector[:,x:x+image_size, y:y+image_size,:], gt_seg)
-						_output = alloutputs[1]
-					
-						mask[x:x+image_size, y:y+image_size, :] += weights
-						output[x:x+image_size, y:y+image_size,:] += np.multiply(_output[0,:,:,:], weights)
-
-
-				output = np.divide(output, mask)
-
-				output = output[32:2048+32,32:2048+32,:]
-				input_sat = input_sat[:,32:2048+32,32:2048+32,:]
-
-				output_keypoints_img = (output[:,:,0] * 255.0).reshape((2048,2048)).astype(np.uint8)
-				Image.fromarray(output_keypoints_img).save("outputs/region_%d_output_keypoints.png" % tile_id)
-
-				input_sat_img = ((input_sat[0,:,:,:]+0.5) * 255.0).reshape((2048,2048,3)).astype(np.uint8)
-				Image.fromarray(input_sat_img).save("outputs/region_%d_input.png" % tile_id)
-
-				DecodeAndVis(output, "outputs/region_%d_output" % (tile_id), thr=0.05, edge_thr = 0.05, snap=True, imagesize = 2048)
-							
-				np.save("rawoutputs_%s/region_%d_output_raw" % (args.instance_id, tile_id), output)
-									
-				print(" done!  time: %.2f seconds"%(time() - t0))
-
-			exit()
+			dataloader_test = Sat2GraphDataLoaderOSM(osmdataset, validfiles, imgsize = image_size, preload_tiles = 128, random_mask=False, testing=True)
+			dataloader_test.preload()
 
 	else:
 		# CLEANING UP ... 
@@ -287,7 +204,7 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 
 	validation_data = []
 
-	test_size = 32
+	test_size = 64
 
 	for j in range(test_size/batch_size):
 		input_sat, gt_prob, gt_vector, gt_seg= dataloader_test.getBatch(batch_size)
