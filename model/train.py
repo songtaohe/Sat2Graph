@@ -107,7 +107,7 @@ Popen("mkdir -p %s" % model_save_folder, shell=True).wait()
 
 gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.95)
 with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
-	model = Sat2GraphModel(sess, image_size=image_size, resnet_step = args.resnet_step, batchsize = batch_size, channel = args.channel, mode = args.mode)
+	model = Sat2GraphModel(sess, image_size=image_size, image_ch=5, resnet_step = args.resnet_step, batchsize = batch_size, channel = args.channel, mode = args.mode)
 	
 	if args.model_recover is not None:
 		print("model recover", args.model_recover)
