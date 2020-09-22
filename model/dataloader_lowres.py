@@ -158,7 +158,7 @@ class Sat2GraphDataLoader():
 
 			seg = np.pad(seg, ((3,3),(3,3)), 'constant') # 256*256
 
-			sat_img = img[:,:,0:5].astype(np.float)/16384.0 - 0.5 
+			sat_img = img[:,:,0:5].astype(np.float)/(np.amax(sat_img)+1.0) - 0.5 
 
 			sat_img = np.pad(sat_img, ((3,3),(3,3),(0,0)), 'constant') # 256*256
 			
@@ -207,15 +207,15 @@ class Sat2GraphDataLoader():
 
 
 			# random rotation augmentation 
-			if self.testing == False:
-				self.tiles_input[i,:,:,:] = self.tiles_input[i,:,:,:] * (0.8 + 0.2 * random.random()) - (random.random() * 0.4 - 0.2)
-				self.tiles_input[i,:,:,:] = np.clip(self.tiles_input[i,:,:,:], -0.5, 0.5)
+			#if self.testing == False:
+				# self.tiles_input[i,:,:,:] = self.tiles_input[i,:,:,:] * (0.8 + 0.2 * random.random()) - (random.random() * 0.4 - 0.2)
+				# self.tiles_input[i,:,:,:] = np.clip(self.tiles_input[i,:,:,:], -0.5, 0.5)
 
-				self.tiles_input[i,:,:,0] = self.tiles_input[i,:,:,0] * (0.8 + 0.2 * random.random())
-				self.tiles_input[i,:,:,1] = self.tiles_input[i,:,:,1] * (0.8 + 0.2 * random.random())
-				self.tiles_input[i,:,:,2] = self.tiles_input[i,:,:,2] * (0.8 + 0.2 * random.random())
-				self.tiles_input[i,:,:,3] = self.tiles_input[i,:,:,3] * (0.8 + 0.2 * random.random())
-				self.tiles_input[i,:,:,4] = self.tiles_input[i,:,:,4] * (0.8 + 0.2 * random.random())
+				# self.tiles_input[i,:,:,0] = self.tiles_input[i,:,:,0] * (0.8 + 0.2 * random.random())
+				# self.tiles_input[i,:,:,1] = self.tiles_input[i,:,:,1] * (0.8 + 0.2 * random.random())
+				# self.tiles_input[i,:,:,2] = self.tiles_input[i,:,:,2] * (0.8 + 0.2 * random.random())
+				# self.tiles_input[i,:,:,3] = self.tiles_input[i,:,:,3] * (0.8 + 0.2 * random.random())
+				# self.tiles_input[i,:,:,4] = self.tiles_input[i,:,:,4] * (0.8 + 0.2 * random.random())
 
 
 	def getBatch(self, batchsize = 4, st = None):
@@ -229,21 +229,21 @@ class Sat2GraphDataLoader():
 
 			self.input_sat[i,:,:,:] = self.tiles_input[tile_id, :, :, :]
 			
-			if random.randint(0,100) < 50 and self.random_mask==True:
+			# if random.randint(0,100) < 50 and self.random_mask==True:
 
-				# add noise
-				for it in range(random.randint(1,5)):
-					xx = random.randint(0,image_size-16-1)
-					yy = random.randint(0,image_size-16-1)
+			# 	# add noise
+			# 	for it in range(random.randint(1,5)):
+			# 		xx = random.randint(0,image_size-16-1)
+			# 		yy = random.randint(0,image_size-16-1)
 
-					self.input_sat[i,xx:xx+16,yy:yy+16,:] =  np.multiply(self.input_sat[i,xx:xx+16,yy:yy+16,:] + 0.5, self.noise_mask) - 0.5
+			# 		self.input_sat[i,xx:xx+16,yy:yy+16,:] =  np.multiply(self.input_sat[i,xx:xx+16,yy:yy+16,:] + 0.5, self.noise_mask) - 0.5
 				
-				# add more noise 
-				for it in range(random.randint(1,3)):
-					xx = random.randint(0,image_size-16-1)
-					yy = random.randint(0,image_size-16-1)
+			# 	# add more noise 
+			# 	for it in range(random.randint(1,3)):
+			# 		xx = random.randint(0,image_size-16-1)
+			# 		yy = random.randint(0,image_size-16-1)
 
-					self.input_sat[i,xx:xx+16,yy:yy+16,:] =  (self.noise_mask - 1.0) 
+			# 		self.input_sat[i,xx:xx+16,yy:yy+16,:] =  (self.noise_mask - 1.0) 
 				
 			self.target_prob[i,:,:,:] = self.tiles_prob[tile_id,:,:,:]
 			self.target_vector[i,:,:,:] = self.tiles_vector[tile_id, :,:,:]

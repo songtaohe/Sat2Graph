@@ -280,6 +280,7 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 						for k in range(batch_size):
 							
 							input_sat_img = ((input_sat[k,:,:,0:3] + 0.5) * 255.0).reshape((image_size,image_size,3)).astype(np.uint8)
+							input_gt_seg = (gt_seg[k,:,:,0]*255.0).astype(np.uint8)
 
 							# segmentation output (joint training)
 							output_img = (output[k,:,:,-2] * 255.0).reshape((image_size,image_size)).astype(np.uint8)
@@ -293,10 +294,14 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 							# input satellite
 							Image.fromarray(input_sat_img).save(validation_folder+"/tile%d_input_sat.png" % (j*batch_size+k))
 								
+							# input gt seg 
+							Image.fromarray(input_gt_seg).save(validation_folder+"/tile%d_input_gt_seg.png" % (j*batch_size+k))
+							
+
 							# todo 			
 							#ImageGraphVis(output[k,:,:,0:2 + 4*max_degree].reshape((image_size, image_size, 2 + 4*max_degree )), validation_folder+"/tile%d_output_graph_0.01.png" % (j*batch_size+k), thr=0.01, imagesize = image_size)
 							DecodeAndVis(output[k,:,:,0:2 + 4*max_degree].reshape((image_size, image_size, 2 + 4*max_degree )), validation_folder+"/tile%d_output_graph_0.01_snap.png" % (j*batch_size+k), thr=0.01, snap=True, imagesize = image_size)
-							#ImageGraphVis(gt_imagegraph[k,:,:,:].reshape((image_size, image_size, 2 + 4*max_degree )), validation_folder+"/tile%d_output_graph_gt.png" % (j*batch_size+k), thr=0.5, imagesize = image_size)
+							DecodeAndVis(gt_imagegraph[k,:,:,:].reshape((image_size, image_size, 2 + 4*max_degree )), validation_folder+"/tile%d_output_graph_gt.png" % (j*batch_size+k), thr=0.5, imagesize = image_size)
 
 
 				test_loss /= test_size/batch_size
