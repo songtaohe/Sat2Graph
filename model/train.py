@@ -139,7 +139,7 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 			dataloader_train = Sat2GraphDataLoader(osmdataset, trainfiles, imgsize = image_size, preload_tiles = 100, testing = False, random_mask=True)
 			dataloader_train.preload()
 
-			dataloader_test = Sat2GraphDataLoaderOSM(osmdataset, validfiles, imgsize = image_size, preload_tiles = 128, random_mask=False, testing=True)
+			dataloader_test = Sat2GraphDataLoader(osmdataset, validfiles, imgsize = image_size, preload_tiles = 128, random_mask=False, testing=True)
 			dataloader_test.preload()
 
 	else:
