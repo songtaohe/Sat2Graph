@@ -1,7 +1,8 @@
 import json 
 import os  
+import sys    
 
-datafiles = json.load(open("train_prep_RE_18_20_CHN_KZN_250.json"))['data']
+datafiles = json.load(open(sys.argv[1]))['data']
 basefolder = "/data/songtao/harvardDataset5m/"
 
 trainfiles = []
