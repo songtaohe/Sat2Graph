@@ -31,7 +31,7 @@ def neighbor_transpos(n_in):
 
 
 class Sat2GraphDataLoader():
-	def __init__(self, folder, filelist, imgsize = 256, preload_tiles = 100, max_degree = 6, loadseg = False, random_mask=True, testing=False, dataset_image_size = 250, transpose=False):
+	def __init__(self, folder, filelist, imgsize = 256, preload_tiles = 100, max_degree = 6, loadseg = False, random_mask=True, testing=False, dataset_image_size = 256, transpose=False):
 		self.folder = folder
 		self.filelist = filelist
 		self.random_mask = random_mask 
