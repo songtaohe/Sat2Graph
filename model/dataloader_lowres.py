@@ -236,7 +236,7 @@ class Sat2GraphDataLoader():
 					xx = random.randint(0,image_size-16-1)
 					yy = random.randint(0,image_size-16-1)
 
-					self.input_sat[i,xx:xx+16,yy:yy+16,:] =  np.multiply(self.input_sat[i,xx:xx+64,yy:yy+64,:] + 0.5, self.noise_mask) - 0.5
+					self.input_sat[i,xx:xx+16,yy:yy+16,:] =  np.multiply(self.input_sat[i,xx:xx+16,yy:yy+16,:] + 0.5, self.noise_mask) - 0.5
 				
 				# add more noise 
 				for it in range(random.randint(1,3)):
