@@ -48,7 +48,7 @@ class Sat2GraphDataLoader():
 		global image_size 
 		image_size = imgsize 
 
-		self.input_sat = np.zeros((8,image_size,image_size,3))
+		self.input_sat = np.zeros((8,image_size,image_size,5))
 		
 		self.gt_seg = np.zeros((8,image_size,image_size,1))
 		self.target_prob = np.zeros((8,image_size,image_size,2*(max_degree + 1)))

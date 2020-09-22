@@ -279,7 +279,7 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 					if step == 1000 or step % 2000 == 0 or (step < 1000 and step % 200 == 0):
 						for k in range(batch_size):
 							
-							input_sat_img = ((input_sat[k,:,:,:] + 0.5) * 255.0).reshape((image_size,image_size,3)).astype(np.uint8)
+							input_sat_img = ((input_sat[k,:,:,0:3] + 0.5) * 255.0).reshape((image_size,image_size,3)).astype(np.uint8)
 
 							# segmentation output (joint training)
 							output_img = (output[k,:,:,-2] * 255.0).reshape((image_size,image_size)).astype(np.uint8)
