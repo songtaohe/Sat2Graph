@@ -249,7 +249,7 @@ class Sat2GraphDataLoader():
 			self.target_vector[i,:,:,:] = self.tiles_vector[tile_id, :,:,:]
 			self.gt_seg[i,:,:,:] = self.tiles_gt_seg[tile_id,:,:,:]
 
-			break
+			
 
 		st = 0
 

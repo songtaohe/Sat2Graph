@@ -128,10 +128,11 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 			trainfiles = []
 			validfiles = []
 			for item in datafiles:
-				if item[-1] == 'train':
-					trainfiles.append(basefolder+item[1].replace(".tif",""))
-				elif item[-1] == 'valid':
-					validfiles.append(basefolder+item[1].replace(".tif",""))
+				if item[1].endswith("4.tif") or item[1].endswith("3.tif"):
+					if item[-1] == 'train':
+						trainfiles.append(basefolder+item[1].replace(".tif",""))
+					elif item[-1] == 'valid':
+						validfiles.append(basefolder+item[1].replace(".tif",""))
 
 			print("train size", len(trainfiles))
 			print("valid size", len(validfiles))
