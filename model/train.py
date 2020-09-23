@@ -310,6 +310,8 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 			print("")
 			print("step", step, "loss", sum_loss, "test_loss", test_loss, "prob_loss", sum_prob_loss/200.0, "vector_loss", sum_vector_loss/200.0, "seg_loss", sum_seg_loss/200.0)
 			
+			summary = model.addLog(test_loss, sum_loss, lr)
+			writer.add_summary(summary, step)
 
 			sum_prob_loss = 0
 			sum_vector_loss = 0
