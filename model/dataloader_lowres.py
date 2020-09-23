@@ -158,7 +158,7 @@ class Sat2GraphDataLoader():
 
 			seg = np.pad(seg, ((3,3),(3,3)), 'constant') # 256*256
 
-			sat_img = img[:,:,0:5].astype(np.float)/(np.amax(seg)+1.0) - 0.5 
+			sat_img = img[:,:,0:5].astype(np.float)/(np.amax(img[:,:,0:5])+1.0) - 0.5 
 
 			sat_img = np.pad(sat_img, ((3,3),(3,3),(0,0)), 'constant') # 256*256
 			
