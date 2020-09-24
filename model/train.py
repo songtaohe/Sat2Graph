@@ -281,7 +281,7 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 						for k in range(batch_size):
 							
 							input_sat_img = ((input_sat[k,:,:,0:3] + 0.5) * 255.0).reshape((image_size,image_size,3)).astype(np.uint8)
-							input_gt_seg = (gt_seg[k,:,:,0]*255.0).astype(np.uint8)
+							input_gt_seg = ((gt_seg[k,:,:,0]+0.5)*255.0).astype(np.uint8)
 
 							# segmentation output (joint training)
 							output_img = (output[k,:,:,-2] * 255.0).reshape((image_size,image_size)).astype(np.uint8)
