@@ -23,15 +23,15 @@ input_img = np.zeros((5000,5000,5))
 
 
 for item in datafiles:
-	if prefix in item:
+	if prefix in item[1]:
 		print(item)
-		
+
 		items = file.split("Analytic_")
 		xy = items[-1].split("_")[0].split("-")
 		x = int(xy[0])
 		y = int(xy[1])
 
-		file = basefolder + "/" + item 
+		file = basefolder + "/" + item[1]
 
 		img = tifffile.imread(filename+".tif")
 		sat_img = img[:,:,0:5].astype(np.float)/(16384) - 0.5 
