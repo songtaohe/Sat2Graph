@@ -35,7 +35,7 @@ testfiles = sorted(testfiles)
 
 region_count = {}
 
-for file in testfiles:
+for file in trainfiles:
 	items = file.split("Analytic")
 	if items[0] in region_count:
 		region_count[items[0]].append(items[1])
