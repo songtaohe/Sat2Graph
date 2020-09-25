@@ -51,6 +51,10 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 
 	output = np.zeros((5120,5120,26))
 	weights = np.zeros((5120,5120,26))+0.00001
+	localweights = np.zeros((256,256,26)) + 0.00001 
+	localweights[32:224,32:224,:] = 0.5
+	localweights[64:192,64:192,:] = 1.0 
+
 
 	gt_prob = np.zeros((1,256,256,14))
 	gt_vector = np.zeros((1,256,256,12))
@@ -62,8 +66,8 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 			if np.sum(input_mask[x:x+256,y:y+256]) > 10.0:
 				_, output_ = model.Evaluate(input_img[x:x+256,y:y+256,:].reshape((1,256,256,5)), gt_prob, gt_vector, gt_seg)
 
-				output[x:x+256,y:y+256,:] += output_[0,:,:,0:26]
-				weights[x:x+256,y:y+256,:] += 1.0 
+				output[x:x+256,y:y+256,:] += output_[0,:,:,0:26] * localweights
+				weights[x:x+256,y:y+256,:] += localweights
 
 	output = np.divide(output, weights)
 
