@@ -67,7 +67,7 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 
 	output = np.divide(output, weights)
 
-	DecodeAndVis(output, "output/"+prefix+"output", thr=0.05, snap=True, imagesize = 5120)
+	DecodeAndVis(output, "output/"+prefix+"output", thr=0.01, edge_thr=0.01, snap=True, imagesize = 5120)
 
 							
 
