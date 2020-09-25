@@ -62,7 +62,7 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 			if np.sum(input_mask[x:x+256,y:y+256]) > 10.0:
 				_, output_ = model.Evaluate(input_img[x:x+256,y:y+256,:].reshape((1,256,256,5)), gt_prob, gt_vector, gt_seg)
 
-				output[x:x+256,y:y+256,:] += output_[0,:,:,:]
+				output[x:x+256,y:y+256,:] += output_[0,:,:,0:26]
 				weights[x:x+256,y:y+256,:] += 1.0 
 
 	output = np.divide(output, weights)
