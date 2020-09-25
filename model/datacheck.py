@@ -45,13 +45,19 @@ for file in testfiles:
 
 
 for k in region_count.keys():
-	print(k, len(region_count[k]))
+	items = region_count[k]
 
-	if k == "/data/songtao/harvardDataset5m/4359222_2019-11-13_RE1_3A_":
-		for v in region_count[k]:
-			print(v)
+	cs = [int(x.split("_")[-1]) for x in items]
 
-			
+	print(k, len(region_count[k]), sum([(1 if x >= 3 else 0)for x in cs]))
+
+	
+
+	# if k == "/data/songtao/harvardDataset5m/4359222_2019-11-13_RE1_3A_":
+	# 	for v in region_count[k]:
+	# 		print(v)
+
+
 
 
 
