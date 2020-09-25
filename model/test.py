@@ -26,7 +26,7 @@ for item in datafiles:
 	if prefix in item[1]:
 		print(item)
 
-		items = file.split("Analytic_")
+		items = item[1].split("Analytic_")
 		xy = items[-1].split("_")[0].split("-")
 		x = int(xy[0])
 		y = int(xy[1])
