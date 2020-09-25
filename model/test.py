@@ -25,7 +25,7 @@ input_mask = np.zeros((5120, 5120))
 
 for item in datafiles:
 	if prefix in item[1]:
-		print(item)
+		#print(item)
 
 		items = item[1].split("Analytic_")
 		xy = items[-1].split("_")[0].split("-")
@@ -57,6 +57,7 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 	gt_seg = np.zeros_like((1,256,256,1))
 
 	for x in range(0, 5120-256, 128):
+		print(x)
 		for y in range(0,5120-256,128):
 			if np.sum(input_mask[x:x+256,y:y+256]) > 10.0:
 				_, output_ = model.Evaluate(input_img[x:x+256,y:y+256,:].reshape((1,256,256,5)), gt_prob, gt_vector, gt_seg)
