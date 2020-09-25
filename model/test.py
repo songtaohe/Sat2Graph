@@ -34,7 +34,7 @@ for item in datafiles:
 
 		file = basefolder + "/" + item[1]
 
-		img = tifffile.imread(filename+".tif")
+		img = tifffile.imread(file)
 		sat_img = img[:,:,0:5].astype(np.float)/(16384) - 0.5 
 
 		input_img[x:x+250, y:y+250, :] = sat_img
