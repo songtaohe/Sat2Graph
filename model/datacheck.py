@@ -35,7 +35,7 @@ testfiles = sorted(testfiles)
 
 region_count = {}
 
-for file in trainfiles:
+for file in testfiles:
 	items = file.split("Analytic")
 	if items[0] in region_count:
 		region_count[items[0]].append(items[1])
@@ -45,7 +45,7 @@ for file in trainfiles:
 for k in region_count.keys():
 	print(k, len(region_count[k]))
 
-	
+
 
 
 
@@ -55,6 +55,8 @@ for k in region_count.keys():
 
 print("train size", len(trainfiles))
 print("valid size", len(validfiles))
+print("test size", len(testfiles))
+
 print("bad files", bad)
 
 
