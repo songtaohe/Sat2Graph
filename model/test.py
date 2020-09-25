@@ -52,9 +52,9 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 	output = np.zeros((5120,5120,26))
 	weights = np.zeros((5120,5120))+0.00001
 
-	gt_prob = np.zeros_like((1,256,256,14))
-	gt_vector = np.zeros_like((1,256,256,12))
-	gt_seg = np.zeros_like((1,256,256,1))
+	gt_prob = np.zeros((1,256,256,14))
+	gt_vector = np.zeros((1,256,256,12))
+	gt_seg = np.zeros((1,256,256,1))
 
 	for x in range(0, 5120-256, 128):
 		print(x)
