@@ -31,7 +31,25 @@ for item in datafiles:
 		testfiles.append(basefolder+item[1].replace(".tif",""))
 
 testfiles = sorted(testfiles)
-print(testfiles)
+#print(testfiles)
+
+region_count = {}
+
+for file in testfiles:
+	items = file.split("Analytic")
+	if items[0] in region_count:
+		region_count[items[0]].append(items[1])
+	else:
+		region_count[items[0]] = [items[1]]
+
+for k in region_count.keys():
+	print(k, len(region_count[k]))
+
+	
+
+
+
+
 
 
 
