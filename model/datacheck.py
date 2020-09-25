@@ -42,8 +42,16 @@ for file in testfiles:
 	else:
 		region_count[items[0]] = [items[1]]
 
+
+
 for k in region_count.keys():
 	print(k, len(region_count[k]))
+
+	if k == "/data/songtao/harvardDataset5m/4359222_2019-11-13_RE1_3A_":
+		for v in region_count[k]:
+			print(v)
+
+			
 
 
 
