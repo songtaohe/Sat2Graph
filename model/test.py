@@ -12,6 +12,7 @@ import sys
 import random 
 import json 
 import argparse
+import tifffile
 
 
 datafiles = json.load(open("train_prep_RE_18_20_CHN_KZN_250.json"))['data']
