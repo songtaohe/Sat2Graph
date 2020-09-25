@@ -24,6 +24,8 @@ input_img = np.zeros((5000,5000,5))
 
 for item in datafiles:
 	if prefix in item:
+		print(item)
+		
 		items = file.split("Analytic_")
 		xy = items[-1].split("_")[0].split("-")
 		x = int(xy[0])
