@@ -18,37 +18,39 @@ import tifffile
 datafiles = json.load(open("train_prep_RE_18_20_CHN_KZN_250.json"))['data']
 basefolder = "/data/songtao/harvardDataset5m/"
 
-prefixs = ["4559325_2019-07-03_RE4_3A_", "4459815_2019-10-13_RE1_3A_", "4659204_2019-07-03_RE4_3A_", "4459815_2018-07-07_RE2_3A_", "4559216_2018-07-20_RE2_3A_", "4559325_2019-08-24_RE3_3A_", "4559325_2019-09-28_RE1_3A_"]
-for prefix in prefixs:
+gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.95)
+with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
+	model = Sat2GraphModel(sess, image_size=256, image_ch=5, resnet_step = 8, batchsize = 1, channel = 12, mode = "test")
+	model.restoreModel(sys.argv[1])
 
-	input_img = np.zeros((5120,5120,5))
-	input_mask = np.zeros((5120, 5120))
+	prefixs = ["4459815_2019-10-13_RE1_3A_", "4659204_2019-07-03_RE4_3A_", "4459815_2018-07-07_RE2_3A_", "4559216_2018-07-20_RE2_3A_", "4559325_2019-08-24_RE3_3A_", "4559325_2019-09-28_RE1_3A_", "4559325_2019-07-03_RE4_3A_"]
+	for prefix in prefixs:
 
-	for item in datafiles:
-		if prefix in item[1]:
-			#print(item)
+		input_img = np.zeros((5120,5120,5))
+		input_mask = np.zeros((5120, 5120))
 
-			items = item[1].split("Analytic_")
-			xy = items[-1].split("_")[0].split("-")
-			x = int(xy[1]) + 60
-			y = int(xy[0]) + 60 
+		for item in datafiles:
+			if prefix in item[1]:
+				#print(item)
 
-			file = basefolder + "/" + item[1]
+				items = item[1].split("Analytic_")
+				xy = items[-1].split("_")[0].split("-")
+				x = int(xy[1]) + 60
+				y = int(xy[0]) + 60 
 
-			img = tifffile.imread(file)
-			sat_img = img[:,:,0:5].astype(np.float)/(16384) - 0.5 
+				file = basefolder + "/" + item[1]
 
-			input_img[x:x+250, y:y+250, :] = sat_img
-			input_mask[x:x+250, y:y+250] = 1.0 
+				img = tifffile.imread(file)
+				sat_img = img[:,:,0:5].astype(np.float)/(16384) - 0.5 
+
+				input_img[x:x+250, y:y+250, :] = sat_img
+				input_mask[x:x+250, y:y+250] = 1.0 
 
 
-	Image.fromarray(((input_img[:,:,0:3]+0.5) * 255.0).astype(np.uint8)).save("output/"+prefix+"rgb.png")
+		Image.fromarray(((input_img[:,:,0:3]+0.5) * 255.0).astype(np.uint8)).save("output/"+prefix+"rgb.png")
 
 
-	gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.95)
-	with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
-		model = Sat2GraphModel(sess, image_size=256, image_ch=5, resnet_step = 8, batchsize = 1, channel = 12, mode = "test")
-		model.restoreModel(sys.argv[1])
+	
 
 		output = np.zeros((5120,5120,26))
 		weights = np.zeros((5120,5120,26))+0.00001
