@@ -46,7 +46,7 @@ Image.fromarray(((input_img[:,:,0:3]+0.5) * 255.0).astype(np.uint8)).save("outpu
 
 gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.95)
 with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
-	model = Sat2GraphModel(sess, image_size=image_size, image_ch=5, resnet_step = 8, batchsize = 1, channel = 12, mode = "test")
+	model = Sat2GraphModel(sess, image_size=256, image_ch=5, resnet_step = 8, batchsize = 1, channel = 12, mode = "test")
 	model.restoreModel(sys.argv[1])
 
 	output = np.zeros((5120,5120,26))
