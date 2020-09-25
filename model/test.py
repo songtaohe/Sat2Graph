@@ -50,7 +50,7 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 	model.restoreModel(sys.argv[1])
 
 	output = np.zeros((5120,5120,26))
-	weights = np.zeros((5120,5120))+0.00001
+	weights = np.zeros((5120,5120,26))+0.00001
 
 	gt_prob = np.zeros((1,256,256,14))
 	gt_vector = np.zeros((1,256,256,12))
