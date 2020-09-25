@@ -29,8 +29,8 @@ for item in datafiles:
 
 		items = item[1].split("Analytic_")
 		xy = items[-1].split("_")[0].split("-")
-		x = int(xy[0])
-		y = int(xy[1])
+		x = int(xy[1])
+		y = int(xy[0])
 
 		file = basefolder + "/" + item[1]
 
