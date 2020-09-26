@@ -51,23 +51,12 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 		input_img = np.clip(input_img, -0.5, 0.5)
 		Image.fromarray(((input_img[:,:,0:3]+0.5) * 255.0).astype(np.uint8)).save("output/"+prefix+"rgb.png")
 
-		img = cv2.imread("output/"+prefix+"rgb.png")
-		graph = pickle.load(open("output/"+prefix+"output_graph.p"))
-
-		for node, nei in graph.iteritems():
-			y1,x1 = int(node[0]),int(node[1])
-
-			for nn in nei:
-				y2,x2 = int(nn[0]),int(nn[1])
-
-				cv2.line(img, (x1,y1),(x2,y2),(0,255,255),2)
-
-		cv2.imwrite("output/"+prefix+"graph_vis.png", img)
+		
 
 
 
 
-		continue
+		#continue
 	
 
 		output = np.zeros((5120,5120,26))
@@ -94,7 +83,20 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 
 		DecodeAndVis(output, "output/"+prefix+"output", thr=0.01, edge_thr=0.01, snap=True, imagesize = 5120)
 
-								
+		img = cv2.imread("output/"+prefix+"rgb.png")
+		graph = pickle.load(open("output/"+prefix+"output_graph.p"))
+
+		for node, nei in graph.iteritems():
+			y1,x1 = int(node[0]),int(node[1])
+
+			for nn in nei:
+				y2,x2 = int(nn[0]),int(nn[1])
+
+				cv2.line(img, (x1,y1),(x2,y2),(0,255,255),2)
+
+		cv2.imwrite("output/"+prefix+"graph_vis.png", img)
+
+						
 
 
 
