@@ -55,10 +55,10 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 		graph = pickle.load(open("output/"+prefix+"output_graph.p"))
 
 		for node, nei in graph.iteritems():
-			x1,y1 = int(node[0]),int(node[1])
+			y1,x1 = int(node[0]),int(node[1])
 
 			for nn in nei:
-				x2,y2 = int(nn[0]),int(nn[1])
+				y2,x2 = int(nn[0]),int(nn[1])
 
 				cv2.line(img, (x1,y1),(x2,y2),(0,255,255),2)
 
