@@ -54,7 +54,7 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 		img = cv2.imread("output/"+prefix+"rgb.png")
 		graph = pickle.load(open("output/"+prefix+"output_graph.p"))
 
-		for node, nei in graph:
+		for node, nei in graph.iteritems():
 			x1,y1 = int(node[0]),int(node[1])
 
 			for nn in nei:
