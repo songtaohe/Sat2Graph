@@ -13,6 +13,8 @@ import random
 import json 
 import argparse
 import tifffile
+import cv2 
+import pickle 
 
 
 datafiles = json.load(open("train_prep_RE_18_20_CHN_KZN_250.json"))['data']
@@ -46,10 +48,26 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 				input_img[x:x+250, y:y+250, :] = sat_img
 				input_mask[x:x+250, y:y+250] = 1.0 
 
-
+		input_img = np.clip(input_img, -0.5, 0.5)
 		Image.fromarray(((input_img[:,:,0:3]+0.5) * 255.0).astype(np.uint8)).save("output/"+prefix+"rgb.png")
 
+		img = cv2.imread("output/"+prefix+"rgb.png")
+		graph = pickle.load(open("output/"+prefix+"output_graph.p"))
 
+		for node, nei in graph:
+			x1,y1 = int(node[0]),int(node[1])
+
+			for nn in nei:
+				x2,y2 = int(nn[0]),int(nn[1])
+
+				cv2.line(img, (x1,y1),(x2,y2),(0,255,255),2)
+
+		cv2.imwrite("output/"+prefix+"graph_vis.png", img)
+
+
+
+
+		continue
 	
 
 		output = np.zeros((5120,5120,26))
