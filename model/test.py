@@ -72,7 +72,7 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 				input_mask[x:x+250, y:y+250] = 1.0 
 
 		input_img = np.clip(input_img, -0.5, 0.5)
-		Image.fromarray(((input_img[:,:,0:3]+0.5) * 255.0).astype(np.uint8)).save("output/"+prefix+"rgb.png")
+		Image.fromarray(((input_img[:,:,0:3]+0.5) * 255.0).astype(np.uint8)).save(outputFolder+prefix+"rgb.png")
 
 		#continue
 	
@@ -99,10 +99,10 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 
 		output = np.divide(output, weights)
 
-		DecodeAndVis(output, outputFolder+prefix+"output", thr=0.01, edge_thr=0.03, snap=True, imagesize = 5120)
+		DecodeAndVis(output, outputFolder+prefix+"output_low", thr=0.01, edge_thr=0.01, snap=True, imagesize = 5120)
 
 		img = cv2.imread(outputFolder+prefix+"rgb.png")
-		graph = pickle.load(open(outputFolder+prefix+"output_graph.p"))
+		graph = pickle.load(open(outputFolder+prefix+"output_low_graph.p"))
 
 		for node, nei in graph.iteritems():
 			y1,x1 = int(node[0]),int(node[1])
@@ -112,7 +112,23 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 
 				cv2.line(img, (x1,y1),(x2,y2),(0,255,255),2)
 
-		cv2.imwrite(outputFolder+prefix+"graph_vis.png", img)
+		cv2.imwrite(outputFolder+prefix+"graph_vis_low.png", img)
+
+
+		DecodeAndVis(output, outputFolder+prefix+"output_high", thr=0.05, edge_thr=0.05, snap=True, imagesize = 5120)
+
+		img = cv2.imread(outputFolder+prefix+"rgb.png")
+		graph = pickle.load(open(outputFolder+prefix+"output_high_graph.p"))
+
+		for node, nei in graph.iteritems():
+			y1,x1 = int(node[0]),int(node[1])
+
+			for nn in nei:
+				y2,x2 = int(nn[0]),int(nn[1])
+
+				cv2.line(img, (x1,y1),(x2,y2),(0,255,255),2)
+
+		cv2.imwrite(outputFolder+prefix+"graph_vis_high.png", img)
 
 
 
