@@ -21,7 +21,7 @@ import os
 datafiles = json.load(open("train_prep_RE_18_20_CHN_KZN_250.json"))['data']
 basefolder = "/data/songtao/harvardDataset5m/"
 basefolderTesting = "/data/songtao/harvardDataset5mTesting/"
-testingfiles = os.path.lisdir(basefolderTesting)
+testingfiles = os.lisdir(basefolderTesting)
 
 
 gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.95)
