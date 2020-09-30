@@ -45,7 +45,7 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 				x = int(xy[1]) + 60
 				y = int(xy[0]) + 60 
 
-				file = testingfiles + "/" + item
+				file = basefolderTesting + "/" + item
 
 				img = tifffile.imread(file)
 				sat_img = img[:,:,0:5].astype(np.float)/(16384) - 0.5 
