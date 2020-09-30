@@ -22,7 +22,20 @@ datafiles = json.load(open("train_prep_RE_18_20_CHN_KZN_250.json"))['data']
 basefolder = "/data/songtao/harvardDataset5m/"
 basefolderTesting = "/data/songtao/harvardDataset5mTesting/"
 testingfiles = os.listdir(basefolderTesting)
+outputFolder = "/data/songtao/harvardDataset5mTestingResults/"
 
+
+testfiles = []
+
+for item in datafiles:
+	if item[-1] == 'test':
+		filepath = basefolder+item[1]
+		testfiles.append(item[1].replace(".tif",""))
+
+for name in testfiles:
+	p = name.split("Analytic_")[0]
+	if p not in prefixs:
+		prefixs.append(p)
 
 gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.95)
 with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
@@ -30,8 +43,13 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 	model.restoreModel(sys.argv[1])
 
 	#prefixs = ["4459815_2019-10-13_RE1_3A_", "4659204_2019-07-03_RE4_3A_", "4459815_2018-07-07_RE2_3A_", "4559216_2018-07-20_RE2_3A_", "4559325_2019-08-24_RE3_3A_", "4559325_2019-09-28_RE1_3A_", "4559325_2019-07-03_RE4_3A_"]
-	prefixs = ["4459815_2019-10-13_RE1_3A_"]
+	#prefixs = ["4459815_2019-10-13_RE1_3A_"]
+	cc = 0
+	t0 = time() 
 	for prefix in prefixs:
+		print(cc, len(prefixs), time() - t0)
+		cc += 1
+		t0 = time() 
 
 		input_img = np.zeros((5120,5120,5))
 		input_mask = np.zeros((5120, 5120))
@@ -70,7 +88,8 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 		gt_seg = np.zeros((1,256,256,1))
 
 		for x in range(0, 5120-192, 64):
-			print(x)
+			if x % 512 == 0:
+				print(x)
 			for y in range(0,5120-192,64):
 				if np.sum(input_mask[x:x+256,y:y+256]) > 10.0:
 					_, output_ = model.Evaluate(input_img[x:x+256,y:y+256,:].reshape((1,256,256,5)), gt_prob, gt_vector, gt_seg)
@@ -80,10 +99,10 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 
 		output = np.divide(output, weights)
 
-		DecodeAndVis(output, "output/"+prefix+"output", thr=0.05, edge_thr=0.15, snap=True, imagesize = 5120)
+		DecodeAndVis(output, outputFolder+prefix+"output", thr=0.01, edge_thr=0.03, snap=True, imagesize = 5120)
 
-		img = cv2.imread("output/"+prefix+"rgb.png")
-		graph = pickle.load(open("output/"+prefix+"output_graph.p"))
+		img = cv2.imread(outputFolder+prefix+"rgb.png")
+		graph = pickle.load(open(outputFolder+prefix+"output_graph.p"))
 
 		for node, nei in graph.iteritems():
 			y1,x1 = int(node[0]),int(node[1])
@@ -93,7 +112,7 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 
 				cv2.line(img, (x1,y1),(x2,y2),(0,255,255),2)
 
-		cv2.imwrite("output/"+prefix+"graph_vis.png", img)
+		cv2.imwrite(outputFolder+prefix+"graph_vis.png", img)
 
 
 
