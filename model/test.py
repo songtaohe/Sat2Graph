@@ -31,7 +31,7 @@ for item in datafiles:
 	if item[-1] == 'test':
 		filepath = basefolder+item[1]
 		testfiles.append(item[1].replace(".tif",""))
-
+prefixs = []
 for name in testfiles:
 	p = name.split("Analytic_")[0]
 	if p not in prefixs:
