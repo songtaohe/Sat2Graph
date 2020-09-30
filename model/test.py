@@ -15,32 +15,37 @@ import argparse
 import tifffile
 import cv2 
 import pickle 
+import os 
 
 
 datafiles = json.load(open("train_prep_RE_18_20_CHN_KZN_250.json"))['data']
 basefolder = "/data/songtao/harvardDataset5m/"
+basefolderTesting = "/data/songtao/harvardDataset5mTesting/"
+testingfiles = os.path.lisdir(basefolderTesting)
+
 
 gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.95)
 with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 	model = Sat2GraphModel(sess, image_size=256, image_ch=5, resnet_step = 8, batchsize = 1, channel = 12, mode = "test")
 	model.restoreModel(sys.argv[1])
 
-	prefixs = ["4459815_2019-10-13_RE1_3A_", "4659204_2019-07-03_RE4_3A_", "4459815_2018-07-07_RE2_3A_", "4559216_2018-07-20_RE2_3A_", "4559325_2019-08-24_RE3_3A_", "4559325_2019-09-28_RE1_3A_", "4559325_2019-07-03_RE4_3A_"]
+	#prefixs = ["4459815_2019-10-13_RE1_3A_", "4659204_2019-07-03_RE4_3A_", "4459815_2018-07-07_RE2_3A_", "4559216_2018-07-20_RE2_3A_", "4559325_2019-08-24_RE3_3A_", "4559325_2019-09-28_RE1_3A_", "4559325_2019-07-03_RE4_3A_"]
+	prefixs = ["4459815_2019-10-13_RE1_3A_"]
 	for prefix in prefixs:
 
 		input_img = np.zeros((5120,5120,5))
 		input_mask = np.zeros((5120, 5120))
 
-		for item in datafiles:
-			if prefix in item[1]:
+		for item in testingfiles:
+			if prefix in item:
 				#print(item)
 
-				items = item[1].split("Analytic_")
+				items = item.split("Analytic_")
 				xy = items[-1].split("_")[0].split("-")
 				x = int(xy[1]) + 60
 				y = int(xy[0]) + 60 
 
-				file = basefolder + "/" + item[1]
+				file = testingfiles + "/" + item
 
 				img = tifffile.imread(file)
 				sat_img = img[:,:,0:5].astype(np.float)/(16384) - 0.5 
@@ -51,14 +56,8 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 		input_img = np.clip(input_img, -0.5, 0.5)
 		Image.fromarray(((input_img[:,:,0:3]+0.5) * 255.0).astype(np.uint8)).save("output/"+prefix+"rgb.png")
 
-		
-
-
-
-
 		#continue
 	
-
 		output = np.zeros((5120,5120,26))
 		weights = np.zeros((5120,5120,26))+0.00001
 		localweights = np.zeros((256,256,26)) + 0.00001 
@@ -96,7 +95,7 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 
 		cv2.imwrite("output/"+prefix+"graph_vis.png", img)
 
-						
+
 
 
 
