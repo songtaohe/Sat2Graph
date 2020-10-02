@@ -299,7 +299,7 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 							output_img = output_img.astype(np.uint8)
 
 							Image.fromarray(output_img).save(validation_folder+"/tile%d_output_road_class.png" % (j*batch_size+k))
-							Image.fromarray((gt_class * 60).astype(np.uint8).reshape((image_size,image_size))).save(validation_folder+"/tile%d_gt_road_class.png" % (j*batch_size+k))
+							Image.fromarray((gt_class[k,:,:,:] * 60).astype(np.uint8).reshape((image_size,image_size))).save(validation_folder+"/tile%d_gt_road_class.png" % (j*batch_size+k))
 							
 
 							# keypoints 
