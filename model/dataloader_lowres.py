@@ -231,10 +231,12 @@ class Sat2GraphDataLoader():
 
 
 			for loc, n_locs in neighbors.items():
-				if loc[0] < buffer or loc[1] < buffer or loc[0] > self.dataset_image_size - buffer or loc[1] > self.dataset_image_size - buffer:
+				bx,by = 3, 3
+
+				if loc[0]+bx < buffer or loc[1]+by < buffer or loc[0]+bx > self.dataset_image_size - buffer or loc[1]+by > self.dataset_image_size - buffer:
 					continue
 
-				bx,by = 3, 3
+				
 
 				self.tiles_prob[i,int(loc[0])+bx,int(loc[1])+by,0] = 1
 				self.tiles_prob[i,int(loc[0])+bx,int(loc[1])+by,1] = 0
@@ -248,7 +250,7 @@ class Sat2GraphDataLoader():
 
 				for n_loc in n_locs:
 
-					if n_loc[0] < buffer or n_loc[1] < buffer or n_loc[0] > self.dataset_image_size - buffer or n_loc[1] > self.dataset_image_size - buffer :
+					if n_loc[0]+bx < buffer or n_loc[1]+by < buffer or n_loc[0]+bx > self.dataset_image_size - buffer or n_loc[1]+by > self.dataset_image_size - buffer :
 						continue
 
 					d = math.atan2(n_loc[1] - loc[1], n_loc[0] - loc[0]) + math.pi 
