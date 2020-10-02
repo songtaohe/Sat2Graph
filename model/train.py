@@ -236,7 +236,7 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 		
 		t0 = time()
 
-		loss, grad_max, prob_loss, vector_loss,seg_loss, _ = model.Train(input_sat, gt_prob, gt_vector, gt_seg, gt_class lr)
+		loss, grad_max, prob_loss, vector_loss,seg_loss, _ = model.Train(input_sat, gt_prob, gt_vector, gt_seg, gt_class, lr)
 
 		sum_loss += loss
 
