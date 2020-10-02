@@ -39,6 +39,9 @@ class Sat2GraphModel():
 		self.input_seg_gt = tf.placeholder(tf.float32, shape = [self.batchsize, self.image_size, self.image_size, 1])
 		self.input_seg_gt_target = tf.concat([self.input_seg_gt+0.5, 0.5 - self.input_seg_gt], axis=3)
 
+		self.input_road_class = tf.placeholder(tf.int32, shape = [self.batchsize, self.image_size, self.image_size, 1])
+		
+
 		self.target_prob = tf.placeholder(tf.float32, shape = [self.batchsize, self.image_size, self.image_size, 2 * (MAX_DEGREE + 1)])
 		self.target_vector = tf.placeholder(tf.float32, shape = [self.batchsize, self.image_size, self.image_size, 2 * (MAX_DEGREE)])
 
@@ -63,7 +66,7 @@ class Sat2GraphModel():
 
 		else:
 			
-			self.imagegraph_output = self.BuildDeepLayerAggregationNetWithResnet(self.input_sat, input_ch = image_ch, output_ch =2 + MAX_DEGREE * 4 + (2 if self.joint_with_seg==True else 0), ch=channel)
+			self.imagegraph_output = self.BuildDeepLayerAggregationNetWithResnet(self.input_sat, input_ch = image_ch, output_ch =2 + MAX_DEGREE * 4 + (2 if self.joint_with_seg==True else 0) + 5, ch=channel)
 
 			x = self.imagegraph_output
 
@@ -74,11 +77,11 @@ class Sat2GraphModel():
 
 			target = self.Merge(self.target_prob, self.target_vector)
 			
-			self.keypoint_prob_loss, self.direction_prob_loss, self.direction_vector_loss, self.seg_loss = self.SupervisedLoss(self.imagegraph_output, self.target_prob, self.target_vector)
+			self.keypoint_prob_loss, self.direction_prob_loss, self.direction_vector_loss, self.seg_loss, self.class_loss = self.SupervisedLoss(self.imagegraph_output, self.target_prob, self.target_vector)
 			
 			self.prob_loss = (self.keypoint_prob_loss + self.direction_prob_loss)
 			if self.joint_with_seg:
-				self.loss = self.prob_loss + self.direction_vector_loss + self.seg_loss
+				self.loss = self.prob_loss + self.direction_vector_loss + self.seg_loss + self.class_loss
 			else:
 				self.loss = self.prob_loss + self.direction_vector_loss
 
@@ -229,12 +232,12 @@ class Sat2GraphModel():
 
 		direction_vector_loss /= MAX_DEGREE 
 
-
+		
 		if self.joint_with_seg:
-
+			class_loss = tf.reduce_mean(tf.losses.sparse_softmax_cross_entropy(self.input_road_class, tf.concat(imagegraph_outputs[2+MAX_DEGREE*4+2: 2+MAX_DEGREE*4+2+5], axis=3)))
 			seg_loss = tf.reduce_mean(tf.losses.softmax_cross_entropy(self.input_seg_gt_target, tf.concat([imagegraph_outputs[2+MAX_DEGREE*4], imagegraph_outputs[2+MAX_DEGREE*4+1]], axis=3)))
 
-			return keypoint_prob_loss, direction_prob_loss*10.0, direction_vector_loss * 1000.0 , seg_loss * 0.1
+			return keypoint_prob_loss, direction_prob_loss*10.0, direction_vector_loss * 1000.0 , seg_loss * 0.1, class_loss
 		
 		else:
 
@@ -279,8 +282,8 @@ class Sat2GraphModel():
 		if self.joint_with_seg:
 			new_outputs.append(tf.nn.sigmoid(imagegraph_outputs[2+4*MAX_DEGREE]-imagegraph_outputs[2+4*MAX_DEGREE+1]))
 			new_outputs.append(1.0 - new_outputs[-1])
-			
-
+		
+		new_outputs.append(tf.nn.softmax(tf.concat(imagegraph_outputs[2+4*MAX_DEGREE+2:2+4*MAX_DEGREE+2+5], axis=3)))
 
 		return tf.concat(new_outputs, axis=3)
 

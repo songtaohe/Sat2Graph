@@ -128,7 +128,7 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 			trainfiles = []
 			validfiles = []
 			for item in datafiles:
-				if item[1].endswith("4.tif") or item[1].endswith("3.tif"):
+				if item[1].endswith("4.tif") or item[1].endswith("3.tif") or item[1].endswith("2.tif") or item[1].endswith("1.tif"):
 					if item[-1] == 'train':
 						trainfiles.append(basefolder+item[1].replace(".tif",""))
 					elif item[-1] == 'valid':
@@ -208,8 +208,8 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 	test_size = 64
 
 	for j in range(test_size/batch_size):
-		input_sat, gt_prob, gt_vector, gt_seg= dataloader_test.getBatch(batch_size)
-		validation_data.append([np.copy(input_sat), np.copy(gt_prob), np.copy(gt_vector), np.copy(gt_seg)])
+		input_sat, gt_prob, gt_vector, gt_seg, gt_class= dataloader_test.getBatch(batch_size)
+		validation_data.append([np.copy(input_sat), np.copy(gt_prob), np.copy(gt_vector), np.copy(gt_seg), np.copy(gt_class)])
 
 
 	step = args.init_step
@@ -231,12 +231,12 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 
 	while True:
 		t0 = time()
-		input_sat, gt_prob, gt_vector, gt_seg = dataloader_train.getBatch(batch_size)
+		input_sat, gt_prob, gt_vector, gt_seg, gt_class = dataloader_train.getBatch(batch_size)
 		t_load += time() - t0 
 		
 		t0 = time()
 
-		loss, grad_max, prob_loss, vector_loss,seg_loss, _ = model.Train(input_sat, gt_prob, gt_vector, gt_seg, lr)
+		loss, grad_max, prob_loss, vector_loss,seg_loss, _ = model.Train(input_sat, gt_prob, gt_vector, gt_seg, gt_class lr)
 
 		sum_loss += loss
 
@@ -263,7 +263,7 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 
 				for j in range(-1,test_size/batch_size):
 					if j >= 0:
-						input_sat, gt_prob, gt_vector, gt_seg = validation_data[j][0], validation_data[j][1], validation_data[j][2], validation_data[j][3]
+						input_sat, gt_prob, gt_vector, gt_seg, gt_class = validation_data[j][0], validation_data[j][1], validation_data[j][2], validation_data[j][3], validation_data[j][4]
 					if j == 0:
 						test_loss = 0
 						test_gan_loss = 0
@@ -273,7 +273,7 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 						gt_imagegraph[:,:,:,2+k*4:2+k*4+2] = gt_prob[:,:,:,2+k*2:2+k*2+2]
 						gt_imagegraph[:,:,:,2+k*4+2:2+k*4+4] = gt_vector[:,:,:,k*2:k*2+2]
 
-					_test_loss, output = model.Evaluate(input_sat, gt_prob, gt_vector, gt_seg)
+					_test_loss, output = model.Evaluate(input_sat, gt_prob, gt_vector, gt_seg, gt_class)
 
 					test_loss += _test_loss
 
@@ -284,9 +284,23 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 							input_gt_seg = ((gt_seg[k,:,:,0]+0.5)*255.0).astype(np.uint8)
 
 							# segmentation output (joint training)
-							output_img = (output[k,:,:,-2] * 255.0).reshape((image_size,image_size)).astype(np.uint8)
+							output_img = (output[k,:,:,26] * 255.0).reshape((image_size,image_size)).astype(np.uint8)
 							Image.fromarray(output_img).save(validation_folder+"/tile%d_output_seg.png" % (j*batch_size+k))
 							Image.fromarray(((gt_seg[k,:,:,0] + 0.5) * 255.0).reshape((image_size, image_size)).astype(np.uint8)).save(validation_folder+"/tile%d_gt_seg.png" % (j*batch_size+k))
+
+							# road class output (joint training)
+
+							output_img = np.zeros((image_size,image_size,3), dtype=np.uint8)
+
+							output_img[:,:,0] = output[k,:,:,28:29] * 255 
+							output_img[:,:,1] = output[k,:,:,29:30] * 255 + output[k,:,:,30:31] * 255 
+							output_img[:,:,2] = output[k,:,:,31:32] * 255 + output[k,:,:,32:33] * 255 
+
+							output_img = output_img.astype(np.uint8)
+
+							Image.fromarray(output_img).save(validation_folder+"/tile%d_output_road_class.png" % (j*batch_size+k))
+							Image.fromarray((gt_class * 60).astype(np.uint8).reshape((image_size,image_size))).save(validation_folder+"/tile%d_gt_road_class.png" % (j*batch_size+k))
+							
 
 							# keypoints 
 							output_keypoints_img = (output[k,:,:,0] * 255.0).reshape((image_size,image_size)).astype(np.uint8)
@@ -338,5 +352,5 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 			lr = lr * args.lr_decay
 
 		step += 1
-		if step == 300000+2:
+		if step == 500000+2:
 			break 

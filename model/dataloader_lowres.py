@@ -30,6 +30,45 @@ def neighbor_transpos(n_in):
 	return n_out 
 
 
+def rotate(sat_img, gt_seg, neighbors, road_class, angle=0, size=256):
+	sat_img = scipy.ndimage.rotate(sat_img, angle, reshape=False)
+	gt_seg = scipy.ndimage.rotate(gt_seg, angle, reshape=False)
+	road_class = scipy.ndimage.rotate(road_class, angle, reshape=False)
+
+	new_neighbors = {}
+
+	def transfer(pos, angle):
+		x = pos[0] - int(size/2)
+		y = pos[1] - int(size/2)
+
+		new_x = x * math.cos(math.radians(angle)) - y * math.sin(math.radians(angle))
+		new_y = x * math.sin(math.radians(angle)) + y * math.cos(math.radians(angle))
+
+		return (int(new_x + int(size/2)), int(new_y + int(size/2)))
+
+	def inrange(pos, m):
+		if pos[0] > m and pos[0] < size-1-m and pos[1]>m and pos[1]<size-1-m:
+			return True
+		else:
+			return False
+
+	for k,n in neighbors.items():
+		nk = transfer(k, angle)
+
+		if inrange(nk,0) == False:
+			continue
+
+		new_neighbors[nk] = []
+
+		for nei in n:
+			nn = transfer(nei, angle) 
+			if inrange(nn,0):
+				new_neighbors[nk].append(nn)
+
+	return sat_img, gt_seg, new_neighbors
+
+
+
 class Sat2GraphDataLoader():
 	def __init__(self, folder, filelist, imgsize = 256, preload_tiles = 100, max_degree = 6, loadseg = False, random_mask=True, testing=False, dataset_image_size = 256, transpose=False):
 		self.folder = folder
@@ -51,6 +90,7 @@ class Sat2GraphDataLoader():
 		self.input_sat = np.zeros((8,image_size,image_size,5))
 		
 		self.gt_seg = np.zeros((8,image_size,image_size,1))
+		self.gt_class = np.zeros((8,image_size,image_size,1))
 		self.target_prob = np.zeros((8,image_size,image_size,2*(max_degree + 1)))
 		self.target_vector = np.zeros((8,image_size,image_size,2*(max_degree)))
 
@@ -141,6 +181,7 @@ class Sat2GraphDataLoader():
 		self.tiles_prob = np.zeros((self.preload_tiles, self.dataset_image_size, self.dataset_image_size, 2 * (self.max_degree + 1)))
 		self.tiles_vector = np.zeros((self.preload_tiles, self.dataset_image_size, self.dataset_image_size, 2 * (self.max_degree)))
 
+		self.tiles_gt_class = np.zeros((self.preload_tiles, self.dataset_image_size, self.dataset_image_size,1))
 		
 		self.tiles_prob[:,:,:,0::2] = 0
 		self.tiles_prob[:,:,:,1::2] = 1
@@ -163,11 +204,24 @@ class Sat2GraphDataLoader():
 
 			sat_img = np.pad(sat_img, ((3,3),(3,3),(0,0)), 'constant') # 256*256
 			
+			neighbors = pickle.load(open(filename+".p"))
+
+			road_class = img[:,:,5]
+			road_class = np.pad(road_class, ((3,3),(3,3)), 'constant')
+
+
+			angle = random.randint(0,3)*90 + random.random()*40-20
+
+			if random.random() > 0.5:
+				sat_img, seg, neighbors, road_class = rotate(sat_img, seg, neighbors, road_class, angle=angle)
+
+			road_class = np.clip(road_class.astype(np.int32), 0, 4)
+
 			self.tiles_input[i,:,:,:] = sat_img
 			self.tiles_gt_seg[i,:,:,0] = seg
-			
+			self.tiles_gt_class[i,:,:,0] = road_class
 
-			neighbors = pickle.load(open(filename+".p"))
+			
 			
 			if self.transpose:
 				neighbors = neighbor_transpos(neighbors)
@@ -251,10 +305,10 @@ class Sat2GraphDataLoader():
 			self.target_prob[i,:,:,:] = self.tiles_prob[tile_id,:,:,:]
 			self.target_vector[i,:,:,:] = self.tiles_vector[tile_id, :,:,:]
 			self.gt_seg[i,:,:,:] = self.tiles_gt_seg[tile_id,:,:,:]
-
+			self.gt_class[i,:,:,:] = self.tiles_gt_class[tile_id,:,:,:]
 			
 
 		st = 0
 
-		return self.input_sat[st:st+batchsize,:,:,:], self.target_prob[st:st+batchsize,:,:,:], self.target_vector[st:st+batchsize,:,:,:], self.gt_seg[st:st+batchsize,:,:,:]
+		return self.input_sat[st:st+batchsize,:,:,:], self.target_prob[st:st+batchsize,:,:,:], self.target_vector[st:st+batchsize,:,:,:], self.gt_seg[st:st+batchsize,:,:,:], self.gt_class[st:st+batchsize,:,:,:]
 		
