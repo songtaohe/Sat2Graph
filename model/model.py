@@ -415,12 +415,13 @@ class Sat2GraphModel():
 		return a_out 
 
 	
-	def Train(self, inputdata, target_prob, target_vector, input_seg_gt, lr):
+	def Train(self, inputdata, target_prob, target_vector, input_seg_gt, input_road_class, lr):
 		feed_dict = {
 			self.input_sat : inputdata,
 			self.target_prob : target_prob,
 			self.target_vector : target_vector,
 			self.input_seg_gt : input_seg_gt, 
+			self.input_road_class : input_road_class,
 			self.lr : lr,
 			self.is_training : True
 		}
@@ -444,12 +445,13 @@ class Sat2GraphModel():
 	
 
 
-	def Evaluate(self, inputdata, target_prob, target_vector, input_seg_gt):
+	def Evaluate(self, inputdata, target_prob, target_vector, input_seg_gt, input_road_class):
 		feed_dict = {
 			self.input_sat : inputdata,
 			self.target_prob : target_prob,
 			self.target_vector : target_vector,
 			self.input_seg_gt : input_seg_gt, 
+			self.input_road_class : input_road_class,
 			self.is_training : False
 		}
 

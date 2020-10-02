@@ -65,7 +65,7 @@ def rotate(sat_img, gt_seg, neighbors, road_class, angle=0, size=256):
 			if inrange(nn,0):
 				new_neighbors[nk].append(nn)
 
-	return sat_img, gt_seg, new_neighbors
+	return sat_img, gt_seg, new_neighbors, road_class
 
 
 
