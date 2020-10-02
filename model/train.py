@@ -292,9 +292,9 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 
 							output_img = np.zeros((image_size,image_size,3), dtype=np.uint8)
 
-							output_img[:,:,0] = output[k,:,:,28:29] * 255 
-							output_img[:,:,1] = output[k,:,:,29:30] * 255 + output[k,:,:,30:31] * 255 
-							output_img[:,:,2] = output[k,:,:,31:32] * 255 + output[k,:,:,32:33] * 255 
+							output_img[:,:,2:3] = output[k,:,:,28:29] * 255 
+							output_img[:,:,1:2] = output[k,:,:,29:30] * 255 + output[k,:,:,30:31] * 255 
+							output_img[:,:,0:1] = output[k,:,:,31:32] * 255 + output[k,:,:,32:33] * 255 
 
 							output_img = output_img.astype(np.uint8)
 
