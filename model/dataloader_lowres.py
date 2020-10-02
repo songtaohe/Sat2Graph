@@ -213,7 +213,14 @@ class Sat2GraphDataLoader():
 			angle = random.randint(0,3)*90 + random.random()*40-20
 
 			if random.random() > 0.5:
+				seg = seg + 0.5 
+				
 				sat_img, seg, neighbors, road_class = rotate(sat_img, seg, neighbors, road_class, angle=angle)
+				
+				seg = np.clip(seg, 0.0, 1.0)
+				seg = seg - 0.5 
+
+
 
 			road_class = np.clip(road_class.astype(np.int32), 0, 4)
 
