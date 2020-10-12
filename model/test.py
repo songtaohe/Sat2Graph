@@ -112,8 +112,16 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 		output_img[:,:,0:1] = output[:,:,31:32] * 255 + output[:,:,32:33] * 255 
 
 		output_img = output_img.astype(np.uint8)
-
 		Image.fromarray(output_img).save(outputFolder+prefix+"_class.png")
+
+
+
+		output_img = np.zeros((5120,5120), dtype=np.uint8)
+		output_img = output[:,:,26] * 255
+		output_img = output_img.astype(np.uint8)
+		Image.fromarray(output_img).save(outputFolder+prefix+"_segmentation.png")
+
+
 
 
 		DecodeAndVis(output, outputFolder+prefix+"output_low", thr=0.01, edge_thr=0.01, snap=True, imagesize = 5120)
