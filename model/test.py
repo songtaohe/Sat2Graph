@@ -22,7 +22,8 @@ datafiles = json.load(open("train_prep_RE_18_20_CHN_KZN_250.json"))['data']
 basefolder = "/data/songtao/harvardDataset5m/"
 basefolderTesting = "/data/songtao/harvardDataset5mTesting/"
 testingfiles = os.listdir(basefolderTesting)
-outputFolder = "/data/songtao/harvardDataset5mTestingResults/"
+#outputFolder = "/data/songtao/harvardDataset5mTestingResults/"
+outputFolder = "/data/songtao/harvardDataset5mTestingResults2/"
 
 
 testfiles = []
@@ -36,6 +37,9 @@ for name in testfiles:
 	p = name.split("Analytic_")[0]
 	if p not in prefixs:
 		prefixs.append(p)
+
+prefixs = sorted(prefixs)
+
 
 gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.95)
 with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
@@ -76,9 +80,9 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 
 		#continue
 	
-		output = np.zeros((5120,5120,26))
-		weights = np.zeros((5120,5120,26))+0.00001
-		localweights = np.zeros((256,256,26)) + 0.00001 
+		output = np.zeros((5120,5120,33))
+		weights = np.zeros((5120,5120,33))+0.00001
+		localweights = np.zeros((256,256,33)) + 0.00001 
 		localweights[32:224,32:224,:] = 0.5
 		localweights[64:192,64:192,:] = 1.0 
 
@@ -86,18 +90,31 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 		gt_prob = np.zeros((1,256,256,14))
 		gt_vector = np.zeros((1,256,256,12))
 		gt_seg = np.zeros((1,256,256,1))
+		gt_class = np.zeros((1,256,256,1))
 
 		for x in range(0, 5120-192, 64):
 			if x % 512 == 0:
 				print(x)
 			for y in range(0,5120-192,64):
 				if np.sum(input_mask[x:x+256,y:y+256]) > 10.0:
-					_, output_ = model.Evaluate(input_img[x:x+256,y:y+256,:].reshape((1,256,256,5)), gt_prob, gt_vector, gt_seg)
+					_, output_ = model.Evaluate(input_img[x:x+256,y:y+256,:].reshape((1,256,256,5)), gt_prob, gt_vector, gt_seg, gt_class)
 
-					output[x:x+256,y:y+256,:] += output_[0,:,:,0:26] * localweights
+					output[x:x+256,y:y+256,:] += output_[0,:,:,0:33] * localweights
 					weights[x:x+256,y:y+256,:] += localweights
 
 		output = np.divide(output, weights)
+
+
+		output_img = np.zeros((5120,5120,3), dtype=np.uint8)
+
+		output_img[:,:,2:3] = 0
+		output_img[:,:,1:2] = output[k,:,:,29:30] * 255 + output[k,:,:,30:31] * 255 
+		output_img[:,:,0:1] = output[k,:,:,31:32] * 255 + output[k,:,:,32:33] * 255 
+
+		output_img = output_img.astype(np.uint8)
+
+		Image.fromarray(output_img).save(outputFolder+prefix+"_class.png")
+
 
 		DecodeAndVis(output, outputFolder+prefix+"output_low", thr=0.01, edge_thr=0.01, snap=True, imagesize = 5120)
 
