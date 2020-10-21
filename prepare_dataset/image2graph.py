@@ -51,8 +51,6 @@ def rdp(points, epsilon):
         results = [points[0], points[-1]]
     return results
 
-
-
 PADDING = 30
 
 in_fname = sys.argv[1]
@@ -69,31 +67,10 @@ if len(im.shape) == 3:
 	im = im[:, :, 0]
 im = numpy.swapaxes(im, 0, 1)
 
-
-
 im = (im >= threshold)
-
-#Image.fromarray(im.astype('uint8')*60).save("tmp0.png")
-#print(np.amax(im))
-
-
-#bigim = numpy.zeros((im.shape[0] + 2*PADDING, im.shape[1] + 2*PADDING), dtype='bool')
-#bigim[PADDING:PADDING+im.shape[0], PADDING:PADDING+im.shape[1]] = im
-#bigim[0:PADDING, PADDING:PADDING+im.shape[1]] = numpy.tile(im[0:1, :], [PADDING, 1])
-#bigim[-PADDING:, PADDING:PADDING+im.shape[1]] = numpy.tile(im[-1:, :], [PADDING, 1])
-#bigim[PADDING:PADDING+im.shape[1], 0:PADDING] = numpy.tile(im[:, 0:1], [1, PADDING])
-#bigim[PADDING:PADDING+im.shape[1], -PADDING:] = numpy.tile(im[0, -1:], [1, PADDING])
-#im = bigim
-
-# apply morphological dilation and thinning
-#selem = skimage.morphology.disk(2)
-#im = skimage.morphology.binary_dilation(im, selem)
 im = skimage.morphology.thin(im)
 im = im.astype('uint8')
 
-#Image.fromarray(im*255).save("tmp.png")
-
-# extract a graph by placing vertices every THRESHOLD pixels, and at all intersections
 vertices = []
 edges = set()
 def add_edge(src, dst):
@@ -160,11 +137,7 @@ while True:
 			break
 neighbors = {}
 
-#print(vertices)
-#with open(out_fname, 'w') as f:
-	#for vertex in vertices:
-	#	f.write('{} {}\n'.format(vertex[0], vertex[1]))
-	#f.write('\n')
+
 
 vertex = vertices
 
@@ -190,28 +163,9 @@ for edge in edges:
 		else:
 			neighbors[nk2] = [nk1]
 
-		#f.write('{} {}\n'.format(edge[0], edge[1]))
-		#f.write('{} {}\n'.format(edge[1], edge[0]))
+		
 
 node_neighbor = graphlib.graphDensify(neighbors, density = 20, distFunc = graphlib.PixelDistance)
-
-
-# img = np.zeros((250,250,3), dtype=np.uint8)
-
-# for node, nei in node_neighbor.iteritems():
-# 	x1,y1 = int(node[0]), int(node[1])
-# 	for n in nei:
-# 		x2,y2 = int(n[0]), int(n[1])
-
-# 		cv2.line(img, (x1,y1), (x2,y2), (255,255,255),2)
-
-# for node, nei in node_neighbor.iteritems():
-# 	x1,y1 = int(node[0]), int(node[1])
-
-# 	cv2.circle(img, (x1,y1), 3, (0,0,255),2)
-
-# Image.fromarray(img).save("t.png")
-
 
 pickle.dump(node_neighbor, open(out_fname, "w"))
 
