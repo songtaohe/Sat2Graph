@@ -14,6 +14,7 @@ import xml.etree.ElementTree
 from time import sleep
 
 
+
 GOOGLE_API_KEY = "enter your google api key here (static map api)"
 
 ORIGIN_SHIFT = 2 * math.pi * 6378137 / 2.0
