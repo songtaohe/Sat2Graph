@@ -74,7 +74,7 @@ im = im.astype('uint8')
 
 cv2.imwrite("debugvis1.png", im.astype(np.uint8)*255)
 
-print("thinning done")
+#print("thinning done")
 
 vertices = []
 edges = set()
