@@ -66,12 +66,12 @@ if len(im.shape) == 3:
 im = numpy.swapaxes(im, 0, 1)
 
 im = (im >= threshold)
-cv2.imwrite("debugvis0.png", im)
+cv2.imwrite("debugvis0.png", im.astype(np.uint8))
 
 im = skimage.morphology.thin(im)
 im = im.astype('uint8')
 
-cv2.imwrite("debugvis1.png", im)
+cv2.imwrite("debugvis1.png", im.astype(np.uint8))
 
 print("thinning done")
 
