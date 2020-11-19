@@ -170,13 +170,13 @@ for edge in edges:
 			neighbors[nk2] = [nk1]
 
 
-img = np.zeros((2048, 2048, 3), dtype=np.uint8)
-for nloc, neis in neighbors.iteritems():
-	for nei in neis:
-		color = (255,255,255)
-		cv2.line(img, (int(nloc[0]),int(nloc[1])) , (int(nei[0]), int(nei[1])), color, 3)
+# img = np.zeros((5120, 5120, 3), dtype=np.uint8)
+# for nloc, neis in neighbors.iteritems():
+# 	for nei in neis:
+# 		color = (255,255,255)
+# 		cv2.line(img, (int(nloc[0]),int(nloc[1])) , (int(nei[0]), int(nei[1])), color, 3)
 
-cv2.imwrite(out_fname.replace(".p", "_graphvis0.png"), img)
+# cv2.imwrite(out_fname.replace(".p", "_graphvis0.png"), img)
 
 	
 
@@ -185,7 +185,7 @@ node_neighbor = graph_refine(node_neighbor, isolated_thr = 150, spurs_thr = 30, 
 pickle.dump(node_neighbor, open(out_fname, "w"))
 
 
-img = np.zeros((2048, 2048, 3), dtype=np.uint8)
+img = np.zeros((5120, 5120, 3), dtype=np.uint8)
 
 for nloc, neis in node_neighbor.iteritems():
 	for nei in neis:

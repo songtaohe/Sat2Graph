@@ -7,7 +7,7 @@ nodeneighbor = pickle.load(open(sys.argv[1]))
 edgeClass = pickle.load(open(sys.argv[2]))
 output_fn = sys.argv[3]
 
-img = np.zeros((2048, 2048, 3), dtype=np.uint8)
+img = np.zeros((5120, 5120, 3), dtype=np.uint8)
 
 for nloc, neis in nodeneighbor.iteritems():
 	for nei in neis:
