@@ -117,7 +117,7 @@ for link in pairwise_dict.keys():
 	if c < 0.5:
 		c = 0.0 
 	else:
-		c = ((c-0.5)*2)
+		c = (c-0.5)
 
 	pf[0,1] *= c
 	pf[1,0] *= c
