@@ -27,4 +27,4 @@ for nloc, neis in nodeneighbor.iteritems():
 
 cv2.imwrite(output_fn, img)
 
-		
+	
