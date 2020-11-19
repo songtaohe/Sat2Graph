@@ -26,7 +26,8 @@ pool = []
 maxp = 32
 cc = 0
 
-for tilename in tilenames:
+#for tilename in tilenames:
+for tilename in ['4358815_2018-08-27_RE4_3A']:
 	print(cc, tilename)
 	cmd = ""
 	

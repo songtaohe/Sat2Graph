@@ -5,6 +5,13 @@ import sys
 import opengm
 from common import neighbors_cos 
 
+# 4358815_2018-08-27_RE4_3A
+
+
+
+#python mrf.py /data/songtao/harvardDataset5mTestingResults2/4358815_2018-08-27_RE4_3A__
+
+
 weight = 5000.0 
 
 nodeneighbor = pickle.load(open(sys.argv[1]))
