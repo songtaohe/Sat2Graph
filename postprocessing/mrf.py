@@ -12,7 +12,7 @@ from common import neighbors_cos
 #python mrf.py /data/songtao/harvardDataset5mTestingResults2/4358815_2018-08-27_RE4_3A__
 
 
-weight = 5000.0 
+weight = 50.0 
 
 nodeneighbor = pickle.load(open(sys.argv[1]))
 edgeClass = pickle.load(open(sys.argv[2]))
@@ -183,7 +183,7 @@ class PyCallback(object):
 		self.step += 1
 
 
-inf=opengm.inference.BeliefPropagation(gm,parameter=opengm.InfParam(steps=500,damping=0.9,convergenceBound=0.0001))
+inf=opengm.inference.BeliefPropagation(gm,parameter=opengm.InfParam(steps=200,damping=0.9,convergenceBound=0.0001))
 
 callback = PyCallback() 
 visitor=inf.pythonVisitor(callback,visitNth=1)
