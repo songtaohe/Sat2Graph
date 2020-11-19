@@ -22,8 +22,8 @@ for nloc, neis in nodeneighbor.iteritems():
 
 			cv2.line(img, (int(nloc[0]),int(nloc[1])) , (int(nei[0]), int(nei[1])), color, 3)
 
-for nloc, neis in nodeneighbor.iteritems():
-	cv2.circle(img, (int(nloc[0]),int(nloc[1])), 3, (0,255,255), -1)
+# for nloc, neis in nodeneighbor.iteritems():
+# 	cv2.circle(img, (int(nloc[0]),int(nloc[1])), 3, (0,255,255), -1)
 
 cv2.imwrite(output_fn, img)
 
