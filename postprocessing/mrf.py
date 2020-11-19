@@ -40,10 +40,10 @@ for nloc, neis in nodeneighbor.iteritems():
 				eid2 = getEdgeId(edge2)
 				# todo add angle constraint
 
-				if len(neis) > 2:
-					c = neighbors_cos(nodeneighbor, nloc, nei, nei2)
-					if abs(c) < 0.5:
-						continue 
+				# if len(neis) > 2:
+				# 	c = neighbors_cos(nodeneighbor, nloc, nei, nei2)
+				# 	if abs(c) < 0.5:
+				# 		continue 
 
 				if eid1 not in edgelinks:
 					edgelinks[eid1] = [eid2]
@@ -56,6 +56,7 @@ unaries = np.zeros(((edgeid), 2))
 
 for eid1, eids in edgelinks.iteritems():
 	for eid2 in eids:
+
 		pairwise_dict[(eid1, eid2)] = True 
 
 for eid, edge in ids2edge.iteritems():
@@ -72,17 +73,44 @@ for i in range(edgeid):
 	fid =  gm.addFunction(unaries[i][:].reshape((2)).astype(opengm.value_type))
 	gm.addFactor(fid, np.array([i]).astype(opengm.index_type))
 
-pf = np.zeros((2, 2))
 
-pf[0,0] = 0
-pf[1,1] = 0
-pf[0,1] = weight
-pf[1,0] = weight
 
 
 for link in pairwise_dict.keys():
 	n1 = link[0]
 	n2 = link[1]
+
+	pf = np.zeros((2, 2))
+
+	pf[0,0] = 0
+	pf[1,1] = 0
+	pf[0,1] = weight
+	pf[1,0] = weight
+
+	edge1 = ids2edge[n1]
+	edge2 = ids2edge[n2]
+
+	c = 1.0 
+
+	if edge1[0] == edge2[0]:
+		if len(nodeneighbor[edge1[0]]) > 2:
+			c = neighbors_cos(nodeneighbor, edge1[0], edge1[1], edge2[1])
+
+	if edge1[0] == edge2[1]:
+		if len(nodeneighbor[edge1[0]]) > 2:
+			c = neighbors_cos(nodeneighbor, edge1[0], edge1[1], edge2[0])
+
+	if edge1[1] == edge2[0]:
+		if len(nodeneighbor[edge1[1]]) > 2:
+			c = neighbors_cos(nodeneighbor, edge1[1], edge1[0], edge2[1])
+
+	if edge1[1] == edge2[1]:
+		if len(nodeneighbor[edge1[1]]) > 2:
+			c = neighbors_cos(nodeneighbor, edge1[1], edge1[0], edge2[0])
+
+	pf[0,1] *= abs(c)
+	pf[1,0] *= abs(c)
+
 
 	fid = gm.addFunction(pf.astype(opengm.value_type))
 	if n1 <= n2:
