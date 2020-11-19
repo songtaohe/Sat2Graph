@@ -55,7 +55,7 @@ PADDING = 30
 
 in_fname = sys.argv[1]
 #threshold = int(sys.argv[2])
-threshold = 96  # 0.15 
+threshold = int(256*0.3)  # 0.15 
 out_fname = sys.argv[2]
 
 im = scipy.ndimage.imread(in_fname)
@@ -180,8 +180,9 @@ for edge in edges:
 
 	
 
-node_neighbor = graphlib.graphDensify(neighbors, density = 20, distFunc = graphlib.PixelDistance)
-node_neighbor = graph_refine(node_neighbor, isolated_thr = 150, spurs_thr = 30, three_edge_loop_thr = 70)
+#node_neighbor = graphlib.graphDensify(neighbors, density = 20, distFunc = graphlib.PixelDistance)
+#node_neighbor = graph_refine(node_neighbor, isolated_thr = 150, spurs_thr = 30, three_edge_loop_thr = 70)
+node_neighbor = neighbors
 pickle.dump(node_neighbor, open(out_fname, "w"))
 
 
