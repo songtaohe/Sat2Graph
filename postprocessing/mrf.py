@@ -143,13 +143,13 @@ print(np.shape(arg))
 print(arg)
 
 for eid, edge in ids2edge.iteritems():
-	probs = (0,0)
+	probs = [0,0]
 	probs[arg[eid]] = 1.0 
 
 	if edge in edgeClass:
-		edgeClass[edge] = probs
+		edgeClass[edge] = tuple(probs)
 	else:
-		edgeClass[(edge[1], edge[0])] = probs 
+		edgeClass[(edge[1], edge[0])] = tuple(probs) 
 
 
 pickle.dump(edgeClass, open(output_fn, "w"))	
