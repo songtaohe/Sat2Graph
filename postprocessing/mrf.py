@@ -123,10 +123,10 @@ class PyCallback(object):
 		Args : 
 			inference : python wrapped c++ solver which is passed from c++
 		"""
-		
-		arg = inference.arg()
-		gm  = inference.gm()
-		print(self.step, "energy ",gm.evaluate(arg))
+		if self.step % 20 == 0:
+			arg = inference.arg()
+			gm  = inference.gm()
+			print(self.step, "energy ",gm.evaluate(arg))
 		self.step += 1
 
 
