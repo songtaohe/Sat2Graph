@@ -17,6 +17,7 @@ ids2edge = {}
 edgelinks = {}
 
 def getEdgeId(edge):
+	global edgeid 
 	if edge in edges:
 		return edges[edge]
 	elif (edge[1], edge[0]) in edges:
