@@ -5,7 +5,7 @@ import sys
 import opengm
 from common import neighbors_cos 
 
-weight = 1000.0 
+weight = 100.0 
 
 nodeneighbor = pickle.load(open(sys.argv[1]))
 edgeClass = pickle.load(open(sys.argv[2]))
@@ -79,6 +79,10 @@ for i in range(edgeid):
 for link in pairwise_dict.keys():
 	n1 = link[0]
 	n2 = link[1]
+
+	if n1 == n2:
+		continue
+
 
 	pf = np.zeros((2, 2))
 
@@ -172,7 +176,7 @@ class PyCallback(object):
 		self.step += 1
 
 
-inf=opengm.inference.BeliefPropagation(gm,parameter=opengm.InfParam(steps=100,damping=0.9,convergenceBound=0.00001))
+inf=opengm.inference.BeliefPropagation(gm,parameter=opengm.InfParam(steps=200,damping=0.9,convergenceBound=0.00001))
 
 callback = PyCallback() 
 visitor=inf.pythonVisitor(callback,visitNth=1)
