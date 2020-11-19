@@ -13,7 +13,6 @@ import subprocess
 import sys
 from math import sqrt
 import pickle
-import tifffile 
 import json
 import graph_ops as graphlib 
 import cv2 
@@ -55,16 +54,15 @@ PADDING = 30
 
 in_fname = sys.argv[1]
 #threshold = int(sys.argv[2])
-threshold = 1
+threshold = 127
 out_fname = sys.argv[2]
 
-im = tifffile.imread(in_fname)
-im = numpy.array(im)
-im = im[:,:,5]
+im = scipy.ndimage.imread(in_fname)
 
 if len(im.shape) == 3:
 	print 'warning: bad shape {}, using first channel only'.format(im.shape)
 	im = im[:, :, 0]
+
 im = numpy.swapaxes(im, 0, 1)
 
 im = (im >= threshold)
@@ -165,7 +163,7 @@ for edge in edges:
 
 		
 
-#node_neighbor = graphlib.graphDensify(neighbors, density = 20, distFunc = graphlib.PixelDistance)
+node_neighbor = graphlib.graphDensify(neighbors, density = 20, distFunc = graphlib.PixelDistance)
 
 pickle.dump(node_neighbor, open(out_fname, "w"))
 
