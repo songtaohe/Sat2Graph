@@ -16,6 +16,7 @@ import pickle
 import json
 import graph_ops as graphlib 
 import cv2 
+from decoder import graph_refine
 
 def distance(a, b):
     return  sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2)
@@ -54,7 +55,7 @@ PADDING = 30
 
 in_fname = sys.argv[1]
 #threshold = int(sys.argv[2])
-threshold = 38
+threshold = 127  # 0.15 
 out_fname = sys.argv[2]
 
 im = scipy.ndimage.imread(in_fname)
@@ -83,6 +84,8 @@ def add_edge(src, dst):
 	elif src == dst:
 		return
 	edges.add((src, dst))
+
+
 point_to_neighbors = {}
 q = []
 while True:
@@ -96,7 +99,7 @@ while True:
 			del point_to_neighbors[(i, j)]
 	else:
 		w = numpy.where(im > 0)
-		print(len(w[0]))
+		#print(len(w[0]))
 		if len(w[0]) == 0:
 			break
 		i, j = w[0][0], w[1][0]
@@ -142,8 +145,6 @@ while True:
 			break
 neighbors = {}
 
-
-
 vertex = vertices
 
 for edge in edges:
@@ -168,10 +169,18 @@ for edge in edges:
 		else:
 			neighbors[nk2] = [nk1]
 
-		
+
+for nloc, neis in neighbors.iteritems():
+	for nei in neis:
+		color = (255,255,255)
+		cv2.line(img, (int(nloc[0]),int(nloc[1])) , (int(nei[0]), int(nei[1])), color, 3)
+
+cv2.imwrite(out_fname.replace(".p", "_graphvis0.png"), img)
+
+	
 
 node_neighbor = graphlib.graphDensify(neighbors, density = 20, distFunc = graphlib.PixelDistance)
-
+node_neighbor = graph_refine(node_neighbor, isolated_thr = 150, spurs_thr = 30, three_edge_loop_thr = 70)
 pickle.dump(node_neighbor, open(out_fname, "w"))
 
 
@@ -182,7 +191,7 @@ for nloc, neis in node_neighbor.iteritems():
 		color = (255,255,255)
 		cv2.line(img, (int(nloc[0]),int(nloc[1])) , (int(nei[0]), int(nei[1])), color, 3)
 
-cv2.imwrite("debugvis.png", img)
+cv2.imwrite(out_fname.replace(".p", "_graphvis.png"), img)
 
 
 
