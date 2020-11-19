@@ -174,9 +174,8 @@ img = np.zeros((2048, 2048, 3), dtype=np.uint8)
 
 for nloc, neis in node_neighbor.iteritems():
 	for nei in neis:
-		if (nloc, nei) in edgeClass:
-			color = (255,255,255)
-			cv2.line(img, (int(nloc[0]),int(nloc[1])) , (int(nei[0]), int(nei[1])), color, 3)
+		color = (255,255,255)
+		cv2.line(img, (int(nloc[0]),int(nloc[1])) , (int(nei[0]), int(nei[1])), color, 3)
 
 cv2.imwrite("debugvis.png", img)
 
