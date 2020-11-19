@@ -54,7 +54,7 @@ PADDING = 30
 
 in_fname = sys.argv[1]
 #threshold = int(sys.argv[2])
-threshold = 64
+threshold = 38
 out_fname = sys.argv[2]
 
 im = scipy.ndimage.imread(in_fname)
@@ -96,6 +96,7 @@ while True:
 			del point_to_neighbors[(i, j)]
 	else:
 		w = numpy.where(im > 0)
+		print(len(w[0]))
 		if len(w[0]) == 0:
 			break
 		i, j = w[0][0], w[1][0]
