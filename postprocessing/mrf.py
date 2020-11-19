@@ -108,8 +108,8 @@ for link in pairwise_dict.keys():
 		if len(nodeneighbor[edge1[1]]) > 2:
 			c = neighbors_cos(nodeneighbor, edge1[1], edge1[0], edge2[0])
 
-	pf[0,1] *= abs(c)
-	pf[1,0] *= abs(c)
+	pf[0,1] *= abs(c)**2
+	pf[1,0] *= abs(c)**2
 
 
 	fid = gm.addFunction(pf.astype(opengm.value_type))
