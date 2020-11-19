@@ -20,7 +20,7 @@ for nloc, neis in nodeneighbor.iteritems():
 				color = (0,255,0)
 
 
-			cv2.line(img, (int(nloc[0]),int(nloc[1])) , (int(nei[0]), int(nei[1])), color, 3)
+			cv2.line(img, (int(nloc[1]),int(nloc[0])) , (int(nei[1]), int(nei[0])), color, 3)
 
 # for nloc, neis in nodeneighbor.iteritems():
 # 	cv2.circle(img, (int(nloc[0]),int(nloc[1])), 3, (0,255,255), -1)

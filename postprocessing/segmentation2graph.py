@@ -191,7 +191,7 @@ img = np.zeros((5120, 5120, 3), dtype=np.uint8)
 for nloc, neis in node_neighbor.iteritems():
 	for nei in neis:
 		color = (255,255,255)
-		cv2.line(img, (int(nloc[0]),int(nloc[1])) , (int(nei[0]), int(nei[1])), color, 3)
+		cv2.line(img, (int(nloc[1]),int(nloc[0])) , (int(nei[1]), int(nei[0])), color, 3)
 
 cv2.imwrite(out_fname.replace(".p", "_graphvis.png"), img)
 
