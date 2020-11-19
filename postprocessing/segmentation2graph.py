@@ -55,7 +55,7 @@ PADDING = 30
 
 in_fname = sys.argv[1]
 #threshold = int(sys.argv[2])
-threshold = int(256*0.3)  # 0.15 
+threshold = int(256*0.15)  # 0.15 
 out_fname = sys.argv[2]
 
 im = scipy.ndimage.imread(in_fname)
@@ -66,7 +66,9 @@ if len(im.shape) == 3:
 
 im = numpy.swapaxes(im, 0, 1)
 
-im = (im >= threshold)
+im = (im >= threshold).astype(np.uint8)
+im = scipy.ndimage.binary_closing(im)
+
 cv2.imwrite("debugvis0.png", im.astype(np.uint8)*255)
 
 im = skimage.morphology.thin(im)
@@ -181,7 +183,7 @@ for edge in edges:
 	
 
 node_neighbor = graphlib.graphDensify(neighbors, density = 20, distFunc = graphlib.PixelDistance)
-node_neighbor = graph_refine(node_neighbor, isolated_thr = 50, spurs_thr = 5, three_edge_loop_thr = 70)
+node_neighbor = graph_refine(node_neighbor, isolated_thr = 100, spurs_thr = 20, three_edge_loop_thr = 70)
 #node_neighbor = neighbors
 pickle.dump(node_neighbor, open(out_fname, "w"))
 
