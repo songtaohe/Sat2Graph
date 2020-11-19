@@ -19,7 +19,7 @@ import cv2
 from decoder import graph_refine
 
 def distance(a, b):
-    return  sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2)
+    return  sqrt(float((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2))
 
 def point_line_distance(point, start, end):
     if (start == end):
@@ -29,7 +29,7 @@ def point_line_distance(point, start, end):
             (end[0] - start[0]) * (start[1] - point[1]) - (start[0] - point[0]) * (end[1] - start[1])
         )
         d = sqrt(
-            (end[0] - start[0]) ** 2 + (end[1] - start[1]) ** 2
+            float((end[0] - start[0]) ** 2 + (end[1] - start[1]) ** 2)
         )
         return n / d
 
@@ -170,6 +170,7 @@ for edge in edges:
 			neighbors[nk2] = [nk1]
 
 
+img = np.zeros((2048, 2048, 3), dtype=np.uint8)
 for nloc, neis in neighbors.iteritems():
 	for nei in neis:
 		color = (255,255,255)
