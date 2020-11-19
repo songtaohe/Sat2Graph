@@ -3,6 +3,7 @@ import numpy as np
 import cv2 
 import sys 
 import opengm
+from common import neighbors_cos 
 
 weight = 1.0 
 
@@ -38,6 +39,12 @@ for nloc, neis in nodeneighbor.iteritems():
 				eid1 = getEdgeId(edge1)
 				eid2 = getEdgeId(edge2)
 				# todo add angle constraint
+
+				if len(neis) > 2:
+					c = neighbors_cos(nodeneighbor, nloc, nei, nei2)
+					if abs(c) < 0.5:
+						continue 
+						
 				if eid1 not in edgelinks:
 					edgelinks[eid1] = [eid2]
 				else:
