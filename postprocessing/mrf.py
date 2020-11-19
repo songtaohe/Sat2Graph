@@ -5,7 +5,7 @@ import sys
 import opengm
 from common import neighbors_cos 
 
-weight = 10000.0 
+weight = 5000.0 
 
 nodeneighbor = pickle.load(open(sys.argv[1]))
 edgeClass = pickle.load(open(sys.argv[2]))
