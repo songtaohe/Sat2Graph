@@ -183,7 +183,7 @@ for edge in edges:
 	
 
 node_neighbor = graphlib.graphDensify(neighbors, density = 20, distFunc = graphlib.PixelDistance)
-node_neighbor = graph_refine(node_neighbor, isolated_thr = 100, spurs_thr = 20, three_edge_loop_thr = 70)
+node_neighbor = graph_refine(node_neighbor, isolated_thr = 200, spurs_thr = 30, three_edge_loop_thr = 70)
 #node_neighbor = neighbors
 pickle.dump(node_neighbor, open(out_fname, "w"))
 
