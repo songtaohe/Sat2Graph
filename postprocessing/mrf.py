@@ -5,7 +5,7 @@ import sys
 import opengm
 from common import neighbors_cos 
 
-weight = 100.0 
+weight = 2000.0 
 
 nodeneighbor = pickle.load(open(sys.argv[1]))
 edgeClass = pickle.load(open(sys.argv[2]))
@@ -117,7 +117,7 @@ for link in pairwise_dict.keys():
 	if c < 0.5:
 		c = 0.0 
 	else:
-		c = ((c-0.5)*2) ** 2
+		c = ((c-0.5)*2)
 
 	pf[0,1] *= c
 	pf[1,0] *= c
