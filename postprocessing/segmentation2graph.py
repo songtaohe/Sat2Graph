@@ -54,7 +54,7 @@ PADDING = 30
 
 in_fname = sys.argv[1]
 #threshold = int(sys.argv[2])
-threshold = 127
+threshold = 32
 out_fname = sys.argv[2]
 
 im = scipy.ndimage.imread(in_fname)
