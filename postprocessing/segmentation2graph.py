@@ -54,7 +54,7 @@ PADDING = 30
 
 in_fname = sys.argv[1]
 #threshold = int(sys.argv[2])
-threshold = 32
+threshold = 64
 out_fname = sys.argv[2]
 
 im = scipy.ndimage.imread(in_fname)
@@ -66,8 +66,12 @@ if len(im.shape) == 3:
 im = numpy.swapaxes(im, 0, 1)
 
 im = (im >= threshold)
+cv2.imwrite("debugvis0.png", im)
+
 im = skimage.morphology.thin(im)
 im = im.astype('uint8')
+
+cv2.imwrite("debugvis1.png", im)
 
 print("thinning done")
 
