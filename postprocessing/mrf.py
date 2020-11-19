@@ -5,7 +5,7 @@ import sys
 import opengm
 from common import neighbors_cos 
 
-weight = 1.0 
+weight = 10.0 
 
 nodeneighbor = pickle.load(open(sys.argv[1]))
 edgeClass = pickle.load(open(sys.argv[2]))
@@ -44,7 +44,7 @@ for nloc, neis in nodeneighbor.iteritems():
 					c = neighbors_cos(nodeneighbor, nloc, nei, nei2)
 					if abs(c) < 0.5:
 						continue 
-						
+
 				if eid1 not in edgelinks:
 					edgelinks[eid1] = [eid2]
 				else:
