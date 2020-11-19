@@ -4,7 +4,7 @@ import cv2
 import sys 
 
 nodeneighbor = pickle.load(open(sys.argv[1]))
-classmap = pickle.load(open(sys.argv[2]))
+edgeClass = pickle.load(open(sys.argv[2]))
 output_fn = sys.argv[3]
 
 img = np.zeros((2048, 2048, 3), dtype=np.uint8)
