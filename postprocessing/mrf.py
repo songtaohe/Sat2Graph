@@ -142,7 +142,7 @@ arg=inf.arg()
 print(np.shape(arg))
 print(arg)
 
-for eid, edge in ids2edge:
+for eid, edge in ids2edge.iteritems():
 	probs = (0,0)
 	probs[arg[eid]] = 1.0 
 
