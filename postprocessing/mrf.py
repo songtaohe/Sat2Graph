@@ -12,7 +12,7 @@ from common import neighbors_cos
 #python mrf.py /data/songtao/harvardDataset5mTestingResults2/4358815_2018-08-27_RE4_3A__
 
 
-weight = 5.0 
+weight = 1.0 
 
 nodeneighbor = pickle.load(open(sys.argv[1]))
 edgeClass = pickle.load(open(sys.argv[2]))
@@ -88,6 +88,7 @@ for link in pairwise_dict.keys():
 	n2 = link[1]
 
 	if n1 == n2:
+		print("n1==n2 should not happen")
 		continue
 
 
@@ -100,6 +101,15 @@ for link in pairwise_dict.keys():
 
 	edge1 = ids2edge[n1]
 	edge2 = ids2edge[n2]
+
+	if edge1[0] == edge2[0] and edge1[1] == edge2[1]:
+		print("edge1[0] == edge2[0] and edge1[1] == edge2[1] should not happen" )
+		continue
+
+	if edge1[0] == edge2[1] and edge1[1] == edge2[0]:
+		print("edge1[0] == edge2[1] and edge1[1] == edge2[0] should not happen" )
+		continue
+
 
 	c = 1.0 
 
