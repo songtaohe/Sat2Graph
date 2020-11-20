@@ -12,7 +12,7 @@ from common import neighbors_cos
 #python mrf.py /data/songtao/harvardDataset5mTestingResults2/4358815_2018-08-27_RE4_3A__
 
 
-weight = 1.0 
+weight = 2.0 
 
 nodeneighbor = pickle.load(open(sys.argv[1]))
 edgeClass = pickle.load(open(sys.argv[2]))
@@ -39,7 +39,13 @@ def getEdgeId(edge):
 for nloc, neis in nodeneighbor.iteritems():
 	for nei in neis:
 		edge1 = (nloc, nei)
+		if nei == nloc:
+			continue
+
 		for nei2 in neis:
+			if nei2 == nloc:
+				continue
+				
 			if nei2 != nei:
 				edge2 = (nloc, nei2)
 
@@ -63,6 +69,9 @@ unaries = np.zeros(((edgeid), 2))
 
 for eid1, eids in edgelinks.iteritems():
 	for eid2 in eids:
+		if eid2 == eid1:
+			print("eid2==eid1 should not happen")
+			continue 
 
 		pairwise_dict[(eid1, eid2)] = True 
 
