@@ -16,7 +16,7 @@ for nloc, neis in nodeneighbor.iteritems():
 
 			if probs[0] >= 0.5:
 				color = (0,0,255)
-				w = 5
+				w = 7
 			else:
 				color = (0,255,0)
 				w = 3
