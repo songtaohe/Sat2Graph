@@ -139,12 +139,12 @@ for link in pairwise_dict.keys():
 	pf[0,1] *= c
 	pf[1,0] *= c
 
-
-	fid = gm.addFunction(pf.astype(opengm.value_type))
-	if n1 <= n2:
-		gm.addFactor(fid, np.array([n1,n2]).astype(opengm.index_type))
-	else:
-		gm.addFactor(fid, np.array([n2,n1]).astype(opengm.index_type))
+	if c > 0.1:
+		fid = gm.addFunction(pf.astype(opengm.value_type))
+		if n1 <= n2:
+			gm.addFactor(fid, np.array([n1,n2]).astype(opengm.index_type))
+		else:
+			gm.addFactor(fid, np.array([n2,n1]).astype(opengm.index_type))
 
 
 class PyCallback(object):
