@@ -205,6 +205,7 @@ arg=inf.arg()
 
 print(np.shape(arg))
 print(arg)
+print("energy ",gm.evaluate(arg))
 
 for eid, edge in ids2edge.iteritems():
 	probs = [0,0]
