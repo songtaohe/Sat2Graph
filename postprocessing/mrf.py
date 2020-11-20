@@ -194,12 +194,12 @@ class PyCallback(object):
 
 
 #inf=opengm.inference.BeliefPropagation(gm,parameter=opengm.InfParam(steps=200,damping=0.9,convergenceBound=0.0001))
-inf = opengm.inference.GraphCut(gm)
+#callback = PyCallback() 
+#visitor=inf.pythonVisitor(callback,visitNth=1)
+#inf.infer(visitor)
 
-callback = PyCallback() 
-visitor=inf.pythonVisitor(callback,visitNth=1)
-inf.infer(visitor)
-#inf.infer()
+inf = opengm.inference.GraphCut(gm)
+inf.infer()
 
 arg=inf.arg()
 
