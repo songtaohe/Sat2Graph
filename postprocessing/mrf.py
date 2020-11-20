@@ -12,7 +12,7 @@ from common import neighbors_cos
 #python mrf.py /data/songtao/harvardDataset5mTestingResults2/4358815_2018-08-27_RE4_3A__
 
 
-weight = 4.0 
+weight = 1.0 
 
 nodeneighbor = pickle.load(open(sys.argv[1]))
 edgeClass = pickle.load(open(sys.argv[2]))
