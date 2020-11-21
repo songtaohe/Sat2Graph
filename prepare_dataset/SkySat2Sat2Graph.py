@@ -36,5 +36,5 @@ for rid in range(len(regionname)):
 
 	# copy other files 
 	Popen("cp "+skysat_folder+"Sat2Graph_Graphs/"+regionname[rid] + "_gt.png "+ sat2graph_folder+"/region_%d_refine_gt_graph.p" % rid, shell=True)
-	Popen("cp "+skysat_folder+"Sat2Graph_Graphs/"+regionname[rid] + "_gt_graph_samplepoints.json "+ sat2graph_folder+"/region_%d_gt_graph_samplepoints.json" % rid, shell=True)
+	Popen("cp "+skysat_folder+"Sat2Graph_Graphs/"+regionname[rid] + "_refine_gt_graph_samplepoints.json "+ sat2graph_folder+"/region_%d_refine_gt_graph_samplepoints.json" % rid, shell=True)
 
