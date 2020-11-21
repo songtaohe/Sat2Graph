@@ -94,6 +94,30 @@ def neighbor_transpos(n_in):
 
 	return n_out 
 
+def neighbor_to_integer(n_in):
+	n_out = {}
+
+	for k, v in n_in.items():
+		nk = (int(k[0]), int(k[1]))
+		
+		if nk in n_out:
+			nv = n_out[nk]
+		else:
+			nv = []
+
+		for _v in v :
+			new_n_k = (int(_v[0]),int(_v[1]))
+
+			if new_n_k in nv:
+				pass
+			else:
+				nv.append(new_n_k)
+
+		n_out[nk] = nv 
+
+	return n_out
+
+
 
 class Sat2GraphDataLoader():
 	def __init__(self, folder, indrange = [0,10],imgsize = 256, preload_tiles = 4, max_degree = 6, loadseg = False, random_mask=True, testing=False, dataset_image_size = 2048, transpose=False):
@@ -151,6 +175,7 @@ class Sat2GraphDataLoader():
 	
 		try:
 			neighbors = pickle.load(open(self.folder + "/region_%d_refine_gt_graph.p" % ind))
+			neighbors = neighbor_to_integer(neighbors)
 
 			if self.transpose:
 				neighbors = neighbor_transpos(neighbors)
@@ -242,7 +267,8 @@ class Sat2GraphDataLoader():
 
 
 			neighbors = pickle.load(open(self.folder + "/region_%d_refine_gt_graph.p" % ind))
-			
+			neighbors = neighbor_to_integer(neighbors)
+
 			if self.transpose:
 				neighbors = neighbor_transpos(neighbors)
 
@@ -372,6 +398,9 @@ class Sat2GraphDataLoader():
 
 					x = np.clip(x, 256, self.dataset_image_size-256-image_size)
 					y = np.clip(y, 256, self.dataset_image_size-256-image_size)
+
+				x = int(x)
+				y = int(y)
 
 
 				c += 1
