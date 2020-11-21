@@ -20,7 +20,7 @@ for filename in sorted(os.listdir(skysat_folder+"Sat2Graph_Satellite_Images/")):
 print(regionname)
 
 for rid in range(len(regionname)):
-	if rid % 100 == 0:
+	if rid % 10 == 0:
 		print(rid)
 	# convert image to png 
 	img = tifffile.imread(skysat_folder+"Sat2Graph_Satellite_Images/"+ regionname[rid]+".tif")
@@ -35,6 +35,6 @@ for rid in range(len(regionname)):
 
 
 	# copy other files 
-	Popen("cp "+skysat_folder+"Sat2Graph_Graphs/"+regionname[rid] + "_gt.png "+ sat2graph_folder+"/region_%d_refine_gt_graph.p" % rid, shell=True)
+	Popen("cp "+skysat_folder+"Sat2Graph_Graphs/"+regionname[rid] + "_gt.png "+ sat2graph_folder+"/region_%d_gt.png" % rid, shell=True)
 	Popen("cp "+skysat_folder+"Sat2Graph_Graphs/"+regionname[rid] + "_refine_gt_graph_samplepoints.json "+ sat2graph_folder+"/region_%d_refine_gt_graph_samplepoints.json" % rid, shell=True)
 
