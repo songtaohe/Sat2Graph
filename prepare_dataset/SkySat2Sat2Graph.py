@@ -46,3 +46,5 @@ for rid in range(len(regionname)):
 
 print([regionname[x] for x in bad_rid])
 print(bad_rid)
+
+
