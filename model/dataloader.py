@@ -344,7 +344,7 @@ class Sat2GraphDataLoader():
 
 				coin = random.randint(0,99)
 
-				if coin < 20: # 20%
+				if coin < 100: # 100%
 					while True:
 						
 						x = random.randint(256, self.dataset_image_size-256-image_size)
