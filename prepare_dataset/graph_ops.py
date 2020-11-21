@@ -14,6 +14,12 @@ def GPSDistance(p1, p2):
 
 	return math.sqrt(a*a + b*b)
 
+def PixelDistance(p1, p2):
+	a = p1[0] - p2[0]
+	b = (p1[1] - p2[1]) 
+	
+	return math.sqrt(a*a + b*b)
+
 
 def graphInsert(node_neighbor, n1key, n2key):
 	if n1key != n2key:
@@ -37,7 +43,7 @@ def graphInsert(node_neighbor, n1key, n2key):
 	return node_neighbor
 
 
-def graphDensify(node_neighbor, density = 0.00020):
+def graphDensify(node_neighbor, density = 0.00020, distFunc = GPSDistance):
 	visited = []
 
 	new_node_neighbor = {}
@@ -75,7 +81,7 @@ def graphDensify(node_neighbor, density = 0.00020):
 				pd = [0]
 
 				for i in range(len(node_list)-1):
-					pd.append(pd[-1]+GPSDistance(node_list[i], node_list[i+1]))
+					pd.append(pd[-1]+distFunc(node_list[i], node_list[i+1]))
 
 				interpolate_N = int(pd[-1]/density)
 
@@ -538,7 +544,6 @@ def graphGroundTruthPreProcess(graph):
 
 
 	return graph, sample_points 
-
 
 
 
