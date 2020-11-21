@@ -133,6 +133,9 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 		indrange_validation = []
 
 		for x in range(509):
+			if x in [230, 231, 318, 319, 403, 404]:
+				continue
+				
 			if x % 10 < 8 :
 				indrange_train.append(x)
 
