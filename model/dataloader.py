@@ -363,7 +363,7 @@ class Sat2GraphDataLoader():
 
 					ind = random.randint(0, len(sps)-1)
 
-					x = sps[ind][0]) - image_size/2
+					x = sps[ind][0] - image_size/2
 					y = sps[ind][1] - image_size/2
 
 					x = np.clip(x, 256, self.dataset_image_size-256-image_size)
@@ -401,7 +401,7 @@ class Sat2GraphDataLoader():
 
 				x = int(x)
 				y = int(y)
-				
+
 
 				c += 1
 				if np.sum(self.tiles_gt_seg[tile_id,x:x+image_size, y:y+image_size,:]+0.5) < 20*20 and c < 10:
