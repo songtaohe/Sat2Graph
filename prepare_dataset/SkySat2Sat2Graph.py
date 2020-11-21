@@ -18,23 +18,31 @@ for filename in sorted(os.listdir(skysat_folder+"Sat2Graph_Satellite_Images/")):
 		regionname.append(filename.replace(".tif",""))
 
 print(regionname)
+bad_rid = []
 
 for rid in range(len(regionname)):
-	if rid % 10 == 0:
-		print(rid)
-	# convert image to png 
-	img = tifffile.imread(skysat_folder+"Sat2Graph_Satellite_Images/"+ regionname[rid]+".tif")
-	rgb = img[:,:,0:3]
-	Image.fromarray(rgb).save(sat2graph_folder+"/region_%d_sat.png" % rid)
+	#if rid % 10 == 0:
+	print(rid, regionname[rid])
+
+	try:
+		# convert image to png 
+		img = tifffile.imread(skysat_folder+"Sat2Graph_Satellite_Images/"+ regionname[rid]+".tif")
+		rgb = img[:,:,0:3]
+		Image.fromarray(rgb).save(sat2graph_folder+"/region_%d_sat.png" % rid)
 
 
-	# interpolate graph to 20-pixel interval
-	graph = pickle.load(open(skysat_folder+"Sat2Graph_Graphs/"+regionname[rid] + "_refine_gt_graph.p"))
-	graph = graph_ops.graphDensify(graph, density=20, distFunc=graph_ops.PixelDistance)
-	pickle.dump(graph, open(sat2graph_folder+"/region_%d_refine_gt_graph.p" % rid, "w"))
+		# interpolate graph to 20-pixel interval
+		graph = pickle.load(open(skysat_folder+"Sat2Graph_Graphs/"+regionname[rid] + "_refine_gt_graph.p"))
+		graph = graph_ops.graphDensify(graph, density=20, distFunc=graph_ops.PixelDistance)
+		pickle.dump(graph, open(sat2graph_folder+"/region_%d_refine_gt_graph.p" % rid, "w"))
 
 
-	# copy other files 
-	Popen("cp "+skysat_folder+"Sat2Graph_Graphs/"+regionname[rid] + "_gt.png "+ sat2graph_folder+"/region_%d_gt.png" % rid, shell=True)
-	Popen("cp "+skysat_folder+"Sat2Graph_Graphs/"+regionname[rid] + "_refine_gt_graph_samplepoints.json "+ sat2graph_folder+"/region_%d_refine_gt_graph_samplepoints.json" % rid, shell=True)
+		# copy other files 
+		Popen("cp "+skysat_folder+"Sat2Graph_Graphs/"+regionname[rid] + "_gt.png "+ sat2graph_folder+"/region_%d_gt.png" % rid, shell=True)
+		Popen("cp "+skysat_folder+"Sat2Graph_Graphs/"+regionname[rid] + "_refine_gt_graph_samplepoints.json "+ sat2graph_folder+"/region_%d_refine_gt_graph_samplepoints.json" % rid, shell=True)
 
+	except:
+		bad_rid.append(rid)
+
+print([regionname[x] for x in bad_rid])
+print(bad_rid)

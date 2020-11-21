@@ -16,7 +16,7 @@ import argparse
 # This file supports training and testing Sat2Graph models on both the 20cities dataset and Spacenet dataset.  
 # 
 # -> Train Sat2Graph model on the 20cities dataset
-# time python train.py -model_save tmp -instance_id test -image_size 352
+# time python train.py -model_save modelv1 -instance_id run1 -image_size 352 
 # 
 # -> Train Sat2Graph model on the 20cities dataset from the pre-trained model
 # time python train.py -model_save tmp -instance_id test -image_size 352 -model_recover ../data/20citiesModel/model
@@ -24,6 +24,9 @@ import argparse
 # -> Test Sat2Graph model on the 20cities dataset
 # time python train.py -model_save tmp -instance_id test -image_size 352 -model_recover ../data/20citiesModel/model -mode test
 # 
+
+
+
 
 parser = argparse.ArgumentParser()
 
@@ -52,6 +55,8 @@ parser.add_argument('-lr_decay_step', action='store', dest='lr_decay_step', type
 parser.add_argument('-init_step', action='store', dest='init_step', type=int,
                     help='initial step size ', required =False, default=0)
 
+parser.add_argument('-max_step', action='store', dest='max_step', type=int,
+                    help='initial step size ', required =False, default=300001)
 
 # parser.add_argument('-model_name', action='store', dest='model_name', type=str,
 #                     help='instance_id ', required =False, default="UNET_resnet")
@@ -84,6 +89,8 @@ run = "run-"+datetime.today().strftime('%Y-%m-%d-%H-%M-%S')+"-"+instance_id
 
 osmdataset = "../data/20cities/"
 spacenetdataset = "../data/spacenet/"
+
+osmdataset = "../../data/dataset/" # This should be the skysat dataset 
 
 image_size = args.image_size
 
@@ -125,7 +132,7 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 		indrange_test = []
 		indrange_validation = []
 
-		for x in range(180):
+		for x in range(509):
 			if x % 10 < 8 :
 				indrange_train.append(x)
 
@@ -379,6 +386,8 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 							# todo 			
 							#ImageGraphVis(output[k,:,:,0:2 + 4*max_degree].reshape((image_size, image_size, 2 + 4*max_degree )), validation_folder+"/tile%d_output_graph_0.01.png" % (j*batch_size+k), thr=0.01, imagesize = image_size)
 							DecodeAndVis(output[k,:,:,0:2 + 4*max_degree].reshape((image_size, image_size, 2 + 4*max_degree )), validation_folder+"/tile%d_output_graph_0.01_snap.png" % (j*batch_size+k), thr=0.01, snap=True, imagesize = image_size)
+							DecodeAndVis(gt_imagegraph[k,:,:,0:2 + 4*max_degree].reshape((image_size, image_size, 2 + 4*max_degree )), validation_folder+"/tile%d_output_graph_gt.png" % (j*batch_size+k), thr=0.5, snap=True, imagesize = image_size)
+							
 							#ImageGraphVis(gt_imagegraph[k,:,:,:].reshape((image_size, image_size, 2 + 4*max_degree )), validation_folder+"/tile%d_output_graph_gt.png" % (j*batch_size+k), thr=0.5, imagesize = image_size)
 
 
@@ -413,5 +422,5 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 			lr = lr * args.lr_decay
 
 		step += 1
-		if step == 300000+2:
+		if step == args.max_step:
 			break 
