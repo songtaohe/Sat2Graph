@@ -6,8 +6,8 @@ import tifffile
 from PIL import Image 
 import pickle 
 
-skysat_folder = "../../SkySat_Sat2Graph/"
-sat2graph_folder = "../../dataset/"
+skysat_folder = "../../data/SkySat_Sat2Graph/"
+sat2graph_folder = "../../data/dataset/"
 
 Popen("mkdir -p "+sat2graph_folder, shell=True).wait()
 
