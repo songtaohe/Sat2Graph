@@ -119,8 +119,8 @@ for item in dataset_cfg:
 					
 			#graphlib.graphVis2048(node_neighbor,[lat_st,lon_st,lat_ed,lon_ed], "raw.png")
 			
-			# interpolate the graph (20 meters interval)
-			node_neighbor = graphlib.graphDensify(node_neighbor)
+			# interpolate the graph (12-meter interval == 20-pixel interval)
+			node_neighbor = graphlib.graphDensify(node_neighbor, density=0.00012)
 			node_neighbor_region = graphlib.graph2RegionCoordinate(node_neighbor, [lat_st,lon_st,lat_ed,lon_ed])
 			prop_graph = dataset_folder+"/region_%d_graph_gt.pickle" % c
 			pickle.dump(node_neighbor_region, open(prop_graph, "w"))
