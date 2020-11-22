@@ -40,7 +40,7 @@ fingerprint = ""
 for i in range(len(model.variables_names)):
 	weights[model.variables_names[i]] = params[i]
 	print(i, model.variables_names[i], np.shape(params[i]), np.amax(params[i]), np.amin(params[i]))
-	fingerprint += str(i) + " "+ str(model.variables_names[i]) + " " + str(np.amax(params[i]))+" "+ np.amin(params[i]) + "\n"
+	fingerprint += str(i) + " "+ str(model.variables_names[i]) + " " + str(np.amax(params[i]))+" "+ str(np.amin(params[i])) + "\n"
 	if np.isnan(params[i]).any():
 		print("NAN Detected!!!!!!!!!!!!")
 		print("")
@@ -49,7 +49,7 @@ for i in range(len(model.variables_names)):
 		print("")
 with open("weightsfp.txt","w") as fout:
 	fout.write(fingerprint)
-			
+
 pickle.dump(weights, open("weights.p","w"))
 
 
