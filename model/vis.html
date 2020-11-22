@@ -22,13 +22,13 @@
     folder = vars['folder']
 
 
-	for (i = -4; i < 64; i++) { 
+	for (i = -2; i < 32; i++) { 
         var div = document.createElement('div');
         div.appendChild(document.createTextNode("Example_"+i.toString()))
 
         mDiv.appendChild(div);
 
-        var size = '8%';
+        var size = '12%';
 
 		var img = document.createElement('img');
     	img.src = "http://localhost:"+port+"/" + folder+ "/tile"+i.toString()+"_input_sat.png";
@@ -45,46 +45,12 @@
         mDiv.appendChild(img);
 
         var img = document.createElement('img');
-        img.src = "http://localhost:"+port+"/" + folder+ "/tile"+i.toString()+"_input_gt_seg.png";
+        img.src = "http://localhost:"+port+"/" + folder+ "/tile"+i.toString()+"_gt_seg.png";
         img.style.width = size
         img.style.border="1px solid blue"
         //img.style.height = '33%'
         mDiv.appendChild(img);
 
-        var img = document.createElement('img');
-        img.src = "http://localhost:"+port+"/" + folder+ "/tile"+i.toString()+"_input_condition_vertices.png";
-        img.style.width = size
-        img.style.border="1px solid blue"
-        //img.style.height = '33%'
-        mDiv.appendChild(img);
-
-        var img = document.createElement('img');
-        img.src = "http://localhost:"+port+"/" + folder+ "/tile"+i.toString()+"_input_condition_mask.png";
-        img.style.width = size
-        img.style.border="1px solid blue"
-        //img.style.height = '33%'
-        mDiv.appendChild(img);
-
-        // var img = document.createElement('img');
-        // img.src = "http://localhost:"+port+"/" + folder+ "/tile"+i.toString()+"_output_graph.png";
-        // img.style.width = '14%'
-        // img.style.border="1px solid blue"
-        // //img.style.height = '33%'
-        // mDiv.appendChild(img);
-
-        // var img = document.createElement('img');
-        // img.src = "http://localhost:"+port+"/" + folder+ "/tile"+i.toString()+"_output_graph_snap.png";
-        // img.style.width = '14%'
-        // img.style.border="1px solid cyan"
-        // //img.style.height = '33%'
-        // mDiv.appendChild(img);
-
-        // var img = document.createElement('img');
-        // img.src ="http://localhost:"+port+"/" + folder+ "/tile"+i.toString()+"_output_graph_0.01.png";
-        // img.style.width = '10%'
-        // img.style.border="1px solid blue"
-        // //img.style.height = '33%'
-        // mDiv.appendChild(img);
 
 
         var img = document.createElement('img');
@@ -95,11 +61,20 @@
         mDiv.appendChild(img);
 
         var img = document.createElement('img');
-        img.src = "http://localhost:"+port+"/" + folder+ "/tile"+i.toString()+"_output_graph_gt.png_refine_bk.png ";
+        img.src = "http://localhost:"+port+"/" + folder+ "/tile"+i.toString()+"_output_graph_0.01_snap.png_norefine_bk.png";
+        img.style.width = size
+        img.style.border="1px solid cyan"
+        //img.style.height = '33%'
+        mDiv.appendChild(img);
+
+        var img = document.createElement('img');
+        img.src = "http://localhost:"+port+"/" + folder+ "/tile"+i.toString()+"_output_graph_gt.png_norefine_bk.png ";
         img.style.width = size
         img.style.border="1px solid green"
         //img.style.height = '33%'
         mDiv.appendChild(img);
+
+        
 
         var img = document.createElement('img');
         img.src = "http://localhost:"+port+"/" + folder+ "/tile"+i.toString()+"_output_seg.png";
@@ -115,19 +90,7 @@
         //img.style.height = '33%'
         mDiv.appendChild(img);
 
-        var img = document.createElement('img');
-        img.src = "http://localhost:"+port+"/" + folder+ "/tile"+i.toString()+"_gt_road_class.png";
-        img.style.width = size
-        img.style.border="1px solid green"
-        //img.style.height = '33%'
-        mDiv.appendChild(img);
-
-        var img = document.createElement('img');
-        img.src = "http://localhost:"+port+"/" + folder+ "/tile"+i.toString()+"_output_road_class.png";
-        img.style.width = size
-        img.style.border="1px solid green"
-        //img.style.height = '33%'
-        mDiv.appendChild(img);
+        
 
 
 
