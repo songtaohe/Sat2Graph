@@ -39,7 +39,13 @@ weights = {}
 for i in range(len(model.variables_names)):
 	weights[model.variables_names[i]] = params[i]
 	print(i, model.variables_names[i], np.shape(params[i]), np.amax(params[i]), np.amin(params[i]))
-
+	if np.isnan(params[i]).any():
+		print("NAN Detected!!!!!!!!!!!!")
+		print("")
+	if np.isinf(params[i]).any():
+		print("INF Detected!!!!!!!!!!!!")
+		print("")
+		
 pickle.dump(weights, open("weights.p","w"))
 
 
