@@ -21,6 +21,7 @@ from decoder import DecodeAndVis
 from douglasPeucker import simpilfyGraph 
 
 gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.45)
+gpu_options = tf.GPUOptions()
 sess = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options))
 
 model = Sat2GraphModel(sess, image_size=352, resnet_step = 8, batchsize = 1, channel = 24, mode = "test")
