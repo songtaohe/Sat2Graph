@@ -35,17 +35,21 @@ model.restoreModel("/data/songtao/qcriStartup/Sat2Graph/model/modelv1run2_352_8_
 params = model.get_params()
 
 weights = {}
+fingerprint = ""
 
 for i in range(len(model.variables_names)):
 	weights[model.variables_names[i]] = params[i]
 	print(i, model.variables_names[i], np.shape(params[i]), np.amax(params[i]), np.amin(params[i]))
+	fingerprint += str(i) + " "+ str(model.variables_names[i]) + " " + str(np.amax(params[i]))+" "+ np.amin(params[i]) + "\n"
 	if np.isnan(params[i]).any():
 		print("NAN Detected!!!!!!!!!!!!")
 		print("")
 	if np.isinf(params[i]).any():
 		print("INF Detected!!!!!!!!!!!!")
 		print("")
-		
+with open("weightsfp.txt","w") as fout:
+	fout.write(fingerprint)
+			
 pickle.dump(weights, open("weights.p","w"))
 
 
