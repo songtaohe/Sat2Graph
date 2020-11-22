@@ -41,7 +41,7 @@ class Sat2GraphModel():
 
 		self.input_road_class = tf.placeholder(tf.int32, shape = [self.batchsize, self.image_size, self.image_size, 1])
 		
-		self.input_condition = tf.placeholder(tf.int32, shape = [self.batchsize, self.image_size, self.image_size, 2])
+		self.input_condition = tf.placeholder(tf.float32, shape = [self.batchsize, self.image_size, self.image_size, 2])
 		
 		self.target_prob = tf.placeholder(tf.float32, shape = [self.batchsize, self.image_size, self.image_size, 2 * (MAX_DEGREE + 1)])
 		self.target_vector = tf.placeholder(tf.float32, shape = [self.batchsize, self.image_size, self.image_size, 2 * (MAX_DEGREE)])
