@@ -69,7 +69,7 @@ if os.path.isfile(model_fp_name):
 	with open("weightsfp.txt","w") as fout:
 		fout.write(fingerprint)
 	print("model finger print diff ")
-
+	pickle.dump(weights, open("weights.p","w"))
 	
 	Popen("diff "+model_fp_name + " "+ "weightsfp.txt", shell=True).wait()
 else:
@@ -78,7 +78,7 @@ else:
 
 	pickle.dump(weights, open("weights_"+model_fp_name+".p","w"))
 
-pickle.dump(weights, open("weights.p","w"))
+
 
 if hasBadWeights:
 	sess.close()
