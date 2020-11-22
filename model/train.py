@@ -228,8 +228,8 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 				Image.fromarray(input_sat_img).save("outputs/region_%d_input.png" % tile_id)
 
 				DecodeAndVis(output, "outputs/region_%d_output" % (tile_id), thr=0.05, edge_thr = 0.05, snap=True, imagesize = 2048)
-							
-				np.save("rawoutputs_%s/region_%d_output_raw" % (args.instance_id, tile_id), output)
+						
+				#np.save("rawoutputs_%s/region_%d_output_raw" % (args.instance_id, tile_id), output)
 									
 				print(" done!  time: %.2f seconds"%(time() - t0))
 
