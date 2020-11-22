@@ -1,0 +1,141 @@
+<html>
+<body>
+<div id='111'>
+
+</div>
+<script type="text/javascript">
+	var mDiv=document.getElementById("111")
+    function getUrlVars() {
+    var vars = {};
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+        vars[key] = value;
+    });
+    return vars;
+    }
+
+    vars = getUrlVars()
+
+    console.log(vars)
+    console.log(vars['port'])
+
+    port = vars['port'].toString()
+    folder = vars['folder']
+
+
+	for (i = -4; i < 64; i++) { 
+        var div = document.createElement('div');
+        div.appendChild(document.createTextNode("Example_"+i.toString()))
+
+        mDiv.appendChild(div);
+
+        var size = '8%';
+
+		var img = document.createElement('img');
+    	img.src = "http://localhost:"+port+"/" + folder+ "/tile"+i.toString()+"_input_sat.png";
+    	img.style.width = size
+        img.style.border= "1px solid blue"
+    	//img.style.height = '33%'
+    	mDiv.appendChild(img);
+
+        var img = document.createElement('img');
+        img.src = "http://localhost:"+port+"/" + folder+ "/tile"+i.toString()+"_output_keypoints.png";
+        img.style.width = size
+        img.style.border="1px solid blue"
+        //img.style.height = '33%'
+        mDiv.appendChild(img);
+
+        var img = document.createElement('img');
+        img.src = "http://localhost:"+port+"/" + folder+ "/tile"+i.toString()+"_input_gt_seg.png";
+        img.style.width = size
+        img.style.border="1px solid blue"
+        //img.style.height = '33%'
+        mDiv.appendChild(img);
+
+        var img = document.createElement('img');
+        img.src = "http://localhost:"+port+"/" + folder+ "/tile"+i.toString()+"_input_condition_vertices.png";
+        img.style.width = size
+        img.style.border="1px solid blue"
+        //img.style.height = '33%'
+        mDiv.appendChild(img);
+
+        var img = document.createElement('img');
+        img.src = "http://localhost:"+port+"/" + folder+ "/tile"+i.toString()+"_input_condition_mask.png";
+        img.style.width = size
+        img.style.border="1px solid blue"
+        //img.style.height = '33%'
+        mDiv.appendChild(img);
+
+        // var img = document.createElement('img');
+        // img.src = "http://localhost:"+port+"/" + folder+ "/tile"+i.toString()+"_output_graph.png";
+        // img.style.width = '14%'
+        // img.style.border="1px solid blue"
+        // //img.style.height = '33%'
+        // mDiv.appendChild(img);
+
+        // var img = document.createElement('img');
+        // img.src = "http://localhost:"+port+"/" + folder+ "/tile"+i.toString()+"_output_graph_snap.png";
+        // img.style.width = '14%'
+        // img.style.border="1px solid cyan"
+        // //img.style.height = '33%'
+        // mDiv.appendChild(img);
+
+        // var img = document.createElement('img');
+        // img.src ="http://localhost:"+port+"/" + folder+ "/tile"+i.toString()+"_output_graph_0.01.png";
+        // img.style.width = '10%'
+        // img.style.border="1px solid blue"
+        // //img.style.height = '33%'
+        // mDiv.appendChild(img);
+
+
+        var img = document.createElement('img');
+        img.src = "http://localhost:"+port+"/" + folder+ "/tile"+i.toString()+"_output_graph_0.01_snap.png_refine_bk.png";
+        img.style.width = size
+        img.style.border="1px solid cyan"
+        //img.style.height = '33%'
+        mDiv.appendChild(img);
+
+        var img = document.createElement('img');
+        img.src = "http://localhost:"+port+"/" + folder+ "/tile"+i.toString()+"_output_graph_gt.png_refine_bk.png ";
+        img.style.width = size
+        img.style.border="1px solid green"
+        //img.style.height = '33%'
+        mDiv.appendChild(img);
+
+        var img = document.createElement('img');
+        img.src = "http://localhost:"+port+"/" + folder+ "/tile"+i.toString()+"_output_seg.png";
+        img.style.width = size
+        img.style.border="1px solid green"
+        //img.style.height = '33%'
+        mDiv.appendChild(img);
+
+        var img = document.createElement('img');
+        img.src = "http://localhost:"+port+"/" + folder+ "/tile"+i.toString()+"_gt_seg.png";
+        img.style.width = size
+        img.style.border="1px solid green"
+        //img.style.height = '33%'
+        mDiv.appendChild(img);
+
+        var img = document.createElement('img');
+        img.src = "http://localhost:"+port+"/" + folder+ "/tile"+i.toString()+"_gt_road_class.png";
+        img.style.width = size
+        img.style.border="1px solid green"
+        //img.style.height = '33%'
+        mDiv.appendChild(img);
+
+        var img = document.createElement('img');
+        img.src = "http://localhost:"+port+"/" + folder+ "/tile"+i.toString()+"_output_road_class.png";
+        img.style.width = size
+        img.style.border="1px solid green"
+        //img.style.height = '33%'
+        mDiv.appendChild(img);
+
+
+
+        
+    	
+    	}
+    
+</script>
+
+</body>
+</html>
