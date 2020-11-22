@@ -94,7 +94,7 @@ osmdataset = "../../data/dataset/" # This should be the skysat dataset
 
 image_size = args.image_size
 
-batch_size = 4 # 352 * 352 
+batch_size = 2 # 352 * 352 
 
 # if args.image_size == 384:
 # 	batch_size = 4
