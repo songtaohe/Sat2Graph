@@ -27,7 +27,7 @@ gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.45)
 sess = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options))
 
 model = Sat2GraphModel(sess, image_size=352, resnet_step = 8, batchsize = 1, channel = 12, mode = "test")
-model.restoreModel("/data/songtao/qcriStartup/Sat2Graph/model/modelv1run1_352_8__channel12/model300000")
+model.restoreModel("/data/songtao/qcriStartup/Sat2Graph/model/modelv1run2_352_8__channel12/model100000")
 
 # L18-13904E-7800N_1m.png
 # L18-13906E-7800N_1m.png
