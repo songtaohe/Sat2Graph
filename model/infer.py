@@ -67,7 +67,6 @@ for i in range(len(model.variables_names)):
 		print("")
 		hasBadWeights = True
 		
-
 model_fp_name = model_name.replace("/", "_")
 
 if os.path.isfile(model_fp_name) and USE_CPU == False:
@@ -77,17 +76,25 @@ if os.path.isfile(model_fp_name) and USE_CPU == False:
 	pickle.dump(weights, open("weights.p","w"))
 	
 	Popen("diff "+model_fp_name + " "+ "weightsfp.txt", shell=True).wait()
+
+	weights = pickle.load(open("weights_"+model_fp_name+".p"))
+	model.set_params(weights)
+	hasBadWeights = False
+	
+	print("Use weights from CPU loader [I guess this is a bug in tensorflow 1.13.1]")
+
+
 else:
 	with open(model_fp_name,"w") as fout:
 		fout.write(fingerprint)
 
 	pickle.dump(weights, open("weights_"+model_fp_name+".p","w"))
 
-
-
 if hasBadWeights:
 	sess.close()
 	exit()
+
+
 
 
 
