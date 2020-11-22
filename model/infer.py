@@ -26,11 +26,7 @@ sess = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options))
 model = Sat2GraphModel(sess, image_size=352, resnet_step = 8, batchsize = 1, channel = 24, mode = "test")
 model.restoreModel("/data/songtao/Sat2GraphLib/globalmodel20200810_dla_mapbox_highway_new_352_8__channel24/model1000000")
 
-# L18-13904E-7800N_1m.png
-# L18-13906E-7800N_1m.png
-# L18-13907E-7800N_1m.png
-# L18-13905E-7790N_1m.png
-# L18-13905E-7791N_1m.png
+
 
 gt_prob_placeholder = np.zeros((1,352,352,14))
 gt_vector_placeholder = np.zeros((1,352,352,12))
