@@ -70,10 +70,13 @@ if os.path.isfile(model_fp_name):
 		fout.write(fingerprint)
 	print("model finger print diff ")
 
+	
 	Popen("diff "+model_fp_name + " "+ "weightsfp.txt", shell=True).wait()
 else:
 	with open(model_fp_name,"w") as fout:
 		fout.write(fingerprint)
+
+	pickle.dump(weights, open("weights_"+model_fp_name+".p","w"))
 
 pickle.dump(weights, open("weights.p","w"))
 
