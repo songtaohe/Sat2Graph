@@ -47,6 +47,17 @@ for i in range(len(regionname)):
 
     Image.fromarray(gtimg).save(output_folder+"/" + regionname[i]+ "_gt.png")
 
+    sat = nd.imread(output_folder+"/" + regionname[i]+ ".png").astype(np.float)
+    sat[:,:,0] += gtimg
+    sat[:,:,0] = np.clip(sat[:,:,0], 0, 255)
+    sat = sat.astype(np.uint8)
+
+    Image.fromarray(sat).save(output_folder+"/" + regionname[i]+ "_gt_sat.png")
+
+
+
+    
+
     # Image.fromarray(regionimg).save(output_folder+"/" + regionname[i]+ ".png")
     # regionimg = scipy.misc.imresize(regionimg, (2458, 2458))
     # Image.fromarray(regionimg).save(output_folder+"/" + regionname[i]+ "_1m.png")
