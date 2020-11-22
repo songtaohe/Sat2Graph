@@ -485,4 +485,4 @@ class Sat2GraphModel():
 		return self.sess.run(self.merged_summary, feed_dict=feed_dict)
 
 	def get_params(self):
-		return self.sess.run(variables_names)
+		return self.sess.run(self.variables_names)
