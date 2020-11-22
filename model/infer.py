@@ -35,8 +35,8 @@ params = model.get_params()
 
 weights = {}
 
-for i in range(len(self.variables_names)):
-	weights[self.variables_names[i]] = params[i]
+for i in range(len(model.variables_names)):
+	weights[model.variables_names[i]] = params[i]
 	print(i, np.shape(params[i]), np.amax(params[i]), np.amin(params[i]))
 
 json.dump(weights, open("weights.json"), indent=2)
