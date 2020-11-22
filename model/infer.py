@@ -2,9 +2,14 @@
 # python infer.py input_image.png output_prefix
 #
 #
+import sys 
+USE_CPU = False
 
 import os
-os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+
+if len(sys.argv) > 2:
+	os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+	USE_CPU = True
 
 import json 
 import os 
@@ -65,7 +70,7 @@ for i in range(len(model.variables_names)):
 
 model_fp_name = model_name.replace("/", "_")
 
-if os.path.isfile(model_fp_name):
+if os.path.isfile(model_fp_name) and USE_CPU == False:
 	with open("weightsfp.txt","w") as fout:
 		fout.write(fingerprint)
 	print("model finger print diff ")
@@ -100,10 +105,10 @@ gt_seg_placeholder = np.zeros((1,352,352,1))
 
 
 input_file = sys.argv[1]
-if len(sys.argv) <= 2:
-	output_file = sys.argv[1].replace(".png", "")
-else:
-	output_file = sys.argv[2]
+#if len(sys.argv) <= 2:
+output_file = sys.argv[1].replace(".png", "")
+#else:
+#	output_file = sys.argv[2]
 
 v_thr = 0.01
 e_thr = 0.01
