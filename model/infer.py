@@ -34,7 +34,7 @@ gt_seg_placeholder = np.zeros((1,352,352,1))
 
 
 input_file = sys.argv[1]
-if len(sys) <= 2:
+if len(sys.argv) <= 2:
 	output_file = sys.argv[1].replace(".png", "_result.png")
 else:
 	output_file = sys.argv[2]
