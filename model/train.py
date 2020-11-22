@@ -406,7 +406,7 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 			sum_loss = 0 
 
 
-		if step > 0 and step % 400 == 0:
+		if step > 0 and step % 200 == 0:
 			dataloader_train.preload(num=1024)
 
 
