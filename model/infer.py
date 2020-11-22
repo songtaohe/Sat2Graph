@@ -50,9 +50,15 @@ for i in range(len(model.variables_names)):
 		hasBadWeights = True
 		
 
-	if np.isinf(params[i]).any():
+	elif np.isinf(params[i]).any():
 		print(i, model.variables_names[i], np.shape(params[i]), np.amax(params[i]), np.amin(params[i]))
 		print("INF Detected!!!!!!!!!!!!")
+		print("")
+		hasBadWeights = True
+
+	if np.amax(params[i]) > 10**5 or np.amin(params[i]) < -10**5:
+		print(i, model.variables_names[i], np.shape(params[i]), np.amax(params[i]), np.amin(params[i]))
+		print("Very Large/Small Numbers Detected!!!!!!!!!!!!")
 		print("")
 		hasBadWeights = True
 		
