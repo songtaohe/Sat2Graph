@@ -93,7 +93,7 @@ class Sat2GraphDataLoader():
 		self.gt_class = np.zeros((8,image_size,image_size,1))
 		self.target_prob = np.zeros((8,image_size,image_size,2*(max_degree + 1)))
 		self.target_vector = np.zeros((8,image_size,image_size,2*(max_degree)))
-
+		self.input_condition = np.zeros((8, image_size, image_size, 2))
 		self.noise_mask = (np.random.rand(16,16,5) - 0.5) * 0.8
 
 
@@ -316,8 +316,23 @@ class Sat2GraphDataLoader():
 			self.gt_seg[i,:,:,:] = self.tiles_gt_seg[tile_id,:,:,:]
 			self.gt_class[i,:,:,:] = self.tiles_gt_class[tile_id,:,:,:]
 			
+			#self.input_condition[i,:,:,0] = self.tiles_prob[tile_id,:,:,0]
+			self.input_condition[i,:,:,1]*= 0.0 
+
+			r = random.randint(0,100)
+			if r > 20 and r < 40:
+				self.input_condition[i,0:random.randint(50,100),:,1] = 1.0 
+			elif r >= 40 and r < 60:
+				self.input_condition[i,:,0:random.randint(50,100),1] = 1.0
+			elif r >= 60 and r < 80:
+				self.input_condition[i,-random.randint(50,100):,:,1] = 1.0
+			elif r >= 80:
+				self.input_condition[i,:,-random.randint(50,100):,1] = 1.0
+
+			self.input_condition[i,:,:,0] = np.multiply(self.input_condition[i,:,:,1], self.tiles_prob[tile_id,:,:,0])
+
 
 		st = 0
 
-		return self.input_sat[st:st+batchsize,:,:,:], self.target_prob[st:st+batchsize,:,:,:], self.target_vector[st:st+batchsize,:,:,:], self.gt_seg[st:st+batchsize,:,:,:], self.gt_class[st:st+batchsize,:,:,:]
+		return self.input_sat[st:st+batchsize,:,:,:], self.target_prob[st:st+batchsize,:,:,:], self.target_vector[st:st+batchsize,:,:,:], self.gt_seg[st:st+batchsize,:,:,:], self.gt_class[st:st+batchsize,:,:,:], self.input_condition[st:st+batchsize,:,:,:]
 		

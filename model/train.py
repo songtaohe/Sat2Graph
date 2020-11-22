@@ -208,8 +208,8 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 	test_size = 64
 
 	for j in range(test_size/batch_size):
-		input_sat, gt_prob, gt_vector, gt_seg, gt_class= dataloader_test.getBatch(batch_size)
-		validation_data.append([np.copy(input_sat), np.copy(gt_prob), np.copy(gt_vector), np.copy(gt_seg), np.copy(gt_class)])
+		input_sat, gt_prob, gt_vector, gt_seg, gt_class, input_condition= dataloader_test.getBatch(batch_size)
+		validation_data.append([np.copy(input_sat), np.copy(gt_prob), np.copy(gt_vector), np.copy(gt_seg), np.copy(gt_class), np.copy(input_condition)])
 
 
 	step = args.init_step
@@ -231,12 +231,12 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 
 	while True:
 		t0 = time()
-		input_sat, gt_prob, gt_vector, gt_seg, gt_class = dataloader_train.getBatch(batch_size)
+		input_sat, gt_prob, gt_vector, gt_seg, gt_class, input_condition = dataloader_train.getBatch(batch_size)
 		t_load += time() - t0 
 		
 		t0 = time()
 
-		loss, grad_max, prob_loss, vector_loss,seg_loss, _ = model.Train(input_sat, gt_prob, gt_vector, gt_seg, gt_class, lr)
+		loss, grad_max, prob_loss, vector_loss,seg_loss, _ = model.Train(input_sat, gt_prob, gt_vector, gt_seg, gt_class,input_condition, lr)
 
 		sum_loss += loss
 
@@ -263,7 +263,7 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 
 				for j in range(-1,test_size/batch_size):
 					if j >= 0:
-						input_sat, gt_prob, gt_vector, gt_seg, gt_class = validation_data[j][0], validation_data[j][1], validation_data[j][2], validation_data[j][3], validation_data[j][4]
+						input_sat, gt_prob, gt_vector, gt_seg, gt_class, input_condition = validation_data[j][0], validation_data[j][1], validation_data[j][2], validation_data[j][3], validation_data[j][4], validation_data[j][5]
 					if j == 0:
 						test_loss = 0
 						test_gan_loss = 0
@@ -273,7 +273,7 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 						gt_imagegraph[:,:,:,2+k*4:2+k*4+2] = gt_prob[:,:,:,2+k*2:2+k*2+2]
 						gt_imagegraph[:,:,:,2+k*4+2:2+k*4+4] = gt_vector[:,:,:,k*2:k*2+2]
 
-					_test_loss, output = model.Evaluate(input_sat, gt_prob, gt_vector, gt_seg, gt_class)
+					_test_loss, output = model.Evaluate(input_sat, gt_prob, gt_vector, gt_seg, gt_class, input_condition)
 
 					test_loss += _test_loss
 
@@ -312,7 +312,10 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 							# input gt seg 
 							Image.fromarray(input_gt_seg).save(validation_folder+"/tile%d_input_gt_seg.png" % (j*batch_size+k))
 							
-
+							# input_condition
+							Image.fromarray((input_condition[k,:,:,0] * 255.0).astype(np.uint8)).save(validation_folder+"/tile%d_input_condition_vertices.png" % (j*batch_size+k))
+							Image.fromarray((input_condition[k,:,:,1] * 255.0).astype(np.uint8)).save(validation_folder+"/tile%d_input_condition_mask.png" % (j*batch_size+k))
+							
 							# todo 			
 							#ImageGraphVis(output[k,:,:,0:2 + 4*max_degree].reshape((image_size, image_size, 2 + 4*max_degree )), validation_folder+"/tile%d_output_graph_0.01.png" % (j*batch_size+k), thr=0.01, imagesize = image_size)
 							DecodeAndVis(output[k,:,:,0:2 + 4*max_degree].reshape((image_size, image_size, 2 + 4*max_degree )), validation_folder+"/tile%d_output_graph_0.01_snap.png" % (j*batch_size+k), thr=0.01, snap=True, imagesize = image_size)

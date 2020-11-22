@@ -41,7 +41,8 @@ class Sat2GraphModel():
 
 		self.input_road_class = tf.placeholder(tf.int32, shape = [self.batchsize, self.image_size, self.image_size, 1])
 		
-
+		self.input_condition = tf.placeholder(tf.int32, shape = [self.batchsize, self.image_size, self.image_size, 2])
+		
 		self.target_prob = tf.placeholder(tf.float32, shape = [self.batchsize, self.image_size, self.image_size, 2 * (MAX_DEGREE + 1)])
 		self.target_vector = tf.placeholder(tf.float32, shape = [self.batchsize, self.image_size, self.image_size, 2 * (MAX_DEGREE)])
 
@@ -54,6 +55,7 @@ class Sat2GraphModel():
 
 
 		if self.train_seg:
+
 			self.linear_output = self.BuildDeepLayerAggregationNetWithResnet(self.input_sat, input_ch = image_ch, output_ch = 2, ch = channel)
 
 			num_unet = len(tf.trainable_variables())
@@ -65,8 +67,8 @@ class Sat2GraphModel():
 			self.train_op = tf.train.AdamOptimizer(learning_rate=self.lr).minimize(self.loss)
 
 		else:
-			
-			self.imagegraph_output = self.BuildDeepLayerAggregationNetWithResnet(self.input_sat, input_ch = image_ch, output_ch =2 + MAX_DEGREE * 4 + (2 if self.joint_with_seg==True else 0) + 5, ch=channel)
+			input_x = tf.concat([self.input_condition, self.input_sat], axis = 3)
+			self.imagegraph_output = self.BuildDeepLayerAggregationNetWithResnet(input_x, input_ch = image_ch + 2, output_ch =2 + MAX_DEGREE * 4 + (2 if self.joint_with_seg==True else 0) + 5, ch=channel)
 
 			x = self.imagegraph_output
 
@@ -415,13 +417,14 @@ class Sat2GraphModel():
 		return a_out 
 
 	
-	def Train(self, inputdata, target_prob, target_vector, input_seg_gt, input_road_class, lr):
+	def Train(self, inputdata, target_prob, target_vector, input_seg_gt, input_road_class, input_condition, lr):
 		feed_dict = {
 			self.input_sat : inputdata,
 			self.target_prob : target_prob,
 			self.target_vector : target_vector,
 			self.input_seg_gt : input_seg_gt, 
 			self.input_road_class : input_road_class,
+			self.input_condition : input_condition,
 			self.lr : lr,
 			self.is_training : True
 		}
@@ -445,13 +448,14 @@ class Sat2GraphModel():
 	
 
 
-	def Evaluate(self, inputdata, target_prob, target_vector, input_seg_gt, input_road_class):
+	def Evaluate(self, inputdata, target_prob, target_vector, input_seg_gt, input_road_class, input_condition):
 		feed_dict = {
 			self.input_sat : inputdata,
 			self.target_prob : target_prob,
 			self.target_vector : target_vector,
 			self.input_seg_gt : input_seg_gt, 
 			self.input_road_class : input_road_class,
+			self.input_condition : input_condition,
 			self.is_training : False
 		}
 
