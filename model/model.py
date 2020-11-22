@@ -354,7 +354,8 @@ class Sat2GraphModel():
 				for i in range(resnet_step):
 					x = residual_block(x, channels=ch, is_training=self.is_training, downsample=False, scope=name+"_residual_block_decode_%d" % i)
 
-				x = batch_norm_resnet(x, is_training=self.is_training, scope = name+"_decode_0_batch_norm") # mark
+				#x = batch_norm_resnet(x, is_training=self.is_training, scope = name+"_decode_0_batch_norm") # mark
+				x = batch_norm_resnet(x,  scope = name+"_decode_0_batch_norm") # mark
 				
 				x = tf.nn.relu(x)
 			return x 
