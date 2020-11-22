@@ -40,8 +40,8 @@ if len(sys.argv) <= 2:
 else:
 	output_file = sys.argv[2]
 
-v_thr = 0.03
-e_thr = 0.15
+v_thr = 0.01
+e_thr = 0.05
 snap_dist = 15
 snap_w = 50
 
