@@ -3,6 +3,9 @@
 #
 #
 
+import os
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+
 import json 
 import os 
 import os.path  
@@ -77,6 +80,7 @@ sat_img = np.pad(sat_img, ((0,0),(32,32),(32,32),(0,0)), 'constant')
 
 t0 = time()
 for x in range(0,352*6-176-88,176/2):	
+	print(x)
 	for y in range(0,352*6-176-88,176/2):
 
 		alloutputs  = model.Evaluate(sat_img[:,x:x+image_size, y:y+image_size,:], gt_prob_placeholder, gt_vector_placeholder, gt_seg_placeholder)
