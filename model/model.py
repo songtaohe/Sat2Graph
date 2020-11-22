@@ -88,6 +88,9 @@ class Sat2GraphModel():
 			self.train_op = tf.train.AdamOptimizer(learning_rate=self.lr).minimize(self.loss)
 
 
+		#self.params = tf.trainable_variables()
+		self.variables_names = [v.name for v in tf.trainable_variables()]
+
 		self.sess.run(tf.global_variables_initializer())
 		self.saver = tf.train.Saver(max_to_keep=20)
 
@@ -481,3 +484,5 @@ class Sat2GraphModel():
 		}
 		return self.sess.run(self.merged_summary, feed_dict=feed_dict)
 
+	def get_params(self):
+		return self.sess.run(variables_names)

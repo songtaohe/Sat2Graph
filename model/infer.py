@@ -22,12 +22,27 @@ from PIL import Image
 from model import Sat2GraphModel
 from decoder import DecodeAndVis 
 from douglasPeucker import simpilfyGraph 
+import json 
+
 
 gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.45)
 sess = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options))
 
 model = Sat2GraphModel(sess, image_size=352, resnet_step = 8, batchsize = 1, channel = 12, mode = "test")
 model.restoreModel("/data/songtao/qcriStartup/Sat2Graph/model/modelv1run2_352_8__channel12/model110000")
+
+params = model.get_params()
+
+weights = {}
+
+for i in range(len(self.variables_names)):
+	weights[self.variables_names[i]] = params[i]
+	print(i, np.shape(params[i]), np.amax(params[i]), np.amin(params[i]))
+
+json.dump(weights, open("weights.json"), indent=2)
+
+
+
 
 # L18-13904E-7800N_1m.png
 # L18-13906E-7800N_1m.png
