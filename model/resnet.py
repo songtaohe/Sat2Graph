@@ -8,9 +8,9 @@ import tensorflow.contrib as tf_contrib
 # l2_decay : tf_contrib.layers.l2_regularizer(0.0001)
 
 weight_init = tf_contrib.layers.variance_scaling_initializer()
-#weight_regularizer = tf_contrib.layers.l2_regularizer(0.0001)
+weight_regularizer = tf_contrib.layers.l2_regularizer(0.0001)
 
-weight_regularizer = tf_contrib.layers.l2_regularizer(0.000001)
+#weight_regularizer = tf_contrib.layers.l2_regularizer(0.000001)
 
 
 ##################################################################################
