@@ -89,7 +89,7 @@ class Sat2GraphModel():
 
 
 		self.sess.run(tf.global_variables_initializer())
-		self.saver = tf.train.Saver(max_to_keep=10)
+		self.saver = tf.train.Saver(max_to_keep=20)
 
 		self.summary_loss = []
 		

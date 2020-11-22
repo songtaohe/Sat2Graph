@@ -56,7 +56,7 @@ parser.add_argument('-init_step', action='store', dest='init_step', type=int,
                     help='initial step size ', required =False, default=0)
 
 parser.add_argument('-max_step', action='store', dest='max_step', type=int,
-                    help='initial step size ', required =False, default=300001)
+                    help='initial step size ', required =False, default=500001)
 
 # parser.add_argument('-model_name', action='store', dest='model_name', type=str,
 #                     help='instance_id ', required =False, default="UNET_resnet")
