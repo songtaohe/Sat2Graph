@@ -22,7 +22,8 @@ from PIL import Image
 from model import Sat2GraphModel
 from decoder import DecodeAndVis 
 from douglasPeucker import simpilfyGraph 
-import json 
+import json
+import pickle 
 
 
 gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.45)
@@ -39,7 +40,8 @@ for i in range(len(model.variables_names)):
 	weights[model.variables_names[i]] = params[i]
 	print(i, model.variables_names[i], np.shape(params[i]), np.amax(params[i]), np.amin(params[i]))
 
-json.dump(weights, open("weights.json","w"), indent=2)
+pickle.dump(weights, open("weights.p","w"))
+
 
 
 
