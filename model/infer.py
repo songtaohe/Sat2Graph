@@ -24,7 +24,7 @@ gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.45)
 sess = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options))
 
 model = Sat2GraphModel(sess, image_size=352, resnet_step = 8, batchsize = 1, channel = 12, mode = "test")
-model.restoreModel("/data/songtao/qcriStartup/Sat2Graph/model/modelv1run1_352_8__channel12/model290000")
+model.restoreModel("/data/songtao/qcriStartup/Sat2Graph/model/modelv1run1_352_8__channel12/model280000")
 
 # L18-13904E-7800N_1m.png
 # L18-13906E-7800N_1m.png
@@ -44,8 +44,8 @@ if len(sys.argv) <= 2:
 else:
 	output_file = sys.argv[2]
 
-v_thr = 0.03
-e_thr = 0.15
+v_thr = 0.01
+e_thr = 0.05
 snap_dist = 15
 snap_w = 50
 
