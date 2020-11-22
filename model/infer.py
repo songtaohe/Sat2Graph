@@ -52,7 +52,7 @@ dim = np.shape(sat_img)
 s = (dim[0]-2048) // 2
 sat_img = sat_img[s:s+2048, s:s+2048,:]
 
-sat_img = scipy.misc.imresize(sat_img, (2048,2048)).astype(np.float)
+#sat_img = scipy.misc.imresize(sat_img, (2048,2048)).astype(np.float)
 
 max_v = 255
 sat_img = (sat_img.astype(np.float)/ max_v - 0.5) * 0.9 
