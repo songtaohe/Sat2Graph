@@ -91,7 +91,7 @@ class Sat2GraphModel():
 		#self.params = tf.trainable_variables()
 		self.variables_names = [v.name for v in tf.trainable_variables()]
 		self.create_set_params_ops()
-		
+
 		self.sess.run(tf.global_variables_initializer())
 		self.saver = tf.train.Saver(max_to_keep=20)
 
@@ -490,12 +490,13 @@ class Sat2GraphModel():
 
 	def create_set_params_ops(self):
 		input_params  = []
-		for param in tf.trainable_variables():
+		tvs = tf.trainable_variables()
+		for param in tvs:
 			input_params.append(tf.placeholder(tf.float32, shape=param.get_shape()))
 		
 		set_params_op = []
 		for idx, param in enumerate(input_params):
-			set_params_op.append(self.variables_names[idx].assign_add(param))
+			set_params_op.append(self.tvs[idx].assign_add(param))
 
 		self.input_params = input_params
 		self.set_params_op = set_params_op
