@@ -7,6 +7,7 @@ from PIL import Image
 import pickle 
 import numpy as np 
 import scipy.misc
+import scipy.ndimage as nd 
 import cv2 
 
 skysat_folder = "../../data/SkySat_Sat2Graph/"
@@ -36,10 +37,10 @@ for i in range(len(regionname)):
         # regionimg[0:2048,2048:4096] = tifffile.imread(skysat_folder+"Sat2Graph_Satellite_Images/"+ regionname[i]+ "_2.tif")[:,:,0:3] 
         # regionimg[2048:4096,2048:4096] = tifffile.imread(skysat_folder+"Sat2Graph_Satellite_Images/"+ regionname[i]+ "_3.tif")[:,:,0:3] 
         
-        gtimg[0:2048,0:2048] = cv2.imread(skysat_folder+"Sat2Graph_Graphs/"+ regionname[i]+ "_0_gt.png")[:,:] 
-        gtimg[2048:4096,0:2048] = cv2.imread(skysat_folder+"Sat2Graph_Graphs/"+ regionname[i]+ "_1_gt.png")[:,:] 
-        gtimg[0:2048,2048:4096] = cv2.imread(skysat_folder+"Sat2Graph_Graphs/"+ regionname[i]+ "_2_gt.png")[:,:] 
-        gtimg[2048:4096,2048:4096] = cv2.imread(skysat_folder+"Sat2Graph_Graphs/"+ regionname[i]+ "_3_gt.png")[:,:] 
+        gtimg[0:2048,0:2048] = nd.imread(skysat_folder+"Sat2Graph_Graphs/"+ regionname[i]+ "_0_gt.png")[:,:] 
+        gtimg[2048:4096,0:2048] = nd.imread(skysat_folder+"Sat2Graph_Graphs/"+ regionname[i]+ "_1_gt.png")[:,:] 
+        gtimg[0:2048,2048:4096] = nd.imread(skysat_folder+"Sat2Graph_Graphs/"+ regionname[i]+ "_2_gt.png")[:,:] 
+        gtimg[2048:4096,2048:4096] = nd.imread(skysat_folder+"Sat2Graph_Graphs/"+ regionname[i]+ "_3_gt.png")[:,:] 
         
     except:
         print("wrong...", i, regionname[i] )
