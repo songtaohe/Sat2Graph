@@ -38,6 +38,8 @@ params = model.get_params()
 weights = {}
 fingerprint = ""
 
+hasBadWeights = False
+
 for i in range(len(model.variables_names)):
 	weights[model.variables_names[i]] = params[i]
 	fingerprint += str(i) + " "+ str(model.variables_names[i]) + " " + str(np.amax(params[i]))+" "+ str(np.amin(params[i])) + "\n"
@@ -45,15 +47,15 @@ for i in range(len(model.variables_names)):
 		print(i, model.variables_names[i], np.shape(params[i]), np.amax(params[i]), np.amin(params[i]))
 		print("NAN Detected!!!!!!!!!!!!")
 		print("")
-		sess.close()
-		exit()
+		hasBadWeights = True
+		
 
 	if np.isinf(params[i]).any():
 		print(i, model.variables_names[i], np.shape(params[i]), np.amax(params[i]), np.amin(params[i]))
 		print("INF Detected!!!!!!!!!!!!")
 		print("")
-		sess.close()
-		exit()
+		hasBadWeights = True
+		
 
 model_fp_name = model_name.replace("/", "_")
 
@@ -66,9 +68,12 @@ if os.path.isfile(model_fp_name):
 else:
 	with open(model_fp_name,"w") as fout:
 		fout.write(fingerprint)
-		
+
 pickle.dump(weights, open("weights.p","w"))
 
+if hasBadWeights:
+	sess.close()
+	exit()
 
 
 
