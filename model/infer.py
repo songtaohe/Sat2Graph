@@ -115,7 +115,7 @@ overlay = np.zeros_like(sat_img)
 for k,v in graph.iteritems():
 	n1 = k 
 	for n2 in v:
-		cv2.line(overlay, (n1[1], n1[0]), (n2[1], n2[0]), (255,0,0),2)
+		cv2.line(overlay, (n1[1], n1[0]), (n2[1], n2[0]), (255,255,0),2)
 
 sat_img = cv2.add(sat_img, overlay)
 
