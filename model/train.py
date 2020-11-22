@@ -94,7 +94,7 @@ osmdataset = "../../data/dataset/" # This should be the skysat dataset
 
 image_size = args.image_size
 
-batch_size = 2 # 352 * 352 
+batch_size = 4 # 352 * 352 
 
 # if args.image_size == 384:
 # 	batch_size = 4
@@ -297,7 +297,7 @@ with tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) as sess:
 
 	validation_data = []
 
-	test_size = 32
+	test_size = 64
 
 	for j in range(test_size/batch_size):
 		input_sat, gt_prob, gt_vector, gt_seg= dataloader_test.getBatch(batch_size)
