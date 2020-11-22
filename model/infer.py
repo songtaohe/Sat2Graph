@@ -18,7 +18,7 @@ import tensorflow as tf
 from time import time 
 import sys 
 from PIL import Image 
- 
+from subprocess import Popen 
 from model import Sat2GraphModel
 from decoder import DecodeAndVis 
 from douglasPeucker import simpilfyGraph 
@@ -30,7 +30,8 @@ gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.45)
 sess = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options))
 
 model = Sat2GraphModel(sess, image_size=352, resnet_step = 8, batchsize = 1, channel = 12, mode = "test")
-model.restoreModel("/data/songtao/qcriStartup/Sat2Graph/model/modelv1run2_352_8__channel12/model110000")
+model_name = "/data/songtao/qcriStartup/Sat2Graph/model/modelv1run2_352_8__channel12/model110000"
+model.restoreModel(model_name)
 
 params = model.get_params()
 
@@ -44,13 +45,28 @@ for i in range(len(model.variables_names)):
 		print(i, model.variables_names[i], np.shape(params[i]), np.amax(params[i]), np.amin(params[i]))
 		print("NAN Detected!!!!!!!!!!!!")
 		print("")
+		sess.close()
+		exit()
+
 	if np.isinf(params[i]).any():
 		print(i, model.variables_names[i], np.shape(params[i]), np.amax(params[i]), np.amin(params[i]))
 		print("INF Detected!!!!!!!!!!!!")
 		print("")
-with open("weightsfp.txt","w") as fout:
-	fout.write(fingerprint)
+		sess.close()
+		exit()
 
+model_fp_name = model_name.replace("/", "_")
+
+if os.path.isfile(model_fp_name):
+	with open("weightsfp.txt","w") as fout:
+		fout.write(fingerprint)
+	print("model finger print diff ")
+
+	Popen("diff "+model_fp_name + " "+ "weightsfp.txt", shell=True).wait()
+else:
+	with open(model_fp_name,"w") as fout:
+		fout.write(fingerprint)
+		
 pickle.dump(weights, open("weights.p","w"))
 
 
