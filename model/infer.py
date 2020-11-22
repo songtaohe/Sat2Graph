@@ -34,7 +34,10 @@ gt_seg_placeholder = np.zeros((1,352,352,1))
 
 
 input_file = sys.argv[1]
-output_file = sys.argv[2]
+if len(sys) <= 2:
+	output_file = sys.argv[1].replace(".png", "")
+else:
+	output_file = sys.argv[2]
 
 v_thr = 0.05
 e_thr = 0.05
@@ -45,6 +48,10 @@ snap_w = 50
 # run the model 
 
 sat_img = scipy.ndimage.imread(input_file)
+dim = np.shape(sat_img)
+s = (dim[0]-2048) // 2
+sat_img = sat_img[s:s+2048, s:s+2048,:]
+
 sat_img = scipy.misc.imresize(sat_img, (2048,2048)).astype(np.float)
 
 max_v = 255
@@ -96,6 +103,10 @@ t0 = time()
 
 # vis 
 sat_img = scipy.ndimage.imread(input_file)
+dim = np.shape(sat_img)
+s = (dim[0]-2048) // 2
+sat_img = sat_img[s:s+2048, s:s+2048,:]
+
 sat_img = scipy.misc.imresize(sat_img, (2048,2048))
 
 for k,v in graph.iteritems():
