@@ -6,6 +6,7 @@ import tifffile
 from PIL import Image 
 import pickle 
 import numpy as np 
+import scipy.misc
 
 skysat_folder = "../../data/SkySat_Sat2Graph/"
 output_folder = "../../data/SkySatRegions/"
@@ -37,6 +38,8 @@ for i in range(len(regionname)):
         print("wrong...", i, regionname[i] )
 
     Image.fromarray(regionimg).save(output_folder+"/" + regionname[i]+ ".png")
+    regionimg = scipy.misc.imresize(regionimg, (2458, 2458))
+    Image.fromarray(regionimg).save(output_folder+"/" + regionname[i]+ "_1m.png")
 
 
 
