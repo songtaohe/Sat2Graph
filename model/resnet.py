@@ -132,7 +132,7 @@ def batch_norm(x, is_training=True, scope='batch_norm'):
     #return x 
     #print("resnet batch norm hit!")
     return tf_contrib.layers.batch_norm(x,
-                                       decay=0.99, epsilon=1e-05,
+                                       decay=0.99, epsilon=0.001,
                                        center=True, scale=True, updates_collections=None,
                                        is_training=is_training, scope=scope, fused = False)
 
