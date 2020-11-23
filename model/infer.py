@@ -141,6 +141,7 @@ while True:
 				sess.close()
 				exit()
 
+			print("passed weights test!")
 
 
 
