@@ -79,7 +79,7 @@ if os.path.isfile(model_fp_name) and USE_CPU == False:
 
 	weights = pickle.load(open("weights_"+model_fp_name+".p"))
 	model.set_params(weights)
-	hasBadWeights = False
+	#hasBadWeights = False
 
 	print("Use weights from CPU loader")
 	print("Restoring models using GPU has some wired bugs, so we should always load weights on CPU first. [I guess this is a bug in tensorflow 1.13.1]")
