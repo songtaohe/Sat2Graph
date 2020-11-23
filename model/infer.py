@@ -96,20 +96,27 @@ while True:
 		
 		Popen("diff "+model_fp_name + " "+ "weightsfp.txt", shell=True).wait()
 
-		model.set_params(cpu_weights)
 
-		check_params = model.get_params()
+		retry = 0
+		while True:
+			print("retry", retry)
+			model.set_params(cpu_weights)
+			check_params = model.get_params()
 
-		wrong = False
-		for i in range(len(check_params)):
-			if np.mean(check_params[i] - cpu_weights[model.variables_names[i]]) != 0:
-				bugs = np.where((check_params[i] - cpu_weights[model.variables_names[i]]) !=0 )
-				print(i, model.variables_names[i], np.shape(cpu_weights[model.variables_names[i]]), np.shape(check_params[i]), np.mean(check_params[i] - cpu_weights[model.variables_names[i]]), len(bugs[0]) )
-				wrong = True 
-		if wrong:
-			print("something wrong...")
-			sess.close()
-			exit()
+			wrong = False
+			for i in range(len(check_params)):
+				if np.mean(check_params[i] - cpu_weights[model.variables_names[i]]) != 0:
+					bugs = np.where((check_params[i] - cpu_weights[model.variables_names[i]]) !=0 )
+					print(i, model.variables_names[i], np.shape(cpu_weights[model.variables_names[i]]), np.shape(check_params[i]), np.mean(check_params[i] - cpu_weights[model.variables_names[i]]), len(bugs[0]) )
+					wrong = True 
+			if wrong:
+				retry += 1
+				if retry < 10:
+					continue 
+
+				print("something wrong...")
+				sess.close()
+				exit()
 
 
 
