@@ -103,6 +103,15 @@ while True:
 			model.set_params(cpu_weights)
 			check_params = model.get_params()
 
+			names = set()
+			for name in model.variables_names:
+				if name not in names:
+					names.add(name)
+				else:
+					print("duplicated name!")
+					sess.close()
+					exit()
+
 			wrong = False
 			for i in range(len(check_params)):
 				if np.mean(check_params[i] - cpu_weights[model.variables_names[i]]) != 0:
