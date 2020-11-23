@@ -96,7 +96,9 @@ while True:
 		Popen("diff "+model_fp_name + " "+ "weightsfp.txt", shell=True).wait()
 
 		
-		#model.set_params(cpu_weights)
+		model.set_params(cpu_weights)
+		break 
+	
 		#hasBadWeights = False
 
 		print("Use weights from CPU loader")
