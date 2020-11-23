@@ -116,9 +116,9 @@ while True:
 					if diff_cc > 0:
 						succ = False
 						failed_cc += 1
-						sleep(0.01)
-						if failed_cc % 100 == 0:
-							print(i, diff_cc, failed_cc)
+						#sleep(0.01)
+						#if failed_cc % 100 == 0:
+						print(i, diff_cc, failed_cc)
 					else:
 						succ = True 
 
