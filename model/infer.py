@@ -106,6 +106,8 @@ while True:
 			failed_cc = 0 
 
 			for i in range(len(model.variables_names)):
+				print("configuring parameters", i)
+
 				succ = False 
 
 				while not succ:
