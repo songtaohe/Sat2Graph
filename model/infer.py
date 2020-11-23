@@ -116,6 +116,8 @@ while True:
 						succ = False
 						failed_cc += 1
 						sleep(0.01)
+						if failed_cc % 100 == 0:
+							print(i, failed_cc)
 					else:
 						succ = True 
 
