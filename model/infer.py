@@ -96,8 +96,22 @@ while True:
 		
 		Popen("diff "+model_fp_name + " "+ "weightsfp.txt", shell=True).wait()
 
-		
 		model.set_params(cpu_weights)
+
+		check_params = model.get_params()
+
+		for i in range(len(check_params)):
+			print(i, model.variables_names[i], np.shape(cpu_weights[model.variables_names[i]]), np.shape(check_params[i]), np.mean(check_params[i] - cpu_weights[model.variables_names[i]]) )
+			if np.mean(check_params[i] - cpu_weights[model.variables_names[i]]) != 0:
+				print("something wrong...")
+				sess.close()
+				exit()
+
+
+
+
+
+
 		continue 
 	
 		#hasBadWeights = False

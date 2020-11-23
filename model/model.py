@@ -486,17 +486,19 @@ class Sat2GraphModel():
 		return self.sess.run(self.merged_summary, feed_dict=feed_dict)
 
 	def get_params(self):
-		return self.sess.run(self.variables_names)
+		#return self.sess.run(self.variables_names)
+		return self.sess.run(self.tvs)
 
 	def create_set_params_ops(self):
 		input_params  = []
-		tvs = tf.trainable_variables()
+		self.tvs = tf.trainable_variables()
+		tvs= self.tvs
 		for param in tvs:
 			input_params.append(tf.placeholder(tf.float32, shape=param.get_shape()))
 		
 		set_params_op = []
 		for idx, param in enumerate(input_params):
-			set_params_op.append(tvs[idx].assign_add(param))
+			set_params_op.append(tvs[idx].assign(param))
 
 		self.input_params = input_params
 		self.set_params_op = set_params_op
