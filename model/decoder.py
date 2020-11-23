@@ -484,7 +484,7 @@ def DrawKP(imagegraph, filename, imagesize=256, max_degree=6):
 
 
 # Main function 
-def DecodeAndVis(imagegraph, filename, imagesize=256, max_degree=6, thr=0.5, edge_thr = 0.5, snap=False, kp_limit = 500, drop=True, use_graph_refine=True, testing=False, spacenet = False, angledistance_weight = 100, snap_dist = 15):
+def DecodeAndVis(imagegraph, filename, imagesize=256, max_degree=6, thr=0.5, edge_thr = 0.5, snap=False, kp_limit = 500, drop=True, use_graph_refine=True, testing=False, spacenet = False, angledistance_weight = 100, snap_dist = 15, spurs_thr = 50, isolated_thr = 200):
 	kp_limit = 10000000
 
 	# for training 
@@ -758,8 +758,8 @@ def DecodeAndVis(imagegraph, filename, imagesize=256, max_degree=6, thr=0.5, edg
 	
 	# refine the graph
 
-	spurs_thr = 50 
-	isolated_thr = 200
+	#spurs_thr = 50 
+	#isolated_thr = 200
 
 	# spacenet's tiles are small
 	if spacenet :
