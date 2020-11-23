@@ -504,7 +504,7 @@ class Sat2GraphModel():
 	def set_params(self, params):
 		feeddict = {}
 		for i in range(len(self.variables_names)):
-			feeddict[self.variables_names[i]] = params[i]
+			feeddict[self.variables_names[i]] = params[self.variables_names[i]]
 
 		self.sess.run(self.set_params_op, feed_dict = feeddict)
 		

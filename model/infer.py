@@ -72,7 +72,7 @@ model_fp_name = model_name.replace("/", "_")
 if os.path.isfile(model_fp_name) and USE_CPU == False:
 	with open("weightsfp.txt","w") as fout:
 		fout.write(fingerprint)
-	print("model finger print diff ")
+	print("model fingerprint diff ")
 	pickle.dump(weights, open("weights.p","w"))
 	
 	Popen("diff "+model_fp_name + " "+ "weightsfp.txt", shell=True).wait()
@@ -83,7 +83,7 @@ if os.path.isfile(model_fp_name) and USE_CPU == False:
 
 	print("Use weights from CPU loader")
 	print("Restoring models using GPU has some wired bugs, so we should always load weights on CPU first. [I guess this is a bug in tensorflow 1.13.1]")
-
+	
 
 else:
 	with open(model_fp_name,"w") as fout:
