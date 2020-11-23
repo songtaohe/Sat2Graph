@@ -7,7 +7,7 @@ USE_CPU = False
 
 import os
 
-model_name = "/data/songtao/qcriStartup/Sat2Graph/model/modelv1run2_352_8__channel12/model200000"
+model_name = "/data/songtao/qcriStartup/Sat2Graph/model/modelv1run2_352_8__channel12/model250000"
 model_fp_name = model_name.replace("/", "_")
 if not os.path.isfile(model_fp_name):
 	os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
@@ -270,7 +270,7 @@ for input_file in sys.argv[1:]:
 	# output = alloutputs[1][0,:,:,:]
 
 	#graph = DecodeAndVis(output, output_file, thr=0.01, edge_thr = 0.1, angledistance_weight=50, snap=True, imagesize = 704)
-	graph = DecodeAndVis(output, output_file, thr=v_thr, edge_thr = e_thr, angledistance_weight=snap_w, snap_dist = snap_dist, snap=True, imagesize = 2048)
+	graph = DecodeAndVis(output, output_file, thr=v_thr, edge_thr = e_thr, angledistance_weight=snap_w, snap_dist = snap_dist, snap=True, imagesize = 2048,  spurs_thr=100, isolated_thr=500)
 
 	print("Decode time:", time() - t0)
 	t0 = time()
