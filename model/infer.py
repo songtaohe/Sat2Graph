@@ -35,68 +35,78 @@ gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.45)
 sess = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options))
 
 model = Sat2GraphModel(sess, image_size=352, resnet_step = 8, batchsize = 1, channel = 12, mode = "test")
-model_name = "/data/songtao/qcriStartup/Sat2Graph/model/modelv1run2_352_8__channel12/model110000"
-model.restoreModel(model_name)
 
-params = model.get_params()
+retry_counter = 0
 
-weights = {}
-fingerprint = ""
-
-hasBadWeights = False
-
-for i in range(len(model.variables_names)):
-	weights[model.variables_names[i]] = params[i]
-	fingerprint += str(i) + " "+ str(model.variables_names[i]) + " " + str(np.amax(params[i]))+" "+ str(np.amin(params[i])) + "\n"
-	if np.isnan(params[i]).any():
-		print(i, model.variables_names[i], np.shape(params[i]), np.amax(params[i]), np.amin(params[i]))
-		print("NAN Detected!!!!!!!!!!!!")
-		print("")
-		hasBadWeights = True
-		
-
-	elif np.isinf(params[i]).any():
-		print(i, model.variables_names[i], np.shape(params[i]), np.amax(params[i]), np.amin(params[i]))
-		print("INF Detected!!!!!!!!!!!!")
-		print("")
-		hasBadWeights = True
-
-	if np.amax(params[i]) > 10**5 or np.amin(params[i]) < -10**5:
-		print(i, model.variables_names[i], np.shape(params[i]), np.amax(params[i]), np.amin(params[i]))
-		print("Very Large/Small Numbers Detected!!!!!!!!!!!!")
-		print("")
-		hasBadWeights = True
-		
-model_fp_name = model_name.replace("/", "_")
-
-if os.path.isfile(model_fp_name) and USE_CPU == False:
-	with open("weightsfp.txt","w") as fout:
-		fout.write(fingerprint)
-	print("model fingerprint diff ")
-	pickle.dump(weights, open("weights.p","w"))
+while True:
+	print("loading counter", retry_counter)
+	retry_counter += 1
 	
-	Popen("diff "+model_fp_name + " "+ "weightsfp.txt", shell=True).wait()
+	model_name = "/data/songtao/qcriStartup/Sat2Graph/model/modelv1run2_352_8__channel12/model110000"
+	model.restoreModel(model_name)
 
-	weights = pickle.load(open("weights_"+model_fp_name+".p"))
-	model.set_params(weights)
-	#hasBadWeights = False
+	params = model.get_params()
 
-	print("Use weights from CPU loader")
-	print("Restoring models using GPU has some wired bugs, so we should always load weights on CPU first. [I guess this is a bug in tensorflow 1.13.1]")
-	
-else:
-	with open(model_fp_name,"w") as fout:
-		fout.write(fingerprint)
+	weights = {}
+	fingerprint = ""
 
-	pickle.dump(weights, open("weights_"+model_fp_name+".p","w"))
+	hasBadWeights = False
 
-if hasBadWeights:
-	sess.close()
-	exit()
+	for i in range(len(model.variables_names)):
+		weights[model.variables_names[i]] = params[i]
+		fingerprint += str(i) + " "+ str(model.variables_names[i]) + " " + str(np.amax(params[i]))+" "+ str(np.amin(params[i])) + "\n"
+		if np.isnan(params[i]).any():
+			print(i, model.variables_names[i], np.shape(params[i]), np.amax(params[i]), np.amin(params[i]))
+			print("NAN Detected!!!!!!!!!!!!")
+			print("")
+			hasBadWeights = True
+			
 
-if USE_CPU :
-	sess.close()
-	exit()
+		elif np.isinf(params[i]).any():
+			print(i, model.variables_names[i], np.shape(params[i]), np.amax(params[i]), np.amin(params[i]))
+			print("INF Detected!!!!!!!!!!!!")
+			print("")
+			hasBadWeights = True
+
+		if np.amax(params[i]) > 10**5 or np.amin(params[i]) < -10**5:
+			print(i, model.variables_names[i], np.shape(params[i]), np.amax(params[i]), np.amin(params[i]))
+			print("Very Large/Small Numbers Detected!!!!!!!!!!!!")
+			print("")
+			hasBadWeights = True
+			
+	model_fp_name = model_name.replace("/", "_")
+
+	if os.path.isfile(model_fp_name) and USE_CPU == False:
+		with open("weightsfp.txt","w") as fout:
+			fout.write(fingerprint)
+		print("model fingerprint diff ")
+		pickle.dump(weights, open("weights.p","w"))
+		
+		Popen("diff "+model_fp_name + " "+ "weightsfp.txt", shell=True).wait()
+
+		weights = pickle.load(open("weights_"+model_fp_name+".p"))
+		model.set_params(weights)
+		#hasBadWeights = False
+
+		print("Use weights from CPU loader")
+		print("Restoring models using GPU has some wired bugs, so we should always load weights on CPU first. [I guess this is a bug in tensorflow 1.13.1]")
+		
+	else:
+		with open(model_fp_name,"w") as fout:
+			fout.write(fingerprint)
+
+		pickle.dump(weights, open("weights_"+model_fp_name+".p","w"))
+
+	if hasBadWeights:
+		continue 
+		sess.close()
+		exit()
+
+	if USE_CPU :
+		sess.close()
+		exit()
+
+	break 
 
 
 
