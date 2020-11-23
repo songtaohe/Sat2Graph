@@ -493,6 +493,10 @@ class Sat2GraphModel():
 		#return self.sess.run(self.variables_names)
 		return self.sess.run([self.tvs[i]])
 
+	def get_batch_param(self, idxs):
+		#return self.sess.run(self.variables_names)
+		return self.sess.run([self.tvs[i] for i in idxs])
+
 	def create_set_params_ops(self):
 		input_params  = []
 		self.tvs = tf.trainable_variables()
@@ -518,4 +522,10 @@ class Sat2GraphModel():
 		feeddict = {}
 		feeddict[self.input_params[i]] = params[self.variables_names[i]]
 		self.sess.run(self.set_params_op[i], feed_dict = feeddict)
+
+	def set_batch_param(self, params, idxs):
+		feeddict = {}
+		for i in idxs:
+			feeddict[self.input_params[i]] = params[self.variables_names[i]]
+		self.sess.run([self.set_params_op[i] for i in idxs], feed_dict = feeddict)
 		

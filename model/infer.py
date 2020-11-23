@@ -105,16 +105,21 @@ while True:
 			# do this params by params
 			failed_cc = 0 
 
-			for i in range(len(model.variables_names)):
+			for i in range(0, len(model.variables_names), 16):
 				print("configuring parameters", i)
+
+				idxs = [x for x in range(i, min(i+16, len(model.variables_names)))]
 
 				succ = False 
 
 				while not succ:
-					model.set_each_param(cpu_weights, i)
-					check_param = model.get_each_param(i)[0]
-
-					diff_cc =  len(np.where((check_param - cpu_weights[model.variables_names[i]])!=0)[0])
+					model.set_batch_param(cpu_weights, idxs)
+					check_param = model.get_batch_param(idxs)
+					
+					diff_cc = 0
+					for j in idxs: 
+						diff_cc +=  len(np.where((check_param[j-i] - cpu_weights[model.variables_names[j]])!=0)[0])
+					
 					if diff_cc > 0:
 						succ = False
 						failed_cc += 1
@@ -128,8 +133,6 @@ while True:
 
 			model.set_params(cpu_weights)
 			check_params = model.get_params()
-
-			
 
 			wrong = False
 			for i in range(len(check_params)):
@@ -145,24 +148,21 @@ while True:
 				print("something wrong...")
 				sess.close()
 				exit()
+			else:
+				print("Passed the weights test!")
+				break
 
-			print("passed weights test!")
-
-
-
-
-
-		continue 
+		 
 	
 		#hasBadWeights = False
 
 		print("Use weights from CPU loader")
 		print("Restoring models using GPU has some wired bugs, so we should always load weights on CPU first. [I guess this is a bug in tensorflow 1.13.1]")
 		
+		break
+	
 		if diff > 0:
 			continue
-
-
 
 	elif hasBadWeights == False:
 		with open(model_fp_name,"w") as fout:
