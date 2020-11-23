@@ -42,7 +42,7 @@ while True:
 	print("loading counter", retry_counter)
 	retry_counter += 1
 
-	model_name = "/data/songtao/qcriStartup/Sat2Graph/model/modelv1run2_352_8__channel12/model110000"
+	model_name = "/data/songtao/qcriStartup/Sat2Graph/model/modelv1run2_352_8__channel12/model170000"
 	model.restoreModel(model_name)
 
 	params = model.get_params()
