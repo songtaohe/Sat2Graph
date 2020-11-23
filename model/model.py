@@ -568,3 +568,47 @@ class Sat2GraphModel():
 		}
 		return self.sess.run(self.merged_summary, feed_dict=feed_dict)
 
+	def get_params(self):
+		#return self.sess.run(self.variables_names)
+		return self.sess.run(self.tvs)
+
+	def get_each_param(self, i):
+		#return self.sess.run(self.variables_names)
+		return self.sess.run([self.tvs[i]])
+
+	def get_batch_param(self, idxs):
+		#return self.sess.run(self.variables_names)
+		return self.sess.run([self.tvs[i] for i in idxs])
+
+	def create_set_params_ops(self):
+		input_params  = []
+		self.tvs = tf.trainable_variables()
+		tvs= self.tvs
+		for param in tvs:
+			input_params.append(tf.placeholder(tf.float32, shape=param.get_shape()))
+		
+		set_params_op = []
+		for idx, param in enumerate(input_params):
+			set_params_op.append(tvs[idx].assign(param))
+
+		self.input_params = input_params
+		self.set_params_op = set_params_op
+
+	def set_params(self, params):
+		feeddict = {}
+		for i in range(len(self.variables_names)):
+			feeddict[self.input_params[i]] = params[self.variables_names[i]]
+
+		self.sess.run(self.set_params_op, feed_dict = feeddict)
+	
+	def set_each_param(self, params, i):
+		feeddict = {}
+		feeddict[self.input_params[i]] = params[self.variables_names[i]]
+		self.sess.run(self.set_params_op[i], feed_dict = feeddict)
+
+	def set_batch_param(self, params, idxs):
+		feeddict = {}
+		for i in idxs:
+			feeddict[self.input_params[i]] = params[self.variables_names[i]]
+		self.sess.run([self.set_params_op[i] for i in idxs], feed_dict = feeddict)
+		
