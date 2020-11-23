@@ -41,7 +41,7 @@ retry_counter = 0
 while True:
 	print("loading counter", retry_counter)
 	retry_counter += 1
-	
+
 	model_name = "/data/songtao/qcriStartup/Sat2Graph/model/modelv1run2_352_8__channel12/model110000"
 	model.restoreModel(model_name)
 
@@ -80,18 +80,26 @@ while True:
 		with open("weightsfp.txt","w") as fout:
 			fout.write(fingerprint)
 		print("model fingerprint diff ")
+		cpu_weights = pickle.load(open("weights_"+model_fp_name+".p"))
+
+		for k, v1 in cpu_weights.iteritems():
+			v2 = weights[k]
+
+			if np.mean((v1-v2))!= 0:
+				print("diff", k, np.mean((v1-v2)))
+
 		pickle.dump(weights, open("weights.p","w"))
 		
 		Popen("diff "+model_fp_name + " "+ "weightsfp.txt", shell=True).wait()
 
-		weights = pickle.load(open("weights_"+model_fp_name+".p"))
-		model.set_params(weights)
+		
+		#model.set_params(cpu_weights)
 		#hasBadWeights = False
 
 		print("Use weights from CPU loader")
 		print("Restoring models using GPU has some wired bugs, so we should always load weights on CPU first. [I guess this is a bug in tensorflow 1.13.1]")
 		
-	else:
+	elif hasBadWeights == False:
 		with open(model_fp_name,"w") as fout:
 			fout.write(fingerprint)
 
