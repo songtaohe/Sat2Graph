@@ -20,7 +20,7 @@ import math
 import cv2
 import numpy as np 
 import tensorflow as tf 
-from time import time 
+from time import time, sleep 
 import sys 
 from PIL import Image 
 from subprocess import Popen 
@@ -29,6 +29,7 @@ from decoder import DecodeAndVis
 from douglasPeucker import simpilfyGraph 
 import json
 import pickle 
+
 
 
 gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.45)
@@ -100,17 +101,30 @@ while True:
 		retry = 0
 		while True:
 			print("retry", retry)
+
+			# do this params by params
+			failed_cc = 0 
+
+			for i in range(len(model.variables_names)):
+				succ = False 
+
+				while !succ:
+					model.set_each_param(cpu_weights, i)
+					check_param = model.get_each_param(i)[0]
+
+					if len(np.where((check_param - cpu_weights[model.variables_names[i]])!=0)[0]) > 0:
+						succ = False
+						failed_cc += 1
+						sleep(0.01)
+					else:
+						succ = True 
+
+			print("failed_cc", failed_cc)
+
 			model.set_params(cpu_weights)
 			check_params = model.get_params()
 
-			names = set()
-			for name in model.variables_names:
-				if name not in names:
-					names.add(name)
-				else:
-					print("duplicated name!")
-					sess.close()
-					exit()
+			
 
 			wrong = False
 			for i in range(len(check_params)):
