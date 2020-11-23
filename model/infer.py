@@ -270,7 +270,7 @@ for input_file in sys.argv[1:]:
 	# output = alloutputs[1][0,:,:,:]
 
 	#graph = DecodeAndVis(output, output_file, thr=0.01, edge_thr = 0.1, angledistance_weight=50, snap=True, imagesize = 704)
-	graph = DecodeAndVis(output, output_file, thr=v_thr, edge_thr = e_thr, angledistance_weight=snap_w, snap_dist = snap_dist, snap=True, imagesize = 2048,  spurs_thr=100, isolated_thr=500)
+	graph = DecodeAndVis(output, output_file, thr=v_thr, edge_thr = e_thr, angledistance_weight=snap_w, snap_dist = snap_dist, snap=True, imagesize = 2048,  spurs_thr=100, isolated_thr=300)
 
 	print("Decode time:", time() - t0)
 	t0 = time()
