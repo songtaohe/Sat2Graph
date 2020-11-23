@@ -37,6 +37,9 @@ with tf.Session(config=tf.ConfigProto(gpu_options=tf.GPUOptions())) as sess:
             print(i, "diff=", diff, "max_error", np.amax(a-b), "min_error", np.amin(a-b))
             succ = False
 
+            print(b[np.where( ((a-b)>0.00001) | ((a-b)<-0.00001))   ])
+
+
     if succ:
         print("Test passed")
     else:
