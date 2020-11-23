@@ -7,7 +7,7 @@ USE_CPU = False
 
 import os
 
-model_name = "/data/songtao/qcriStartup/Sat2Graph/model/modelv1run2_352_8__channel12/model250000"
+model_name = "/data/songtao/qcriStartup/Sat2Graph/model/modelv1run2_352_8__channel12/model340000"
 model_fp_name = model_name.replace("/", "_")
 if not os.path.isfile(model_fp_name):
 	os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
