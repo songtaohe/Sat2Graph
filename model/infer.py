@@ -103,7 +103,8 @@ while True:
 		wrong = False
 		for i in range(len(check_params)):
 			if np.mean(check_params[i] - cpu_weights[model.variables_names[i]]) != 0:
-				print(i, model.variables_names[i], np.shape(cpu_weights[model.variables_names[i]]), np.shape(check_params[i]), np.mean(check_params[i] - cpu_weights[model.variables_names[i]]) )
+				bugs = np.where((check_params[i] - cpu_weights[model.variables_names[i]]) !=0 )
+				print(i, model.variables_names[i], np.shape(cpu_weights[model.variables_names[i]]), np.shape(check_params[i]), np.mean(check_params[i] - cpu_weights[model.variables_names[i]]), len(bugs[0]) )
 				wrong = True 
 		if wrong:
 			print("something wrong...")
