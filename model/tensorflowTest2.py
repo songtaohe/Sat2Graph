@@ -34,10 +34,10 @@ with tf.Session(config=tf.ConfigProto(gpu_options=tf.GPUOptions())) as sess:
         diff = len(np.where( ((a-b)>0.00001) | ((a-b)<-0.00001) )[0])
 
         if diff > 0 :
-            print(i, "diff=", diff, "max_error", np.amax(a-b), "min_error", np.amin(a-b))
+            print(i, "diff=", diff, "max_error", np.amax(a-b), "min_error", np.amin(a-b), "values", b[np.where( ((a-b)>0.00001) | ((a-b)<-0.00001))   ])
             succ = False
 
-            print(b[np.where( ((a-b)>0.00001) | ((a-b)<-0.00001))   ])
+           
 
 
     if succ:
