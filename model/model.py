@@ -496,7 +496,7 @@ class Sat2GraphModel():
 		
 		set_params_op = []
 		for idx, param in enumerate(input_params):
-			set_params_op.append(self.tvs[idx].assign_add(param))
+			set_params_op.append(tvs[idx].assign_add(param))
 
 		self.input_params = input_params
 		self.set_params_op = set_params_op
