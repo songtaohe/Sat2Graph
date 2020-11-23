@@ -24,9 +24,9 @@ regionname = []
 
 
 for filename in sorted(os.listdir(skysat_folder+"/")):
-	if ".tif" in filename and filename.endswith(".tif"):
-		print(filename)
-		tilename.append(filename.replace(".tif",""))
+    if ".tif" in filename and filename.endswith(".tif"):
+        print(filename)
+        tilename.append(filename.replace(".tif",""))
         name = filename.replace(".tif","")[:-2]
         if name not in regionname:
             regionname.append(name)
