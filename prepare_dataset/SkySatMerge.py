@@ -23,7 +23,7 @@ tilename = []
 regionname = []
 
 
-for filename in sorted(os.listdir(skysat_folder+"Sat2Graph_Satellite_Images/")):
+for filename in sorted(os.listdir(skysat_folder+"/")):
 	if filename.endswith(".tif"):
 		tilename.append(filename.replace(".tif",""))
         name = filename.replace(".tif","")[:-2]
@@ -36,10 +36,15 @@ for i in range(len(regionname)):
     regionimg = np.zeros((4096, 4096,3), dtype=np.uint8)
     gtimg = np.zeros((4096, 4096), dtype=np.uint8)
     try:
-        regionimg[0:2048,0:2048] = tifffile.imread(skysat_folder+"Sat2Graph_Satellite_Images/"+ regionname[i]+ "_0.tif")[:,:,0:3] 
-        regionimg[2048:4096,0:2048] = tifffile.imread(skysat_folder+"Sat2Graph_Satellite_Images/"+ regionname[i]+ "_1.tif")[:,:,0:3] 
-        regionimg[0:2048,2048:4096] = tifffile.imread(skysat_folder+"Sat2Graph_Satellite_Images/"+ regionname[i]+ "_2.tif")[:,:,0:3] 
-        regionimg[2048:4096,2048:4096] = tifffile.imread(skysat_folder+"Sat2Graph_Satellite_Images/"+ regionname[i]+ "_3.tif")[:,:,0:3] 
+        regionimg[0:2048,0:2048] = tifffile.imread(skysat_folder+"/"+ regionname[i]+ "_0.tif")[:,:,0:3] 
+        regionimg[2048:4096,0:2048] = tifffile.imread(skysat_folder+"/"+ regionname[i]+ "_1.tif")[:,:,0:3] 
+        regionimg[0:2048,2048:4096] = tifffile.imread(skysat_folder+"/"+ regionname[i]+ "_2.tif")[:,:,0:3] 
+        regionimg[2048:4096,2048:4096] = tifffile.imread(skysat_folder+"/"+ regionname[i]+ "_3.tif")[:,:,0:3] 
+        
+        # regionimg[0:2048,0:2048] = tifffile.imread(skysat_folder+"Sat2Graph_Satellite_Images/"+ regionname[i]+ "_0.tif")[:,:,0:3] 
+        # regionimg[2048:4096,0:2048] = tifffile.imread(skysat_folder+"Sat2Graph_Satellite_Images/"+ regionname[i]+ "_1.tif")[:,:,0:3] 
+        # regionimg[0:2048,2048:4096] = tifffile.imread(skysat_folder+"Sat2Graph_Satellite_Images/"+ regionname[i]+ "_2.tif")[:,:,0:3] 
+        # regionimg[2048:4096,2048:4096] = tifffile.imread(skysat_folder+"Sat2Graph_Satellite_Images/"+ regionname[i]+ "_3.tif")[:,:,0:3] 
         
         # gtimg[0:2048,0:2048] = nd.imread(skysat_folder+"Sat2Graph_Graphs/"+ regionname[i]+ "_0_gt.png")[:,:] 
         # gtimg[2048:4096,0:2048] = nd.imread(skysat_folder+"Sat2Graph_Graphs/"+ regionname[i]+ "_1_gt.png")[:,:] 
