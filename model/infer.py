@@ -87,9 +87,9 @@ while True:
 			v2 = weights[k]
 
 			
-			if np.mean((v1-v2))!= 0:
+			if abs(np.mean((v1-v2)))> 0.0001:
 				diff += 1
-				print("diff", k, np.mean((v1-v2)))
+				print("diff", k, abs(np.mean((v1-v2))))
 	
 		pickle.dump(weights, open("weights.p","w"))
 		
