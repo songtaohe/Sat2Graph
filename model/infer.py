@@ -215,6 +215,7 @@ snap_w = 50
 
 
 for input_file in sys.argv[1:]:
+	print(input_file)
 	if "png" in input_file:
 		output_file = sys.argv[1].replace(".png", "")
 	else:
