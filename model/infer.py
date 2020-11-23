@@ -112,12 +112,13 @@ while True:
 					model.set_each_param(cpu_weights, i)
 					check_param = model.get_each_param(i)[0]
 
-					if len(np.where((check_param - cpu_weights[model.variables_names[i]])!=0)[0]) > 0:
+					diff_cc =  len(np.where((check_param - cpu_weights[model.variables_names[i]])!=0)[0])
+					if diff_cc > 0:
 						succ = False
 						failed_cc += 1
 						sleep(0.01)
 						if failed_cc % 100 == 0:
-							print(i, failed_cc)
+							print(i, diff_cc, failed_cc)
 					else:
 						succ = True 
 
