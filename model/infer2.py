@@ -207,8 +207,8 @@ output_file = sys.argv[1].replace(".png", "")
 #else:
 #	output_file = sys.argv[2]
 
-v_thr = 0.01
-e_thr = 0.01
+v_thr = 0.05
+e_thr = 0.05
 snap_dist = 15
 snap_w = 50
 
@@ -275,7 +275,7 @@ for input_file in sys.argv[1:]:
 	print("Decode time:", time() - t0)
 	t0 = time()
 
-	graph = simpilfyGraph(graph)
+	#graph = simpilfyGraph(graph)
 
 	print("Graph simpilfy time:", time() - t0)
 	t0 = time()
