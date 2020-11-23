@@ -23,13 +23,14 @@ with tf.Session(config=tf.ConfigProto(gpu_options=tf.GPUOptions())) as sess:
         arrays.append(np.random.rand(3,3,tensor_size, tensor_size))
 
     # main part of the test
-
-    # assign the random array to the tf variables
-    sess.run(assign_ops, feed_dict = {i:a for i,a in zip(input_placeholders, arrays)})
-
-    # read the arrays back
     for it in range(3):
         print("iteration ", it )
+
+        # assign the random array to the tf variables
+        sess.run(assign_ops, feed_dict = {i:a for i,a in zip(input_placeholders, arrays)})
+
+
+        # read the arrays back
         new_arrays = sess.run(variables)
 
         # check if they match
