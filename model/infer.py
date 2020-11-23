@@ -108,7 +108,7 @@ while True:
 			for i in range(len(model.variables_names)):
 				succ = False 
 
-				while !succ:
+				while not succ:
 					model.set_each_param(cpu_weights, i)
 					check_param = model.get_each_param(i)[0]
 
