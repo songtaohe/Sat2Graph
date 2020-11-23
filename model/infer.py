@@ -7,9 +7,12 @@ USE_CPU = False
 
 import os
 
-if len(sys.argv) > 2:
+model_name = "/data/songtao/qcriStartup/Sat2Graph/model/modelv1run2_352_8__channel12/model200000"
+model_fp_name = model_name.replace("/", "_")
+if not os.path.isfile(model_fp_name):
 	os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 	USE_CPU = True
+
 
 import json 
 import os 
@@ -29,7 +32,7 @@ from decoder import DecodeAndVis
 from douglasPeucker import simpilfyGraph 
 import json
 import pickle 
-
+import tifffile
 
 
 gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.45)
@@ -39,7 +42,6 @@ sess = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options))
 model = Sat2GraphModel(sess, image_size=352, resnet_step = 8, batchsize = 1, channel = 12, mode = "test")
 
 retry_counter = 0
-model_name = "/data/songtao/qcriStartup/Sat2Graph/model/modelv1run2_352_8__channel12/model200000"
 model.restoreModel(model_name)
 
 
@@ -211,77 +213,90 @@ snap_dist = 15
 snap_w = 50
 
 
-# run the model 
 
-sat_img = scipy.ndimage.imread(input_file)
-dim = np.shape(sat_img)
-s = (dim[0]-2048) // 2
-sat_img = sat_img[s:s+2048, s:s+2048,:]
+for input_file in sys.argv[1:]:
+	if "png" in input_file:
+		output_file = sys.argv[1].replace(".png", "")
+	else:
+		output_file = sys.argv[1].replace(".tif", "")
 
-#sat_img = scipy.misc.imresize(sat_img, (2048,2048)).astype(np.float)
+	# run the model 
+	if ".tif" in input_file:
+		sat_img = tifffile.imread(input_file)[:,:,0:3]
+	else:
+		sat_img = scipy.ndimage.imread(input_file)
 
-max_v = 255
-sat_img = (sat_img.astype(np.float)/ max_v - 0.5) * 0.9 
-sat_img = sat_img.reshape((1,2048,2048,3))
+	dim = np.shape(sat_img)
+	s = (dim[0]-2048) // 2
+	sat_img = sat_img[s:s+2048, s:s+2048,:]
 
-image_size = 352 
+	#sat_img = scipy.misc.imresize(sat_img, (2048,2048)).astype(np.float)
 
-weights = np.ones((image_size,image_size, 2+4*6 + 2)) * 0.001 
-weights[32:image_size-32,32:image_size-32, :] = 0.5 
-weights[56:image_size-56,56:image_size-56, :] = 1.0 
-weights[88:image_size-88,88:image_size-88, :] = 1.5 
+	max_v = 255
+	sat_img = (sat_img.astype(np.float)/ max_v - 0.5) * 0.9 
+	sat_img = sat_img.reshape((1,2048,2048,3))
 
-mask = np.zeros((2048+64, 2048+64, 2+4*6 + 2))
-output = np.zeros((2048+64, 2048+64, 2+4*6 + 2))
-sat_img = np.pad(sat_img, ((0,0),(32,32),(32,32),(0,0)), 'constant')
-				
+	image_size = 352 
 
-t0 = time()
-for x in range(0,352*6-176-88,176/2):	
-	print(x)
-	for y in range(0,352*6-176-88,176/2):
+	weights = np.ones((image_size,image_size, 2+4*6 + 2)) * 0.001 
+	weights[32:image_size-32,32:image_size-32, :] = 0.5 
+	weights[56:image_size-56,56:image_size-56, :] = 1.0 
+	weights[88:image_size-88,88:image_size-88, :] = 1.5 
 
-		alloutputs  = model.Evaluate(sat_img[:,x:x+image_size, y:y+image_size,:], gt_prob_placeholder, gt_vector_placeholder, gt_seg_placeholder)
-		_output = alloutputs[1]
+	mask = np.zeros((2048+64, 2048+64, 2+4*6 + 2))
+	output = np.zeros((2048+64, 2048+64, 2+4*6 + 2))
+	sat_img = np.pad(sat_img, ((0,0),(32,32),(32,32),(0,0)), 'constant')
+					
 
-		mask[x:x+image_size, y:y+image_size, :] += weights
-		output[x:x+image_size, y:y+image_size,:] += np.multiply(_output[0,:,:,:], weights)
+	t0 = time()
+	for x in range(0,352*6-176-88,176/2):	
+		print(x)
+		for y in range(0,352*6-176-88,176/2):
 
+			alloutputs  = model.Evaluate(sat_img[:,x:x+image_size, y:y+image_size,:], gt_prob_placeholder, gt_vector_placeholder, gt_seg_placeholder)
+			_output = alloutputs[1]
 
-print("GPU time:", time() - t0)
-t0 = time()
-
-output = np.divide(output, mask)
-output = output[32:2048+32,32:2048+32,:]
-# alloutputs  = model.Evaluate(sat_img, gt_prob_placeholder, gt_vector_placeholder, gt_seg_placeholder)
-# output = alloutputs[1][0,:,:,:]
-
-#graph = DecodeAndVis(output, output_file, thr=0.01, edge_thr = 0.1, angledistance_weight=50, snap=True, imagesize = 704)
-graph = DecodeAndVis(output, output_file, thr=v_thr, edge_thr = e_thr, angledistance_weight=snap_w, snap_dist = snap_dist, snap=True, imagesize = 2048)
-
-print("Decode time:", time() - t0)
-t0 = time()
-
-graph = simpilfyGraph(graph)
-
-print("Graph simpilfy time:", time() - t0)
-t0 = time()
+			mask[x:x+image_size, y:y+image_size, :] += weights
+			output[x:x+image_size, y:y+image_size,:] += np.multiply(_output[0,:,:,:], weights)
 
 
-# vis 
-sat_img = scipy.ndimage.imread(input_file)
-dim = np.shape(sat_img)
-s = (dim[0]-2048) // 2
-sat_img = sat_img[s:s+2048, s:s+2048,:]
+	print("GPU time:", time() - t0)
+	t0 = time()
 
-sat_img = scipy.misc.imresize(sat_img, (2048,2048))
+	output = np.divide(output, mask)
+	output = output[32:2048+32,32:2048+32,:]
+	# alloutputs  = model.Evaluate(sat_img, gt_prob_placeholder, gt_vector_placeholder, gt_seg_placeholder)
+	# output = alloutputs[1][0,:,:,:]
 
-for k,v in graph.iteritems():
-	n1 = k 
-	for n2 in v:
-		cv2.line(sat_img, (n1[1], n1[0]), (n2[1], n2[0]), (255,255,0),2)
+	#graph = DecodeAndVis(output, output_file, thr=0.01, edge_thr = 0.1, angledistance_weight=50, snap=True, imagesize = 704)
+	graph = DecodeAndVis(output, output_file, thr=v_thr, edge_thr = e_thr, angledistance_weight=snap_w, snap_dist = snap_dist, snap=True, imagesize = 2048)
 
-Image.fromarray(sat_img).save(output_file+"_vis.png")
+	print("Decode time:", time() - t0)
+	t0 = time()
+
+	graph = simpilfyGraph(graph)
+
+	print("Graph simpilfy time:", time() - t0)
+	t0 = time()
+
+
+	# vis 
+	if ".tif" in input_file:
+		sat_img = tifffile.imread(input_file)[:,:,0:3]
+	else:
+		sat_img = scipy.ndimage.imread(input_file)
+	dim = np.shape(sat_img)
+	s = (dim[0]-2048) // 2
+	sat_img = sat_img[s:s+2048, s:s+2048,:]
+
+	sat_img = scipy.misc.imresize(sat_img, (2048,2048))
+
+	for k,v in graph.iteritems():
+		n1 = k 
+		for n2 in v:
+			cv2.line(sat_img, (n1[1], n1[0]), (n2[1], n2[0]), (255,255,0),2)
+
+	Image.fromarray(sat_img).save(output_file+"_vis.png")
 
 sess.close()
 
