@@ -37,14 +37,15 @@ sess = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options))
 model = Sat2GraphModel(sess, image_size=352, resnet_step = 8, batchsize = 1, channel = 12, mode = "test")
 
 retry_counter = 0
+model_name = "/data/songtao/qcriStartup/Sat2Graph/model/modelv1run2_352_8__channel12/model170000"
+model.restoreModel(model_name)
+
 
 while True:
 	print("loading counter", retry_counter)
 	retry_counter += 1
 
-	model_name = "/data/songtao/qcriStartup/Sat2Graph/model/modelv1run2_352_8__channel12/model170000"
-	model.restoreModel(model_name)
-
+	
 	params = model.get_params()
 
 	weights = {}
@@ -97,7 +98,7 @@ while True:
 
 		
 		model.set_params(cpu_weights)
-		break 
+		continue 
 	
 		#hasBadWeights = False
 
