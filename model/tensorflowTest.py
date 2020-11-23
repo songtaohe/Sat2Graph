@@ -29,7 +29,7 @@ with tf.Session(config=tf.ConfigProto(gpu_options=tf.GPUOptions())) as sess:
         a = arrays[i]
         b = new_arrays[i]
         
-        diff = len(np.where( ((a-b)>0.00001) | ((a-b)<0.00001) )[0])
+        diff = len(np.where( ((a-b)>0.00001) | ((a-b)<-0.00001) )[0])
 
         if diff > 0 :
             print(i, "diff=", diff, "max_error", np.amax(a-b), "min_error", np.amin(a-b))
