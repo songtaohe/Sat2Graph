@@ -1,7 +1,12 @@
 import tensorflow as tf 
 import numpy as np 
+import sys 
 
-test_size = 256
+if len(sys.argv) == 1:
+    test_size = 256
+else:
+    test_size = int(sys.argv[1])
+
 tensor_size = 384 
 
 with tf.Session(config=tf.ConfigProto(gpu_options=tf.GPUOptions())) as sess:
