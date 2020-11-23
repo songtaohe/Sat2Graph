@@ -4,7 +4,7 @@ import numpy as np
 test_size = 256
 tensor_size = 384 
 
-with tf.Session(config=tf.ConfigProto(gpu_options=tf.GPUOptions())) as sess:
+with tf.Session(config=tf.ConfigProto(gpu_options=tf.GPUOptions(per_process_gpu_memory_fraction=0.45))) as sess:
     variables = []
     assign_ops = []
     input_placeholders = []
