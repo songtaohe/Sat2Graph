@@ -82,10 +82,11 @@ while True:
 		print("model fingerprint diff ")
 		cpu_weights = pickle.load(open("weights_"+model_fp_name+".p"))
 
+		diff = 0
 		for k, v1 in cpu_weights.iteritems():
 			v2 = weights[k]
 
-			diff = 0
+			
 			if np.mean((v1-v2))!= 0:
 				diff += 1
 				print("diff", k, np.mean((v1-v2)))
@@ -104,7 +105,7 @@ while True:
 		if diff > 0:
 			continue
 
-		
+
 
 	elif hasBadWeights == False:
 		with open(model_fp_name,"w") as fout:
