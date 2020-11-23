@@ -23,26 +23,28 @@ with tf.Session(config=tf.ConfigProto(gpu_options=tf.GPUOptions())) as sess:
     sess.run(assign_ops, feed_dict = {i:a for i,a in zip(input_placeholders, arrays)})
 
     # read the arrays back
-    new_arrays = sess.run(variables)
+    for it in range(3):
+        print("iteration ", it )
+        new_arrays = sess.run(variables)
 
-    # check if they match
-    succ = True
-    for i in range(test_size):
-        a = arrays[i]
-        b = new_arrays[i]
-        
-        diff = len(np.where( ((a-b)>0.00001) | ((a-b)<-0.00001) )[0])
+        # check if they match
+        succ = True
+        for i in range(test_size):
+            a = arrays[i]
+            b = new_arrays[i]
+            
+            diff = len(np.where( ((a-b)>0.00001) | ((a-b)<-0.00001) )[0])
 
-        if diff > 0 :
-            print(i, "diff=", diff, "max_error", np.amax(a-b), "min_error", np.amin(a-b), "values", b[np.where( ((a-b)>0.00001) | ((a-b)<-0.00001))   ])
-            succ = False
+            if diff > 0 :
+                print(i, "diff=", diff, "max_error", np.amax(a-b), "min_error", np.amin(a-b), "values", b[np.where( ((a-b)>0.00001) | ((a-b)<-0.00001))   ])
+                succ = False
 
            
 
 
-    if succ:
-        print("Test passed")
-    else:
-        print("Test failed")
+        if succ:
+            print("Test passed")
+        else:
+            print("Test failed")
 
     
