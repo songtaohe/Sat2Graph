@@ -84,7 +84,6 @@ if os.path.isfile(model_fp_name) and USE_CPU == False:
 	print("Use weights from CPU loader")
 	print("Restoring models using GPU has some wired bugs, so we should always load weights on CPU first. [I guess this is a bug in tensorflow 1.13.1]")
 	
-
 else:
 	with open(model_fp_name,"w") as fout:
 		fout.write(fingerprint)
@@ -95,7 +94,9 @@ if hasBadWeights:
 	sess.close()
 	exit()
 
-
+if USE_CPU :
+	sess.close()
+	exit()
 
 
 
@@ -196,7 +197,7 @@ for k,v in graph.iteritems():
 
 Image.fromarray(sat_img).save(output_file+"_vis.png")
 
-
+sess.close()
 
 
 
