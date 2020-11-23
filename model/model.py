@@ -111,6 +111,10 @@ class Sat2GraphModel():
 
 
 		self.sess.run(tf.global_variables_initializer())
+		
+		self.variables_names = [v.name for v in tf.trainable_variables()]
+		self.create_set_params_ops()
+
 		self.saver = tf.train.Saver(max_to_keep=10)
 
 		self.summary_loss = []
