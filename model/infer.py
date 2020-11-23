@@ -85,9 +85,11 @@ while True:
 		for k, v1 in cpu_weights.iteritems():
 			v2 = weights[k]
 
+			diff = 0
 			if np.mean((v1-v2))!= 0:
+				diff += 1
 				print("diff", k, np.mean((v1-v2)))
-
+	
 		pickle.dump(weights, open("weights.p","w"))
 		
 		Popen("diff "+model_fp_name + " "+ "weightsfp.txt", shell=True).wait()
@@ -99,6 +101,11 @@ while True:
 		print("Use weights from CPU loader")
 		print("Restoring models using GPU has some wired bugs, so we should always load weights on CPU first. [I guess this is a bug in tensorflow 1.13.1]")
 		
+		if diff > 0:
+			continue
+
+		
+
 	elif hasBadWeights == False:
 		with open(model_fp_name,"w") as fout:
 			fout.write(fingerprint)
