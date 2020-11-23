@@ -217,9 +217,9 @@ snap_w = 50
 for input_file in sys.argv[1:]:
 	print(input_file)
 	if "png" in input_file:
-		output_file = sys.argv[1].replace(".png", "")
+		output_file = input_file.replace(".png", "")
 	else:
-		output_file = sys.argv[1].replace(".tif", "")
+		output_file = input_file.replace(".tif", "")
 
 	# run the model 
 	if ".tif" in input_file:
