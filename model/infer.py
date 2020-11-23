@@ -33,6 +33,7 @@ import pickle
 
 
 gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.45)
+gpu_options = tf.GPUOptions()
 sess = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options))
 
 model = Sat2GraphModel(sess, image_size=352, resnet_step = 8, batchsize = 1, channel = 12, mode = "test")
@@ -160,7 +161,7 @@ while True:
 		print("Restoring models using GPU has some wired bugs, so we should always load weights on CPU first. [I guess this is a bug in tensorflow 1.13.1]")
 		
 		break
-	
+
 		if diff > 0:
 			continue
 
