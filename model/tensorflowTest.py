@@ -21,7 +21,7 @@ with tf.Session(config=tf.ConfigProto(gpu_options=tf.GPUOptions())) as sess:
     sess.run(assign_ops, feed_dict = {i:a for i,a in zip(input_placeholders, arrays)})
 
     # read the arrays back
-    new_arrays = sess.run(input_placeholders)
+    new_arrays = sess.run(variables)
 
     # check if they match
     succ = True
