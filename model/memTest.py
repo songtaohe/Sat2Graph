@@ -250,14 +250,14 @@ for input_file in sys.argv[2:]:
 	mask = np.zeros((2048+64, 2048+64, 2+4*6 + 2))
 	output = np.zeros((2048+64, 2048+64, 2+4*6 + 2))
 	sat_img = np.pad(sat_img, ((0,0),(32,32),(32,32),(0,0)), 'constant')
-    
-    image_size = infer_size
-    x = 32
-    y = 32
-    t0 = time()
-    alloutputs  = model.Evaluate(sat_img[:,x:x+image_size, y:y+image_size,:], gt_prob_placeholder, gt_vector_placeholder, gt_seg_placeholder)
+	
+	image_size = infer_size
+	x = 32
+	y = 32
+	t0 = time()
+	alloutputs  = model.Evaluate(sat_img[:,x:x+image_size, y:y+image_size,:], gt_prob_placeholder, gt_vector_placeholder, gt_seg_placeholder)
 	_output = alloutputs[1]
-    output[x:x+image_size, y:y+image_size,:] += np.multiply(_output[0,:,:,:], weights)
+	output[x:x+image_size, y:y+image_size,:] += np.multiply(_output[0,:,:,:], weights)
 
 	print("GPU time:", time() - t0)
 	t0 = time()
