@@ -34,6 +34,8 @@ import json
 import pickle 
 import tifffile
 
+# python memTest.py 1024 ../../data/Test_Images_Results/Aileu/L18-13905E-7793N_1m.png
+# python memTest.py 1024 ../../data/Test_Images_Results/Dili/L18-13907E-7800N_1m.png
 
 gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.5)
 gpu_options = tf.GPUOptions()
@@ -104,62 +106,62 @@ while True:
 		
 		Popen("diff "+model_fp_name + " "+ "weightsfp.txt", shell=True).wait()
 
+		if diff > 0:
+			retry = 0
+			while True:
+				print("retry", retry)
 
-		retry = 0
-		while True:
-			print("retry", retry)
+				# do this params by params
+				failed_cc = 0 
+				batch_size = 4
+				for i in range(0, len(model.variables_names), batch_size):
+					print("configuring parameters", i)
 
-			# do this params by params
-			failed_cc = 0 
-			batch_size = 4
-			for i in range(0, len(model.variables_names), batch_size):
-				print("configuring parameters", i)
+					idxs = [x for x in range(i, min(i+batch_size, len(model.variables_names)))]
 
-				idxs = [x for x in range(i, min(i+batch_size, len(model.variables_names)))]
+					succ = False 
 
-				succ = False 
+					while not succ:
+						model.set_batch_param(cpu_weights, idxs)
+						check_param = model.get_batch_param(idxs)
+						
+						diff_cc = 0
+						for j in idxs: 
+							diff_cc +=  len(np.where((check_param[j-i] - cpu_weights[model.variables_names[j]])!=0)[0])
+						
+						if diff_cc > 0:
+							succ = False
+							failed_cc += 1
+							sleep(0.1)
+							#if failed_cc % 100 == 0:
+							print(i, diff_cc, failed_cc)
+						else:
+							succ = True 
 
-				while not succ:
-					model.set_batch_param(cpu_weights, idxs)
-					check_param = model.get_batch_param(idxs)
-					
-					diff_cc = 0
-					for j in idxs: 
-						diff_cc +=  len(np.where((check_param[j-i] - cpu_weights[model.variables_names[j]])!=0)[0])
-					
-					if diff_cc > 0:
-						succ = False
-						failed_cc += 1
-						sleep(0.1)
-						#if failed_cc % 100 == 0:
-						print(i, diff_cc, failed_cc)
-					else:
-						succ = True 
+				print("failed_cc", failed_cc)
 
-			print("failed_cc", failed_cc)
+				# don't check, just break!
+				break
+				# model.set_params(cpu_weights)
+				# check_params = model.get_params()
 
-			# don't check, just break!
-			break
-			# model.set_params(cpu_weights)
-			# check_params = model.get_params()
+				# wrong = False
+				# for i in range(len(check_params)):
+				# 	if np.mean(check_params[i] - cpu_weights[model.variables_names[i]]) != 0:
+				# 		bugs = np.where((check_params[i] - cpu_weights[model.variables_names[i]]) !=0 )
+				# 		print(i, model.variables_names[i], np.shape(cpu_weights[model.variables_names[i]]), np.shape(check_params[i]), np.mean(check_params[i] - cpu_weights[model.variables_names[i]]), len(bugs[0]) )
+				# 		wrong = True 
+				# if wrong:
+				# 	retry += 1
+				# 	if retry < 10:
+				# 		continue 
 
-			# wrong = False
-			# for i in range(len(check_params)):
-			# 	if np.mean(check_params[i] - cpu_weights[model.variables_names[i]]) != 0:
-			# 		bugs = np.where((check_params[i] - cpu_weights[model.variables_names[i]]) !=0 )
-			# 		print(i, model.variables_names[i], np.shape(cpu_weights[model.variables_names[i]]), np.shape(check_params[i]), np.mean(check_params[i] - cpu_weights[model.variables_names[i]]), len(bugs[0]) )
-			# 		wrong = True 
-			# if wrong:
-			# 	retry += 1
-			# 	if retry < 10:
-			# 		continue 
-
-			# 	print("something wrong...")
-			# 	sess.close()
-			# 	exit()
-			# else:
-			# 	print("Passed the weights test!")
-			# 	break
+				# 	print("something wrong...")
+				# 	sess.close()
+				# 	exit()
+				# else:
+				# 	print("Passed the weights test!")
+				# 	break
 
 		 
 	
