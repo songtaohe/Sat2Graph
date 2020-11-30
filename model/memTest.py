@@ -36,7 +36,7 @@ import tifffile
 
 
 gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.5)
-#gpu_options = tf.GPUOptions()
+gpu_options = tf.GPUOptions()
 sess = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options))
 
 infer_size = int(sys.argv[1])
