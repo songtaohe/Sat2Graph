@@ -259,7 +259,7 @@ for input_file in sys.argv[2:]:
 	t0 = time()
 	alloutputs  = model.Evaluate(sat_img[:,x:x+image_size, y:y+image_size,:], gt_prob_placeholder, gt_vector_placeholder, gt_seg_placeholder)
 	_output = alloutputs[1]
-	output[x:x+image_size, y:y+image_size,:] += np.multiply(_output[0,:,:,:], weights)
+	output[x:x+image_size, y:y+image_size,:] += _output[0,:,:,:]
 
 	print("GPU time:", time() - t0)
 	t0 = time()
