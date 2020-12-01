@@ -18,8 +18,8 @@ def connectDeadends(neighbor, threshold = 30):
 
     for pair in pairs:
         if pair[0] not in coverSet and pair[1] not in coverSet:
-            n1 = pair[0]
-            n2 = pair[1]
+            n1 = deadends[pair[0]]
+            n2 = deadends[pair[1]]
 
             if n1 not in neighbor[n2]:
                 neighbor[n2].append(n1)
@@ -27,8 +27,8 @@ def connectDeadends(neighbor, threshold = 30):
             if n2 not in neighbor[n1]:
                 neighbor[n1].append(n2)
 
-            coverSet.add(n1)
-            coverSet.add(n2)
+            coverSet.add(pair[0])
+            coverSet.add(pair[1])
 
 
     return neighbor
