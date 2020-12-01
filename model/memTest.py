@@ -275,7 +275,7 @@ for input_file in sys.argv[2:]:
 	print("Decode time:", time() - t0)
 	t0 = time()
 
-	#graph = simpilfyGraph(graph)
+	graph = simpilfyGraph(graph)
 
 	print("Graph simpilfy time:", time() - t0)
 	t0 = time()
