@@ -9,6 +9,7 @@ from rtree import index
 import sys 
 import pickle 
 from common import * 
+from connectDeadends import  connectDeadends
 
 
 vector_norm = 25.0 
@@ -484,7 +485,7 @@ def DrawKP(imagegraph, filename, imagesize=256, max_degree=6):
 
 
 # Main function 
-def DecodeAndVis(imagegraph, filename, imagesize=256, max_degree=6, thr=0.5, edge_thr = 0.5, snap=False, kp_limit = 500, drop=True, use_graph_refine=True, testing=False, spacenet = False, angledistance_weight = 100, snap_dist = 15, spurs_thr = 50, isolated_thr = 200):
+def DecodeAndVis(imagegraph, filename, imagesize=256, max_degree=6, thr=0.5, edge_thr = 0.5, snap=False, kp_limit = 500, drop=True, use_graph_refine=True, testing=False, spacenet = False, angledistance_weight = 100, snap_dist = 15, spurs_thr = 50, isolated_thr = 200, connect_deadend_thr = -1):
 	kp_limit = 10000000
 
 	# for training 
@@ -771,9 +772,12 @@ def DecodeAndVis(imagegraph, filename, imagesize=256, max_degree=6, thr=0.5, edg
 		isolated_thr = 100
 
 	if use_graph_refine:
-		graph = graph_refine(neighbors, isolated_thr=isolated_thr, spurs_thr=spurs_thr)
 		
 		_vis(neighbors , filename+"_norefine_bk.png", size=imagesize)
+		graph = connectDeadends(neighbors, threshold=connect_deadend_thr)
+		graph = graph_refine(graph, isolated_thr=isolated_thr, spurs_thr=spurs_thr)
+
+		
 
 		rc = 100
 		while rc > 0:
