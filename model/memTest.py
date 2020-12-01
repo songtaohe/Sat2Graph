@@ -214,6 +214,9 @@ output_file = sys.argv[1].replace(".png", "")
 
 v_thr = 0.05
 e_thr = 0.15
+
+v_thr = 0.01
+e_thr = 0.05
 snap_dist = 15
 snap_w = 50
 
