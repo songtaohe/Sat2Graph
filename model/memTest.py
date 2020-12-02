@@ -221,6 +221,59 @@ snap_dist = 15
 snap_w = 50
 
 
+# time profiling
+input_file = sys.argv[2]
+
+if "png" in input_file:
+	output_file = input_file.replace(".png", "")
+else:
+	output_file = input_file.replace(".tif", "")
+
+# run the model 
+if ".tif" in input_file:
+	sat_img = tifffile.imread(input_file)[:,:,0:3]
+else:
+	sat_img = scipy.ndimage.imread(input_file)
+
+dim = np.shape(sat_img)
+s = (dim[0]-2048) // 2
+sat_img = sat_img[s:s+2048, s:s+2048,:]
+max_v = 255
+sat_img = (sat_img.astype(np.float)/ max_v - 0.5) * 0.9 
+sat_img_ = sat_img.reshape((1,2048,2048,3))
+
+
+
+# maxsize = 4096
+maxsize = 4096 
+
+sat_img = np.zeros((1,maxsize, maxsize, 3))
+sat_img[0,0:2048, 0:2048, :] = sat_img_
+sat_img[0,2048:4096, 0:2048, :] = sat_img_
+sat_img[0,0:2048, 2048:4096, :] = sat_img_
+sat_img[0,2048:4096, 2048:4096, :] = sat_img_
+
+ts = []
+for i in range(10):
+	t0 = time()
+	x = 0 
+	y = 0 
+	alloutputs  = model.Evaluate(sat_img[:,x:x+image_size, y:y+image_size,:], gt_prob_placeholder, gt_vector_placeholder, gt_seg_placeholder)
+	if i != 0:
+		ts.append(time()-t0)
+	print(i, "GPU time:", time() - t0)
+	t0 = time()
+
+
+print(ts)
+print(np.mean(ts), np.std(ts))
+
+
+
+
+sess.close()
+exit()
+
 
 for input_file in sys.argv[2:]:
 	print(input_file)
@@ -238,6 +291,7 @@ for input_file in sys.argv[2:]:
 	dim = np.shape(sat_img)
 	s = (dim[0]-2048) // 2
 	sat_img = sat_img[s:s+2048, s:s+2048,:]
+
 
 	#sat_img = scipy.misc.imresize(sat_img, (2048,2048)).astype(np.float)
 
