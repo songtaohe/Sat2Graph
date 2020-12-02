@@ -259,7 +259,7 @@ for i in range(10):
 	x = 0 
 	y = 0 
 	alloutputs  = model.Evaluate(sat_img[:,x:x+image_size, y:y+image_size,:], gt_prob_placeholder, gt_vector_placeholder, gt_seg_placeholder)
-	if i != 0:
+	if i >= 3:
 		ts.append(time()-t0)
 	print(i, "GPU time:", time() - t0)
 	t0 = time()
