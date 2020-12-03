@@ -34,7 +34,7 @@ class Sat2GraphModel():
 		self.batchsize = batchsize
 		self.resnet_step = resnet_step
 
-		self.input_sat = tf.placeholder(tf.float32, shape = [self.batchsize, self.image_size, self.image_size, self.image_ch])
+		self.input_sat = tf.placeholder(tf.float32, shape = [self.batchsize, self.image_size, self.image_size, self.image_ch], name="input")
 
 		self.input_seg_gt = tf.placeholder(tf.float32, shape = [self.batchsize, self.image_size, self.image_size, 1])
 		self.input_seg_gt_target = tf.concat([self.input_seg_gt+0.5, 0.5 - self.input_seg_gt], axis=3)
@@ -308,7 +308,7 @@ class Sat2GraphModel():
 			
 
 
-		return tf.concat(new_outputs, axis=3)
+		return tf.concat(new_outputs, axis=3, name="output")
 
 	def BuildUNET(self, net_input, input_ch = 3, output_ch = 26, ch = 32):
 		## 

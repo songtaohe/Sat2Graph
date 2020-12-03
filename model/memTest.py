@@ -43,9 +43,10 @@ sess = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options))
 
 infer_size = int(sys.argv[1])
 
-
-
 model = Sat2GraphModel(sess, image_size=infer_size, resnet_step = 8, batchsize = 1, channel = 24, mode = "test")
+
+tf.train.write_graph(sess.graph_def,'.','graph.pb')
+
 
 retry_counter = 0
 model.restoreModel(model_name)
