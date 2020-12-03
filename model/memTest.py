@@ -50,7 +50,8 @@ batch_size = int(sys.argv[2])
 
 model = Sat2GraphModel(sess, image_size=infer_size, resnet_step = 8, batchsize = batch_size, channel = 24, mode = "test")
 
-tf.train.write_graph(sess.graph_def,'.','graph.pb')
+tf.train.write_graph(sess.graph_def,'.',"graph_%d_%d.pb" % (batch_size, infer_size))
+
 
 
 retry_counter = 0
