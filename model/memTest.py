@@ -51,7 +51,7 @@ tf.train.write_graph(sess.graph_def,'.','graph.pb')
 retry_counter = 0
 model.restoreModel(model_name)
 
-
+# skip this ... 
 while False:
 	print("loading counter", retry_counter)
 	retry_counter += 1
