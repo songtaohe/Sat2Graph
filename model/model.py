@@ -47,7 +47,7 @@ class Sat2GraphModel():
 
 		self.lr = tf.placeholder(tf.float32, shape=[])
 		
-		self.is_training = tf.placeholder(tf.bool)
+		self.is_training = tf.placeholder(tf.bool, name="istraining")
 
 
 		if self.train_seg:
