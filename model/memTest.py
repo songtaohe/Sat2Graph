@@ -34,6 +34,8 @@ import json
 import pickle 
 import tifffile
 
+
+
 # python memTest.py 1024 ../../data/Test_Images_Results/Aileu/L18-13905E-7793N_1m.png
 # python memTest.py 1024 ../../data/Test_Images_Results/Dili/L18-13907E-7800N_1m.png
 
@@ -42,8 +44,11 @@ gpu_options = tf.GPUOptions(allow_growth=True)
 sess = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options))
 
 infer_size = int(sys.argv[1])
+batch_size = int(sys.argv[2])
 
-model = Sat2GraphModel(sess, image_size=infer_size, resnet_step = 8, batchsize = 1, channel = 24, mode = "test")
+
+
+model = Sat2GraphModel(sess, image_size=infer_size, resnet_step = 8, batchsize = batch_size, channel = 24, mode = "test")
 
 tf.train.write_graph(sess.graph_def,'.','graph.pb')
 
@@ -203,9 +208,9 @@ while False:
 # L18-13905E-7791N_1m.png
 
 image_size = infer_size
-gt_prob_placeholder = np.zeros((1,image_size,image_size,14))
-gt_vector_placeholder = np.zeros((1,image_size,image_size,12))
-gt_seg_placeholder = np.zeros((1,image_size,image_size,1))
+gt_prob_placeholder = np.zeros((batch_size,image_size,image_size,14))
+gt_vector_placeholder = np.zeros((batch_size,image_size,image_size,12))
+gt_seg_placeholder = np.zeros((batch_size,image_size,image_size,1))
 
 input_file = sys.argv[1]
 #if len(sys.argv) <= 2:
@@ -223,7 +228,7 @@ snap_w = 50
 
 
 # time profiling
-input_file = sys.argv[2]
+input_file = sys.argv[3]
 
 if "png" in input_file:
 	output_file = input_file.replace(".png", "")
@@ -248,11 +253,12 @@ sat_img_ = sat_img.reshape((1,2048,2048,3))
 # maxsize = 4096
 maxsize = 4096 
 
-sat_img = np.zeros((1,maxsize, maxsize, 3))
-sat_img[0,0:2048, 0:2048, :] = sat_img_
-sat_img[0,2048:4096, 0:2048, :] = sat_img_
-sat_img[0,0:2048, 2048:4096, :] = sat_img_
-sat_img[0,2048:4096, 2048:4096, :] = sat_img_
+sat_img = np.zeros((batch_size,maxsize, maxsize, 3))
+for bt in range(batch_size):
+	sat_img[bt,0:2048, 0:2048, :] = sat_img_
+	sat_img[bt,2048:4096, 0:2048, :] = sat_img_
+	sat_img[bt,0:2048, 2048:4096, :] = sat_img_
+	sat_img[bt,2048:4096, 2048:4096, :] = sat_img_
 
 ts = []
 for i in range(10):
