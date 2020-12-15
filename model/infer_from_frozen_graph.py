@@ -80,7 +80,7 @@ for input_file in sys.argv[1:]:
 
     crop_dim = [dim[0] / 32 * 32, dim[1] / 32 * 32]
     sat_img_vis = np.copy(sat_img)
-    sat_img = sat_img[s:s+crop_dim[0], s:s+crop_dim[1],:]
+    sat_img = sat_img[0:0+crop_dim[0], 0:0+crop_dim[1],:]
     
 
     max_v = 255
@@ -93,7 +93,7 @@ for input_file in sys.argv[1:]:
     graph = DecodeAndVis(output, output_file, thr=v_thr, edge_thr = e_thr, angledistance_weight=snap_w, snap_dist = snap_dist, snap=True, imagesize = 2048, spurs_thr = 100, isolated_thr= 500, connect_deadend_thr=30)
     graph = simpilfyGraph(graph)
     print("all done", time()-t0)
-    
+
 
     sat_img = sat_img_vis
     for k,v in graph.iteritems():
