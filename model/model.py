@@ -42,8 +42,8 @@ class Sat2GraphModel():
 		self.target_prob = tf.placeholder(tf.float32, shape = [self.batchsize, self.image_size, self.image_size, 2 * (MAX_DEGREE + 1)])
 		self.target_vector = tf.placeholder(tf.float32, shape = [self.batchsize, self.image_size, self.image_size, 2 * (MAX_DEGREE)])
 
-		self.np_mask = np.ones((self.batchsize,self.image_size, self.image_size,1))
-		self.np_mask[:,32:self.image_size-32,32:self.image_size-32,:] =0.0 
+		# self.np_mask = np.ones((self.batchsize,self.image_size, self.image_size,1))
+		# self.np_mask[:,32:self.image_size-32,32:self.image_size-32,:] =0.0 
 
 		self.lr = tf.placeholder(tf.float32, shape=[])
 		
