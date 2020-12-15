@@ -57,9 +57,9 @@ with tf.Session(graph=G, config=tf.ConfigProto(gpu_options=gpu_options)) as sess
     istraining = G.get_tensor_by_name('import/istraining:0')
 
 
-    v_thr = 0.01
+    v_thr = 0.05
     e_thr = 0.05
-    snap_dist = 15
+    snap_dist = 20
     snap_w = 50
 
     for input_file in sys.argv[1:]:
