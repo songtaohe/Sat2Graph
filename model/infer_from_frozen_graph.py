@@ -63,6 +63,8 @@ snap_dist = 15
 snap_w = 50
 
 for input_file in sys.argv[1:]:
+    print(input_file)
+
     if "png" in input_file:
         output_file = input_file.replace(".png", "")
     else:
@@ -85,10 +87,13 @@ for input_file in sys.argv[1:]:
     sat_img = (sat_img.astype(np.float)/ max_v - 0.5) * 0.9 
     sat_img_ = sat_img.reshape((1,crop_dim[0],crop_dim[1],3))
 
+    t0 = time()
     output = sess.run(y, feed_dict={x: sat_img_, istraining: False})
+    print("gpu done", time()-t0)
     graph = DecodeAndVis(output, output_file, thr=v_thr, edge_thr = e_thr, angledistance_weight=snap_w, snap_dist = snap_dist, snap=True, imagesize = 2048, spurs_thr = 100, isolated_thr= 500, connect_deadend_thr=30)
     graph = simpilfyGraph(graph)
-
+    print("all done", time()-t0)
+    
 
     sat_img = sat_img_vis
     for k,v in graph.iteritems():
