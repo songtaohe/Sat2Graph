@@ -90,7 +90,7 @@ with tf.Session(graph=G, config=tf.ConfigProto(gpu_options=gpu_options)) as sess
         t0 = time()
         output = sess.run(y, feed_dict={x: sat_img_, istraining: False})
         print("gpu done", time()-t0)
-        graph = DecodeAndVis(output, output_file, thr=v_thr, edge_thr = e_thr, angledistance_weight=snap_w, snap_dist = snap_dist, snap=True, imagesize = 2048, spurs_thr = 100, isolated_thr= 500, connect_deadend_thr=30)
+        graph = DecodeAndVis(output, output_file, thr=v_thr, edge_thr = e_thr, angledistance_weight=snap_w, snap_dist = snap_dist, snap=True, imagesize = crop_dim[0], spurs_thr = 100, isolated_thr= 500, connect_deadend_thr=30)
         graph = simpilfyGraph(graph)
         print("all done", time()-t0)
 
