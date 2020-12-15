@@ -57,62 +57,62 @@ with tf.Session(graph=G, config=tf.ConfigProto(gpu_options=gpu_options)) as sess
     istraining = G.get_tensor_by_name('import/istraining:0')
 
 
-v_thr = 0.01
-e_thr = 0.05
-snap_dist = 15
-snap_w = 50
+    v_thr = 0.01
+    e_thr = 0.05
+    snap_dist = 15
+    snap_w = 50
 
-for input_file in sys.argv[1:]:
-    print(input_file)
+    for input_file in sys.argv[1:]:
+        print(input_file)
 
-    if "png" in input_file:
-        output_file = input_file.replace(".png", "")
-    else:
-        output_file = input_file.replace(".tif", "")
+        if "png" in input_file:
+            output_file = input_file.replace(".png", "")
+        else:
+            output_file = input_file.replace(".tif", "")
 
-    # run the model 
-    if ".tif" in input_file:
-        sat_img = tifffile.imread(input_file)[:,:,0:3]
-    else:
-        sat_img = scipy.ndimage.imread(input_file)
+        # run the model 
+        if ".tif" in input_file:
+            sat_img = tifffile.imread(input_file)[:,:,0:3]
+        else:
+            sat_img = scipy.ndimage.imread(input_file)
 
-    dim = np.shape(sat_img)
+        dim = np.shape(sat_img)
 
-    crop_dim = [dim[0] / 32 * 32, dim[1] / 32 * 32]
-    sat_img_vis = np.copy(sat_img)
-    sat_img = sat_img[0:0+crop_dim[0], 0:0+crop_dim[1],:]
-    
+        crop_dim = [dim[0] / 32 * 32, dim[1] / 32 * 32]
+        sat_img_vis = np.copy(sat_img)
+        sat_img = sat_img[0:0+crop_dim[0], 0:0+crop_dim[1],:]
+        
 
-    max_v = 255
-    sat_img = (sat_img.astype(np.float)/ max_v - 0.5) * 0.9 
-    sat_img_ = sat_img.reshape((1,crop_dim[0],crop_dim[1],3))
+        max_v = 255
+        sat_img = (sat_img.astype(np.float)/ max_v - 0.5) * 0.9 
+        sat_img_ = sat_img.reshape((1,crop_dim[0],crop_dim[1],3))
 
-    t0 = time()
-    output = sess.run(y, feed_dict={x: sat_img_, istraining: False})
-    print("gpu done", time()-t0)
-    graph = DecodeAndVis(output, output_file, thr=v_thr, edge_thr = e_thr, angledistance_weight=snap_w, snap_dist = snap_dist, snap=True, imagesize = 2048, spurs_thr = 100, isolated_thr= 500, connect_deadend_thr=30)
-    graph = simpilfyGraph(graph)
-    print("all done", time()-t0)
+        t0 = time()
+        output = sess.run(y, feed_dict={x: sat_img_, istraining: False})
+        print("gpu done", time()-t0)
+        graph = DecodeAndVis(output, output_file, thr=v_thr, edge_thr = e_thr, angledistance_weight=snap_w, snap_dist = snap_dist, snap=True, imagesize = 2048, spurs_thr = 100, isolated_thr= 500, connect_deadend_thr=30)
+        graph = simpilfyGraph(graph)
+        print("all done", time()-t0)
 
 
-    sat_img = sat_img_vis
-    for k,v in graph.iteritems():
-        n1 = k 
-        for n2 in v:
-            cv2.line(sat_img, (n1[1], n1[0]), (n2[1], n2[0]), (255,255,0),2)
-    
-    Image.fromarray(sat_img).save(output_file+"_vis.png")
+        sat_img = sat_img_vis
+        for k,v in graph.iteritems():
+            n1 = k 
+            for n2 in v:
+                cv2.line(sat_img, (n1[1], n1[0]), (n2[1], n2[0]), (255,255,0),2)
+        
+        Image.fromarray(sat_img).save(output_file+"_vis.png")
 
-    jsongraph = {}
-    for k,v in graph.iteritems():
-        sk = "%d_%d" % (k[0], k[1])
-        jsongraph[sk] = []
-        for n2 in v:
-            jsongraph[sk].append("%d_%d" % (n2[0], n2[1]))
+        jsongraph = {}
+        for k,v in graph.iteritems():
+            sk = "%d_%d" % (k[0], k[1])
+            jsongraph[sk] = []
+            for n2 in v:
+                jsongraph[sk].append("%d_%d" % (n2[0], n2[1]))
 
-    json.dump(jsongraph, open(output_file+"_graph.json","w"), indent=2)
+        json.dump(jsongraph, open(output_file+"_graph.json","w"), indent=2)
 
-    
+        
 
 
     
