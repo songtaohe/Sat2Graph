@@ -59,7 +59,7 @@ with tf.Session(graph=G, config=tf.ConfigProto(gpu_options=gpu_options)) as sess
 
     v_thr = 0.05
     e_thr = 0.05
-    snap_dist = 20
+    snap_dist = 15
     snap_w = 50
 
     for input_file in sys.argv[1:]:
@@ -91,7 +91,7 @@ with tf.Session(graph=G, config=tf.ConfigProto(gpu_options=gpu_options)) as sess
         output = sess.run(y, feed_dict={x: sat_img_, istraining: False})
         print(np.shape(output))
         print("gpu done", time()-t0)
-        graph = DecodeAndVis(output[0,:,:,:28], output_file, thr=v_thr, edge_thr = e_thr, angledistance_weight=snap_w, snap_dist = snap_dist, snap=True, imagesize = crop_dim[0], spurs_thr = 100, isolated_thr= 500, connect_deadend_thr=30)
+        graph = DecodeAndVis(output[0,:,:,:28], output_file, thr=v_thr, edge_thr = e_thr, angledistance_weight=snap_w, snap_dist = snap_dist, snap=True, imagesize = crop_dim[0], spurs_thr = 100, isolated_thr= 500, connect_deadend_thr=20)
         graph = simpilfyGraph(graph)
         print("all done", time()-t0)
 
