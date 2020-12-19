@@ -15,7 +15,7 @@ from model import Sat2GraphModel
 from decoder import DecodeAndVis 
 from douglasPeucker import simpilfyGraph 
 
-gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.3)
+gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.25)
 sess = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options))
 
 model = Sat2GraphModel(sess, image_size=352, resnet_step = 8, batchsize = 1, channel = 12, mode = "test")
@@ -163,7 +163,7 @@ def run(server_class=HTTPServer, handler_class=S, port=8080):
 
 if __name__ == '__main__':
 	from sys import argv
-
+	# 8006
 	if len(argv) == 2:
 		run(port=int(argv[1]))
 	else:
