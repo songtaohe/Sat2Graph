@@ -20,6 +20,20 @@ In this paper, we propose a new method, Sat2Graph, which combines the advantages
 
 ![Demo2](figures/demo2.gif)
 
+## Instruction
+* Use mouse to pan/zoom
+* Press 's' to run Sat2Graph (this will take a few seconds)
+* Press 'd' to toggle background brightness
+* Press 'c' to clear the results
+* Press 'm' to switch model
+
+## Supported Models
+Model | Note 
+------------ | -------------
+80-City Global Model | Trained on 80 cities around the world. This model is 2x wider than the 20-city US model. 
+20-City US Model | Trained on 20 US cities. This is the model evaluated in our paper. 
+
+
 # Usage
 ## Download the Dataset and Pre-Trained Model
 
