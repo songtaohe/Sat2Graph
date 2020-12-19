@@ -28,7 +28,7 @@ In this paper, we propose a new method, Sat2Graph, which combines the advantages
 * Press 'm' to switch model
 
 ## Supported Models
-Model &nbsp;&nbsp;&nbsp; | Note 
+Model &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Note 
 --------------------- | -------------
 80-City Global Model | Trained on 80 cities around the world. This model is 2x wider than the 20-city US model. 
 20-City US Model | Trained on 20 US cities. This is the model evaluated in our paper. 
