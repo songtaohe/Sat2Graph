@@ -71,7 +71,7 @@ TODO
 
 
 # APLS and TOPO metric
-Please see the metric folder for the details of these two metrics. 
+Please see the 'metrics' folder for the details of these two metrics. 
 
 
 
