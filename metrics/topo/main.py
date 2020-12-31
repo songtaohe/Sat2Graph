@@ -123,9 +123,9 @@ losm = topo.TOPOGenerateStartingPoints(graph_gt, region=region, image="NULL", ch
 
 lmap = topo.TOPOGeneratePairs(graph_prop, graph_gt, losm, threshold = 0.00010, region=region)
 
-# margin 
+# propagation distance 
 r = 0.00300 # around 300 meters
-# for spacenet, use a smaller margin
+# for spacenet, use a smaller distance
 if lat_top_left - min_lat < 0.01000:
     r = 0.00150 # around 150 meters
 
