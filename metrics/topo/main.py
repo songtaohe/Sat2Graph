@@ -25,7 +25,7 @@ parser.add_argument('-interval', action='store', dest='topo_interval', type=floa
                     help='topo marble-hole interval ', required =False, default=0.00005)
 
 args = parser.parse_args()
-
+print(args)
 
 
 lat_top_left = 41.0 
@@ -108,6 +108,8 @@ def create_graph(m):
 
 graph_gt = create_graph(map1)
 graph_prop = create_graph(map2)
+
+print("load gt/prop graphs")
 
 region = [min_lat-300 * 1.0/111111.0, lon_top_left-500 * 1.0/111111.0, lat_top_left+300 * 1.0/111111.0, max_lon+500 * 1.0/111111.0]
 
