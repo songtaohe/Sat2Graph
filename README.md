@@ -70,7 +70,7 @@ python train.py -model_save tmp -instance_id test -image_size 352
 TODO
 
 
-# APLS and TOPO metric
+# APLS and TOPO metrics
 Please see the 'metrics' folder for the details of these two metrics. 
 
 
