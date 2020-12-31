@@ -943,10 +943,12 @@ def TOPOWithPairs(GPSMap, OSMMap, GPSList, OSMList, step = 0.00005, r = 0.00300,
     # with open(outputfile, "a") as fout:
     # 	fout.write(str(p)+" "+str(r)+" "+str(len(new_topoResult)/float(len(OSMList)))+"\n")
 
+    print("precision="+ str(p)+ " overall-recall="+ str(r * len(new_topoResult)/float(len(OSMList))))
+
     try:
         with open(outputfile, "a") as fout:
             fout.write(str(p)+" "+str(r)+" "+str(len(new_topoResult)/float(len(OSMList)))+ " " + str(r * len(new_topoResult)/float(len(OSMList)))  +"\n")
-
+            fout.write("precision="+ str(p)+ " overall-recall="+ str(r * len(new_topoResult)/float(len(OSMList))))
     except:
         with open(outputfile, "a") as fout:
             fout.write(str(0)+" "+str(0)+" "+str(0)+ " " + str(0)  +"\n")
