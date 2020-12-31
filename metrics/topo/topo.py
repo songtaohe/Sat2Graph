@@ -228,7 +228,7 @@ def TOPOGenerateStartingPoints(OSMMap, check = True, density = 0.00050, region =
         svgEdges.append((OSMMap.nodes[edge[0]][0],OSMMap.nodes[edge[0]][1], OSMMap.nodes[edge[1]][0], OSMMap.nodes[edge[1]][1]))
 
 
-    showTOPO.RenderRegion(result, svgEdges, region, "svg/OSM.svg")
+    showTOPO.RenderRegion(result, svgEdges, region, "gt.svg")
 
 
 
