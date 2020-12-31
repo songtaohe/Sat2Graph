@@ -15,3 +15,7 @@ Matching Distance Threshold | Default is 10 meters. Config with -matching_thresh
 Matching Angle Threshold | 30 degrees 
 One-to-One Matching | True
 
+
+# Dependency
+* hopcroftkarp
+* rtree
