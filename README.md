@@ -2,6 +2,7 @@
 Sat2Graph: Road Graph Extraction through Graph-Tensor Encoding
 
 Paper: [arxiv.org/pdf/2007.09547.pdf](https://arxiv.org/pdf/2007.09547.pdf) (ECCV 2020)
+
 Talk: [https://www.youtube.com/watch?v=bLw-Ka_SRX8](https://www.youtube.com/watch?v=bLw-Ka_SRX8) (10 minutes)
 
 ### Abstract
