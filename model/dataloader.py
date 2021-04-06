@@ -218,7 +218,7 @@ class Sat2GraphDataLoader():
 
 		return sat_img, tiles_prob, tiles_vector
 
-
+	# num = 1024 is useless here.
 	def preload(self, num = 1024, seg_only = False):
 		self.noise_mask = (np.random.rand(64,64,3)) * 1.0 + 0.5
 
@@ -258,12 +258,7 @@ class Sat2GraphDataLoader():
 
 			max_v = np.amax(sat_img) + 0.0001 
 
-			# rotate 
-			# (1) sat_img
-			# (2) gt_seg 
-			# (3) neighbors
-			# (4) sample point
-			# (5) sample mask?
+			
 
 
 			neighbors = pickle.load(open(self.folder + "/region_%d_refine_gt_graph.p" % ind))
@@ -277,6 +272,13 @@ class Sat2GraphDataLoader():
 			self.rotmask[i,:,:] = np.ones((self.dataset_image_size, self.dataset_image_size))
 
 			# random rotation augmentation 
+			# rotate 
+			# (1) sat_img
+			# (2) gt_seg 
+			# (3) neighbors
+			# (4) sample point
+			# (5) sample mask?
+
 			if self.testing == False and random.randint(0,5) < 4:
 				angle = random.randint(0,3) * 90 + random.randint(-30,30)
 				sat_img, gt_seg, neighbors, samplepoints, rotmask = rotate(sat_img, gt_seg, neighbors, samplepoints, angle= angle, size = self.dataset_image_size)
@@ -323,7 +325,7 @@ class Sat2GraphDataLoader():
 							self.tiles_vector[i,x,y,2*j+1] = (n_loc[1] - loc[1]) / vector_norm
 
 
-			# random rotation augmentation 
+			
 			if self.testing == False:
 				self.tiles_input[i,:,:,:] = self.tiles_input[i,:,:,:] * (0.8 + 0.2 * random.random()) - (random.random() * 0.4 - 0.2)
 				self.tiles_input[i,:,:,:] = np.clip(self.tiles_input[i,:,:,:], -0.5, 0.5)
