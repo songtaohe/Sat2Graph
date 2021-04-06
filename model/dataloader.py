@@ -160,11 +160,6 @@ class Sat2GraphDataLoader():
 
 		sat_img = sat_img.reshape((1,self.dataset_image_size,self.dataset_image_size,3))
 
-		#Image.fromarray(((sat_img[0,:,:,:] + 0.5) * 255.0).astype(np.uint8)).save("outputs/test.png")
-
-		#print(np.shape(sat_img))
-		
-
 		tiles_prob = np.zeros((1,self.dataset_image_size, self.dataset_image_size, 2 * (self.max_degree + 1)))
 		tiles_vector = np.zeros((1, self.dataset_image_size, self.dataset_image_size, 2 * (self.max_degree)))
 
@@ -180,8 +175,6 @@ class Sat2GraphDataLoader():
 
 			r = 1
 			i = 0
-
-			#tiles_angle = np.zeros((self.dataset_image_size, self.dataset_image_size, 1), dtype=np.uint8)
 				
 			for loc, n_locs in neighbors.items():
 				if loc[0] < 16 or loc[1] < 16 or loc[0] > self.dataset_image_size - 16 or loc[1] > self.dataset_image_size - 16 :
@@ -267,7 +260,6 @@ class Sat2GraphDataLoader():
 			# (4) sample point
 			# (5) sample mask?
 
-
 			neighbors = pickle.load(open(self.folder + "/region_%d_refine_gt_graph.p" % ind))
 			neighbors = neighbor_to_integer(neighbors)
 
@@ -325,7 +317,7 @@ class Sat2GraphDataLoader():
 							self.tiles_vector[i,x,y,2*j+1] = (n_loc[1] - loc[1]) / vector_norm
 
 
-			# random rotation augmentation 
+			
 			if self.testing == False:
 				self.tiles_input[i,:,:,:] = self.tiles_input[i,:,:,:] * (0.8 + 0.2 * random.random()) - (random.random() * 0.4 - 0.2)
 				self.tiles_input[i,:,:,:] = np.clip(self.tiles_input[i,:,:,:], -0.5, 0.5)
