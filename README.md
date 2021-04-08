@@ -34,9 +34,9 @@ In this paper, we propose a new method, Sat2Graph, which combines the advantages
 ## Supported Models
 Model | Note 
 --------------------- | -------------
-80-City Global Model | Trained on 80 cities around the world. This model is 2x wider than the 20-city US model. 
-20-City US Model | Trained on 20 US cities. This is the model evaluated in our paper. 
-
+80-City Global  | Trained on 80 cities around the world. This model is 2x wider than the 20-city US model. 
+20-City US  | Trained on 20 US cities. This is the model evaluated in our paper. 
+20-City US V2 | Trained on 20 US cities. This is an experimental model. 
 
 # Usage
 ## Download the Dataset and Pre-Trained Model
