@@ -15,8 +15,12 @@ In this paper, we propose a new method, Sat2Graph, which combines the advantages
 
 # Run Sat2Graph at any place on Earth! [(Link)](http://128.30.198.28:8080/#background=Mapbox&disable_features=points,traffic_roads,service_roads,paths,buildings,building_parts,indoor,landuse,boundaries,water,rail,pistes,aerialways,power,past_future,others&map=2.00/13.4/2.6).
 
-**Try Sat2Graph in iD editor [(link)](http://128.30.198.28:8080/#background=Mapbox&disable_features=points,traffic_roads,service_roads,paths,buildings,building_parts,indoor,landuse,boundaries,water,rail,pistes,aerialways,power,past_future,others&map=2.00/13.4/2.6).**
-**Watch the [demo](https://youtu.be/uqcGPVOBpGg).**
+
+## Update
+* **2021-04-07** Check out our new experimental Sat2Graph model!
+![Demo3](figures/demo3.gif)
+
+### **Try Sat2Graph in iD editor [(link)](http://128.30.198.28:8080/#background=Mapbox&disable_features=points,traffic_roads,service_roads,paths,buildings,building_parts,indoor,landuse,boundaries,water,rail,pistes,aerialways,power,past_future,others&map=2.00/13.4/2.6).** **Watch the [demo](https://youtu.be/uqcGPVOBpGg).**
 
 <!-- ![Demo1](figures/demo.gif) -->
 
