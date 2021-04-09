@@ -485,26 +485,28 @@ def DrawKP(imagegraph, filename, imagesize=256, max_degree=6):
 
 # Main function 
 def DecodeAndVis(imagegraph, filename, imagesize=256, max_degree=6, thr=0.5, edge_thr = 0.5, snap=False, kp_limit = 500, drop=True, use_graph_refine=True, testing=False, spacenet = False, angledistance_weight = 100, snap_dist = 15):
+	
+	# At the very begining of the training, the vertexness output can be very noisy. 
+	# The decoder algorithm may find too many keypoints (vertices) and run very slowly.  
+	# To avoid this slowdown, we limit the total number of the keypoints during training.
 	kp_limit = 10000000
-
-	# for training 
 	if imagesize < 600:
 		kp_limit = 500
 
 	if testing :
 		kp_limit = 10000000
 
-	# for visualization 
+	# Create numpy arrays for visualization.
 	if snap :
 		rgb = np.zeros((imagesize*4, imagesize*4, 3), dtype=np.uint8)
 		rgb2 = np.zeros((imagesize*4, imagesize*4, 3), dtype=np.uint8)
-
 	else:
 		rgb = 255 * np.ones((imagesize*4, imagesize*4, 3), dtype=np.uint8)
 		rgb2 = 255 * np.ones((imagesize*4, imagesize*4, 3), dtype=np.uint8)
 
 
-	# Step-1: Find vertices 
+	# Step-1: Find vertices
+	# Step-1 (a): Find vertices through local minima detection. 
 	vertexness = imagegraph[:,:,0].reshape((imagesize, imagesize))
 
 	kp = np.copy(vertexness)
@@ -515,9 +517,15 @@ def DecodeAndVis(imagegraph, filename, imagesize=256, max_degree=6, thr=0.5, edg
 
 	cc = 0 
 
-
-	# locate edge endpoints
-	# we do this becasue the local maima may not represent all the vertices
+	# Step-1 (b): There could be a case where the local minima detection algorithm fails
+	# to detect some of the vertices. 
+	# For example, we have links a<-->b and b<-->c but b is missing. 
+	# In this case, we use the edges a-->b and b<--c to recover b.
+	# 
+	# To do so, we locate the endpoint of each edge (from the detected vertices so far.),
+	# draw all the endpoints on a numpy array (a 2D image), blur it, and use the same minima
+	# detection algorithm to find vertices. 
+	#
 	edgeEndpointMap = np.zeros((imagesize, imagesize))
 
 	for i in range(len(keypoints[0])):
@@ -540,13 +548,17 @@ def DecodeAndVis(imagegraph, filename, imagesize=256, max_degree=6, thr=0.5, edg
 	edgeEndpointMap = scipy.ndimage.filters.gaussian_filter(edgeEndpointMap, 3)
 	edgeEndpoints = detect_local_minima(-edgeEndpointMap, edgeEndpointMap, thr*thr*thr)
 
-	# create rtree index to speed up the queries. 
+	# Step-1 (c): Create rtree index to speed up the queries.
+	# We need to insert the vertices detected in Step-1(a) and Step-1(b) to the rtree.
+	# For the vertices detected in Step-1(b), to avoid duplicated vertices, we only 
+	# insert them when there are no nearby vertices around them. 
+	# 
 	idx = index.Index()
 
 	if snap == True:
 		cc = 0
 
-		# insert keypoints to the rtree
+		# Insert keypoints to the rtree
 		for i in range(len(keypoints[0])):
 			if cc > kp_limit:
 				break 
@@ -557,7 +569,9 @@ def DecodeAndVis(imagegraph, filename, imagesize=256, max_degree=6, thr=0.5, edg
 
 			cc += 1
 
-		# insert edge endpoints (the other vertex of the edge) to the rtree
+		# Insert edge endpoints (the other vertex of the edge) to the rtree
+		# To avoid duplicated vertices, we only insert the vertex when there is no
+		# other vertex nearby.
 		for i in range(len(edgeEndpoints[0])):
 			if cc > kp_limit*2:
 				break 
@@ -570,6 +584,9 @@ def DecodeAndVis(imagegraph, filename, imagesize=256, max_degree=6, thr=0.5, edg
 				idx.insert(i + len(keypoints[0]),(x-1,y-1,x+1,y+1))
 			cc += 1
 
+
+
+	# Step-2 Connect the vertices to build a graph. 
 
 	# endpoint lookup 
 	neighbors = {}
@@ -595,13 +612,23 @@ def DecodeAndVis(imagegraph, filename, imagesize=256, max_degree=6, thr=0.5, edg
 				l = vector_norm * np.sqrt(imagegraph[x,y,2+4*j+2]*imagegraph[x,y,2+4*j+2] + imagegraph[x,y,2+4*j+3]*imagegraph[x,y,2+4*j+3])
 
 				if snap==True:
-					# Pass-One (restrict distance metric)
+					
 
+					# We look for a candidate vertex to connect through three passes
+					# Here, we use d(a-->b) to represent the distance metric for edge a-->b .
+					# Pass-1 For a link a<-->b, we connect them only if d(a-->b) + d(a<--b) <= snap_dist.
+					# Pass-2 (relaxed) For a link a<-->b, we connect them only if 2*d(a-->b) <= snap_dist or 2*d(a<--b) <= snap_dist.
+					# Pass-3 (more relaxed) For a link a<-->b, we connect them only if d(a-->b) <= snap_dist or d(a<--b) <= snap_dist.
+					# 
+					# In Pass-1 and Pass-2, we only consider the keypoints detected directly by the minima detection algorithm (Step-1(a)).
+					# In Pass-3, we only consider the edge end points detected in Step-1(b)
+					# 
 					best_candidate = -1 
 					min_distance = snap_dist #15.0 
 
 					candidates = list(idx.intersection((x1-20,y1-20,x1+20,y1+20)))
-
+					
+					# Pass-1 (restrict distance metric)
 					for candidate in candidates:
 						# only snap to keypoints 
 						if candidate >= len(keypoints[0]):
@@ -643,13 +670,13 @@ def DecodeAndVis(imagegraph, filename, imagesize=256, max_degree=6, thr=0.5, edg
 						# cosine distance 
 						ad = 1.0 - anglediff(v1,v2) # -1 to 1
 
-						d = d + ad * angledistance_weight # 0.15 --> 15
+						d = d + ad * angledistance_weight # 0.15 --> 15 degrees 
 
 						if d < min_distance:
 							min_distance = d 
 							best_candidate = candidate
 
-					# Pass-Two (release the distance metric)
+					# Pass-2 (relax the distance metric)
 					min_distance = snap_dist #15.0 
 					# only need the second pass when there is no good candidate found in the first pass. 
 					if best_candidate == -1:
@@ -680,7 +707,7 @@ def DecodeAndVis(imagegraph, filename, imagesize=256, max_degree=6, thr=0.5, edg
 								min_distance = d 
 								best_candidate = candidate
 
-					# Pass-Three (release the distance metric even more)
+					# Pass-3 (relax the distance metric even more)
 					if best_candidate == -1:
 						for candidate in candidates:
 							# only snap to edge endpoints 
@@ -729,6 +756,7 @@ def DecodeAndVis(imagegraph, filename, imagesize=256, max_degree=6, thr=0.5, edg
 
 				w = 2
 
+				# draw the edges and add them in 'neighbors'
 				if skip == False or drop==False:
 
 					nk1 = (x1,y1)
@@ -755,8 +783,9 @@ def DecodeAndVis(imagegraph, filename, imagesize=256, max_degree=6, thr=0.5, edg
 		cc += 1
 
 
-	
-	# refine the graph
+	# Step-3 Some graph refinement post-processing passes. 
+	# We also apply them to other methods in the evaluation.
+	# 
 
 	spurs_thr = 50 
 	isolated_thr = 200
