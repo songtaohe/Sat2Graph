@@ -12,6 +12,17 @@ Inferring road graphs from satellite imagery is a challenging computer vision ta
 In this paper, we propose a new method, Sat2Graph, which combines the advantages of the two prior categories into a unified framework. The key idea in Sat2Graph is a novel encoding scheme, graph-tensor encoding (GTE), which encodes the road graph into a tensor representation. GTE makes it possible to train a simple, non-recurrent, supervised model to predict a rich set of features that capture the graph structure directly from an image. We evaluate Sat2Graph using two large datasets. We find that Sat2Graph surpasses prior methods on two widely used metrics, TOPO and APLS. Furthermore, whereas prior work only infers planar road graphs, our approach is capable of inferring stacked roads (e.g., overpasses), and does so robustly.
 
 ![Overview](figures/Sat2Graph2.png)
+# Change Log
+## 2021-04-12
+* Add new global models to our [demo](http://128.30.198.28:8080/#background=Mapbox&disable_features=points,traffic_roads,service_roads,paths,buildings,building_parts,indoor,landuse,boundaries,water,rail,pistes,aerialways,power,past_future,others&map=2.00/13.4/2.6). Now you can run Sat2Graph in a larger window (1km) with the new global models.
+* The new models classify the road segments into three categories -- freeway roads, traffic roads and service roads (e.g., parking roads and foot paths). 
+![update20210412](figures/update20210412.png)
+
+## 2021-04-07
+* Update the web portal of our [demo](http://128.30.198.28:8080/#background=Mapbox&disable_features=points,traffic_roads,service_roads,paths,buildings,building_parts,indoor,landuse,boundaries,water,rail,pistes,aerialways,power,past_future,others&map=2.00/13.4/2.6).
+* Check out our new experimental Sat2Graph model (Still updating)!
+<!-- ![Demo3](figures/demo3.gif | width=256) -->
+
 
 # Run Sat2Graph at any place on Earth! [(Link)](http://128.30.198.28:8080/#background=Mapbox&disable_features=points,traffic_roads,service_roads,paths,buildings,building_parts,indoor,landuse,boundaries,water,rail,pistes,aerialways,power,past_future,others&map=2.00/13.4/2.6).
 
@@ -19,10 +30,6 @@ In this paper, we propose a new method, Sat2Graph, which combines the advantages
 ### **Try Sat2Graph in iD editor [(link)](http://128.30.198.28:8080/#background=Mapbox&disable_features=points,traffic_roads,service_roads,paths,buildings,building_parts,indoor,landuse,boundaries,water,rail,pistes,aerialways,power,past_future,others&map=2.00/13.4/2.6).** **Watch the [demo](https://youtu.be/uqcGPVOBpGg).**
 
 ![Demo2](figures/demo2.gif)
-
-## Update 2021-04-07
-* Check out our new experimental Sat2Graph model (Still updating)!
-![Demo3](figures/demo3.gif)
 
 ## Instruction
 * Use mouse to pan/zoom
@@ -36,7 +43,9 @@ Model | Note
 --------------------- | -------------
 80-City Global  | Trained on 80 cities around the world. This model is 2x wider than the 20-city US model. 
 20-City US  | Trained on 20 US cities. This is the model evaluated in our paper. 
-20-City US V2 | Trained on 20 US cities. This is an experimental model. 
+20-City US V2 | Trained on 20 US cities at 50cm resolution. This is an experimental model. 
+Global-V2 | Trained on 80 cities at 50cm resolution. When apply this model to a new place, it takes around 17 seconds for the server to download the images and takes another 30 seconds for inference (1km by 1km). This is an experimental model. 
+
 
 # Usage
 ## Download the Dataset and Pre-Trained Model
