@@ -43,8 +43,8 @@ Model | Note
 --------------------- | -------------
 80-City Global  | Trained on 80 cities around the world. This model is 2x wider than the 20-city US model. 
 20-City US  | Trained on 20 US cities. This is the model evaluated in our paper. 
-20-City US V2 | Trained on 20 US cities at 50cm resolution. This is an experimental model. 
-Global-V2 | Trained on 80 cities at 50cm resolution. When apply this model to a new place, it takes around 17 seconds for the server to download the images and takes another 30 seconds for inference (1km by 1km). This is an experimental model. 
+20-City US V2 | Trained on 20 US cities at 50cm resolution. This is an experimental model and it performs poorly at places where high resolution satellite imagery is not available. 
+Global-V2 | Trained on 80 cities at 50cm resolution. When apply this model to a new place, it takes around 17 seconds for the server to download the images and takes another 30 seconds for inference (1km by 1km). 
 
 
 # Usage
