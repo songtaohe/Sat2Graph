@@ -13,12 +13,16 @@ In this paper, we propose a new method, Sat2Graph, which combines the advantages
 
 ![Overview](figures/Sat2Graph2.png)
 # Change Log
-## 2021-04-12
+## 2021-04-14 --- Sat2Graph inference server docker container
+* Containerize Sat2Graph inference server. Now you can try three Sat2Graph models and three segmentation models (unet, deeproadmapper, and joint orientation learning) in one container. 
+* The containerized inference server supports two inference modes. (1) Given a lat/lon coordinate and the size of the tile, the inference server can automatically download MapBox images and run inference on it. (2) Run on custom input images as long as the ground sampling distance (e.g., 50 cm/pixel) is provided. 
+* Check it out [here](docker/)!
+## 2021-04-12 --- New models
 * Add new global models to our [demo](http://128.30.198.28:8080/#background=Mapbox&disable_features=points,traffic_roads,service_roads,paths,buildings,building_parts,indoor,landuse,boundaries,water,rail,pistes,aerialways,power,past_future,others&map=2.00/13.4/2.6). Now you can run Sat2Graph in a larger window (1km) with the new global models.
 * The new models classify the road segments into three categories -- freeway roads, traffic roads and service roads (e.g., parking roads and foot paths). 
 ![update20210412](figures/update20210412.png)
 
-## 2021-04-07
+## 2021-04-07 --- New demo interface
 * Update the web portal of our [demo](http://128.30.198.28:8080/#background=Mapbox&disable_features=points,traffic_roads,service_roads,paths,buildings,building_parts,indoor,landuse,boundaries,water,rail,pistes,aerialways,power,past_future,others&map=2.00/13.4/2.6).
 * Check out our new experimental Sat2Graph model (Still updating)!
 <!-- ![Demo3](figures/demo3.gif | width=256) -->
