@@ -32,7 +32,7 @@ The *model_id* argument determines which model to use. We show the supported mod
 ### Inference on Custom Images
 To run inference on custom images (e.g., sample.png), use the following command,
 ```
-time python infer_custom_input.py -input sample.png -gsd 0.5 -model_id 2 -output out.json
+python infer_custom_input.py -input sample.png -gsd 0.5 -model_id 2 -output out.json
 ```
 Here, the *gsd* argument indicates the ground sampling distance or the spatial resolution of the image. The unit is in meter. 
 
