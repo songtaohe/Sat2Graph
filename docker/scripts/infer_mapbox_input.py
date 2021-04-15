@@ -63,7 +63,7 @@ if __name__ == "__main__":
     if args.osm_only != 0:
         json.dump(graph["osmgraph"], open(args.output, "w"), indent=2)
     else:
-        json.dump(graph["graph"][0], open(args.output, "w"), indent=2)
+        json.dump(graph["graph"]["graph"][0], open(args.output, "w"), indent=2)
     
     tid = graph["taskid"]
     print("please check intermediate results at http://localhost:8010/t%d/" % tid)

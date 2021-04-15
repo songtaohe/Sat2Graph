@@ -18,6 +18,10 @@ def parseArgument():
     parser.add_argument('-model_id', action='store', dest='model_id', type=int,
                         help='model id', required =False, default=4)
     
+    parser.add_argument('-output', action='store', dest='output', type=str,
+                        help='output graph (edges in json format)', required =False, default="out.json")
+    
+
     return parser.parse_args()
 
 
@@ -56,7 +60,7 @@ if __name__ == "__main__":
         exit()
 
     #print(graph)
-    json.dump(graph["graph"][0], open(args.output, "w"), indent=2)
+    json.dump(graph["graph"]["graph"][0], open(args.output, "w"), indent=2)
     
     tid = graph["taskid"]
     print("please check intermediate results at http://localhost:8010/t%d/" % tid)

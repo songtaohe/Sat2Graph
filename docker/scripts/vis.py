@@ -10,10 +10,10 @@ outfile = sys.argv[3]
 
 edges = json.load(open(infile,"r"))
 
-img = np.ones((tilesize, tilesize, 3), dtype=np.uint8)
+img = np.ones((tilesize, tilesize, 3), dtype=np.uint8) * 255
 for edge in edges:
-    n1 = (int(edge[0][0]), int(edge[0][1]))
-    n2 = (int(edge[1][0]), int(edge[1][1]))
+    n1 = (int(edge[0][1]), int(edge[0][0]))
+    n2 = (int(edge[1][1]), int(edge[1][0]))
     cv2.line(img, n1, n2, (0,0,0),3)
 
 cv2.imwrite(outfile, img)

@@ -58,10 +58,17 @@ python infer_mapbox_input.py -lat 47.601214 -lon -122.134466 -tile_size 500 -osm
 The *out.json* will be the road graph from OpenStreetMap.
 
 ### Inference Result
-The inference result (graph) is stored in a json format. It is basically a list of edges. Each edge stores the coordinates of its two vertices. We add a short script to visualize it. 
+The inference result (graph) is stored in a json format. It is basically a list of edges. Each edge stores the coordinates of its two vertices. We add a simple script to visualize it (need opencv). 
 ```
 python vis.py tile_size input_json output_image 
 ```
+
+You can also convert this json format into the pickle format that is compatible with the Sat2Graph evaluation code (topo and apls).
+```
+convert.py input.json output.p
+```
+
+
 
 ### Intermediate Results
 The intermediate results (e.g., segmentation mask, the downloaded satellite imagery, etc.) of each inference task are stored at http://localhost:8010/t(task_id)/ (replace the *task_id* with the task id you get after each run.)
