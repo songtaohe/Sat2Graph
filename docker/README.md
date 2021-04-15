@@ -9,10 +9,10 @@ We also add code into this container to make it easy to download OpenStreetMap g
 ### Start the Inference Server
 Start the server with GPU support.
 ```bash
-docker run -p8010:8000 -p8011:8001 --gpus all -it --rm songtaohe/sat2graph_inference_server_cpu:latest
+docker run -p8010:8000 -p8011:8001 --gpus all -it --rm songtaohe/sat2graph_inference_server_gpu:latest
 ```
 
-Or just run it with CPU (the image is smaller).
+Or just run it on CPUs (the image is smaller).
 ```bash
 docker run -p8010:8000 -p8011:8001 -it --rm songtaohe/sat2graph_inference_server_cpu:latest
 ```
