@@ -24,7 +24,6 @@ You can use the Python scripts in the [scripts](\scripts) folder to start infere
 
 For example, to run inference on MapBox images, use the following command,
 ```
-cd scripts
 python infer_mapbox_input.py -lat 47.601214 -lon -122.134466 -tile_size 500 -model_id 2 -output out.json
 ```
 This script uses *meter* as the unit for the *tile_size*.
@@ -33,7 +32,6 @@ The *model_id* argument determines which model to use. We show the supported mod
 ### Inference on Custom Images
 To run inference on custom images (e.g., sample.png), use the following command,
 ```
-cd scripts
 time python infer_custom_input.py -input sample.png -gsd 0.5 -model_id 2 -output out.json
 ```
 Here, the *gsd* argument indicates the ground sampling distance or the spatial resolution of the image. The unit is in meter. 
@@ -52,7 +50,6 @@ Model ID | Note
 ### OpenStreetMap Graph
 To get OSM graphs, set the *osm_only* flag to 1 when using *infer_mapbox_input.py*. For example, 
 ```
-cd scripts
 python infer_mapbox_input.py -lat 47.601214 -lon -122.134466 -tile_size 500 -osm_only 1 -output out.json
 ```
 The *out.json* will be the road graph from OpenStreetMap.
@@ -65,7 +62,7 @@ python vis.py tile_size input_json output_image
 
 You can also convert this json format into the pickle format that is compatible with the Sat2Graph evaluation code (topo and apls).
 ```
-convert.py input.json output.p
+python convert.py input.json output.p
 ```
 
 
