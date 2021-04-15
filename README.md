@@ -1,13 +1,13 @@
 # Sat2Graph 
 Sat2Graph: Road Graph Extraction through Graph-Tensor Encoding
 
-Paper: [arxiv.org/pdf/2007.09547.pdf](https://arxiv.org/pdf/2007.09547.pdf) (ECCV 2020)
+* Paper: [arxiv.org/pdf/2007.09547.pdf](https://arxiv.org/pdf/2007.09547.pdf) (ECCV 2020)
 
-Talk: [https://www.youtube.com/watch?v=bLw-Ka_SRX8](https://www.youtube.com/watch?v=bLw-Ka_SRX8) (10 minutes)
+* Talk: [https://www.youtube.com/watch?v=bLw-Ka_SRX8](https://www.youtube.com/watch?v=bLw-Ka_SRX8) (10 minutes)
 
-Docker Container (**new**): [Sat2Graph Inferece Server](docker/)
+* Docker Container (**new**): [Sat2Graph Inference Server](docker/)
 
-Live Demo (**new**): [link](http://128.30.198.28:8080/#background=Mapbox&disable_features=points,traffic_roads,service_roads,paths,buildings,building_parts,indoor,landuse,boundaries,water,rail,pistes,aerialways,power,past_future,others&map=2.00/13.4/2.6)
+* Live Demo (**new**): [link](http://128.30.198.28:8080/#background=Mapbox&disable_features=points,traffic_roads,service_roads,paths,buildings,building_parts,indoor,landuse,boundaries,water,rail,pistes,aerialways,power,past_future,others&map=2.00/13.4/2.6)
 ### Abstract
 
 Inferring road graphs from satellite imagery is a challenging computer vision task. Prior solutions fall into two categories: (1) pixel-wise segmentation-based approaches, which predict whether each pixel is on a road, and (2) graph-based approaches, which predict the road graph iteratively. We find that these two approaches have complementary strengths while suffering from their own inherent limitations. 
