@@ -15,6 +15,7 @@ from model import Sat2GraphModel
 from decoder import DecodeAndVis 
 from douglasPeucker import simpilfyGraph 
 import threading 
+from subprocess import Popen
 
 global_lock = threading.Lock()
 
@@ -32,7 +33,10 @@ sess = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options)) # gpu_options=
 model = Sat2GraphModel(sess, image_size=352, resnet_step = 8, batchsize = 1, channel = 24, mode = "test")
 model.restoreModel("/data/songtao/Sat2GraphLib/globalmodel20200810_dla_mapbox_highway_new_352_8__channel24/model1000000")
 
-
+modelname = "/data/songtao/Sat2GraphLib/globalmodel20200810_dla_mapbox_highway_new_352_8__channel24/model1000000"
+tf.train.write_graph(sess.graph_def,'.',"sat2graph_globalv1.pb")
+cmd = "python -m tensorflow.python.tools.freeze_graph --input_graph %s --input_checkpoint %s --output_graph %s --output_node_names=%s" % ("sat2graph_globalv1.pb", modelname, "sat2graph_globalv1_frozen.pb","output")
+Popen(cmd, shell=True).wait()
 
 gt_prob_placeholder = np.zeros((1,352,352,14))
 gt_vector_placeholder = np.zeros((1,352,352,12))
