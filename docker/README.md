@@ -42,8 +42,8 @@ Here, the *gsd* argument indicates the ground sampling distance or the spatial r
 ### Supported Models
 Model ID | Note 
 --------------------- | -------------
-0  | Sat2Graph, 80-City US, 1 meter GSD, DLA backbone (2x more channels compared with model-1)
-1  | Sat2Graph, 20-City US, 1 meter GSD, DLA backbone (the one used in the paper)
+0  | Sat2Graph-V1, 80-City US, 1 meter GSD, DLA backbone (2x more channels compared with model-1)
+1  | Sat2Graph-V1, 20-City US, 1 meter GSD, DLA backbone (the one used in the paper)
 2  | Sat2Graph-V2, 20-City US, 50cm GSD (preview, same GTE representation but new backbone)
 3  | Sat2Graph-V2, 80-City Global, 50cm GSD (preview, same GTE representation but new backbone)
 4  | UNet segmentation (our implementation), 20-City US, 1 meter GSD
