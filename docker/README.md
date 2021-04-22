@@ -1,11 +1,14 @@
 # Sat2Graph Inference Server Docker Container
-We containerize Sat2Graph inference server with several models (so far, 6) into one container image.   
+We containerize Sat2Graph inference server with several models (so far, 7) into one container image.   
 
 The inference server supports two inference modes. (1) Given a lat/lon coordinate and the size of the tile, the inference server can automatically download MapBox images and run inference on it. (2) Run on custom input images as long as the ground sampling distance (e.g., 50 cm/pixel) is provided. 
 
 We also add code into this container to make it easy to download OpenStreetMap graphs (often used as ground truth). Please check out the detailed instruction below.  
 
 ## Usage
+### Docker 
+To install docker (with GPU support), you can checkout the instruction [here](https://www.tensorflow.org/install/docker). 
+
 ### Start the Inference Server
 Start the server with GPU support.
 ```bash
@@ -39,9 +42,10 @@ Here, the *gsd* argument indicates the ground sampling distance or the spatial r
 ### Supported Models
 Model ID | Note 
 --------------------- | -------------
-1  | Sat2Graph, 20-City US, 1 meter GSD
-2  | Sat2Graph-V2, 20-City US, 50cm GSD
-3  | Sat2Graph-V2, 80-City Global, 50cm GSD
+0  | Sat2Graph, 80-City US, 1 meter GSD, DLA backbone (2x more channels compared with model-1)
+1  | Sat2Graph, 20-City US, 1 meter GSD, DLA backbone (the one used in the paper)
+2  | Sat2Graph-V2, 20-City US, 50cm GSD (preview, same GTE representation but new backbone)
+3  | Sat2Graph-V2, 80-City Global, 50cm GSD (preview, same GTE representation but new backbone)
 4  | UNet segmentation (our implementation), 20-City US, 1 meter GSD
 5  | [DeepRoadMapper](http://www.cs.toronto.edu/~wenjie/papers/iccv17/mattyus_etal_iccv17.pdf) segmentation (our implementation), 20-City US, 1 meter GSD
 6  | [JointOrientation](https://openaccess.thecvf.com/content_CVPR_2019/papers/Batra_Improved_Road_Connectivity_by_Joint_Learning_of_Orientation_and_Segmentation_CVPR_2019_paper.pdf) segmentation (our implementation), 20-City US, 1 meter GSD
