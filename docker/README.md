@@ -23,7 +23,7 @@ docker run -p8010:8000 -p8011:8001 -it --rm songtaohe/sat2graph_inference_server
 You can find these two commands in run-cpu.sh and run-gpu.sh. 
 
 ### Inference on MapBox Images
-You can use the Python scripts in the [scripts](\scripts) folder to start inference tasks.
+You can use the Python scripts in the [scripts](/scripts) folder to start inference tasks.
 
 For example, to run inference on MapBox images, use the following command,
 ```
