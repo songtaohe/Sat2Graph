@@ -7,7 +7,7 @@ We also add code into this container to make it easy to download OpenStreetMap g
 
 ## Usage
 ### Docker 
-To install docker (with GPU support), you can checkout the instruction [here](https://www.tensorflow.org/install/docker). 
+To install docker (with GPU support), you can check out the instruction [here](https://www.tensorflow.org/install/docker). 
 
 ### Start the Inference Server
 Start the server with GPU support.
@@ -43,7 +43,7 @@ Here, the *gsd* argument indicates the ground sampling distance or the spatial r
 Model ID | Note 
 --------------------- | -------------
 0  | Sat2Graph-V1, 80-City US, 1 meter GSD, DLA backbone (2x more channels compared with model-1)
-1  | Sat2Graph-V1, 20-City US, 1 meter GSD, DLA backbone (the one used in the paper)
+1  | Sat2Graph-V1, 20-City US, 1 meter GSD, DLA backbone (the one used in the Sat2Graph paper)
 2  | Sat2Graph-V2, 20-City US, 50cm GSD (preview, same GTE representation but new backbone)
 3  | Sat2Graph-V2, 80-City Global, 50cm GSD (preview, same GTE representation but new backbone)
 4  | UNet segmentation (our implementation), 20-City US, 1 meter GSD
