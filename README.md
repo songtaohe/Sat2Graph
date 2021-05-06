@@ -16,6 +16,7 @@ In this paper, we propose a new method, Sat2Graph, which combines the advantages
 
 ![Overview](figures/Sat2Graph2.png)
 # Change Log
+
 <!-- ## 2021-05-05 --- Bug in APLS implementation
 * There was an implementation bug in the APLS metric which makes the 'recall' part of the score very low. After this fix, the overall APLS score should be 10-20 points higher than before.
 * When there is no connected shortest path on the ground truth graph between two control points, the old APLS implementation considers it as a missing shortest path on the **proposed** graph. This gives very low APLS score when the ground truth graph has several connected components.      -->
