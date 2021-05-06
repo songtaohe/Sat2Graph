@@ -16,6 +16,9 @@ In this paper, we propose a new method, Sat2Graph, which combines the advantages
 
 ![Overview](figures/Sat2Graph2.png)
 # Change Log
+## 2021-05-05 --- Bug in APLS implementation
+* There was an implementation bug in the APLS metric which makes the 'recall' part of the score very low. After this fix, the overall APLS score should be 10-20 points higher than before.
+* When there is no connected shortest path on the ground truth graph between two control points, the old APLS implementation considers it as a missing shortest path on the **proposed** graph. This gives very low APLS score when the ground truth graph has several connected components.     
 ## 2021-04-14 --- Sat2Graph inference server docker container
 * Containerize Sat2Graph inference server. Now you can try four Sat2Graph models and three segmentation models (unet, deeproadmapper, and joint orientation learning) in one container. 
 * The containerized inference server supports two inference modes. (1) Given a lat/lon coordinate and the size of the tile, the inference server can automatically download MapBox images and run inference on it. (2) Run on custom input images as long as the ground sampling distance (e.g., 50 cm/pixel) is provided. 
