@@ -494,12 +494,9 @@ func apls_one_way(graph_gt *graph, graph_prop *graph, ret chan float64) {
 			pair_num += 1 
 
 			
-			// There was a bug here!!!!
-			// We should first check if there is a path on the ground truth map! 
-			// If there is no path on the ground truth map, we should not penalize the recall!!! 
-			// After fixing this bug, the apls should be much higher!
 			d1 := shortest_paths_gt[cp1_gt][cp2_gt]
-			if (cp1_prop == -1 || cp2_prop == -1) && (d1 > 0.0) {
+			//if (cp1_prop == -1 || cp2_prop == -1) && (d1 > 0.0) {
+			if (cp1_prop == -1 || cp2_prop == -1) {
 				cc += 1.0
 				sum += 1.0
 				continue 
