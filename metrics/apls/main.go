@@ -716,9 +716,9 @@ func main() {
 	if len(os.Args) > 4 {
 		// See the header of this file for a detailed description of these parameters 
 		fmt.Println("Use parameters for small tiles (region size=352)")
-		interval_2 = 5.0 // 10 meters (5 * 2)
+		interval_2 = 15.0 // 30 meters (5 * 2)
 		interval_1 = int(interval_2*1.5) 
-		min_distance_filter = 10.0 // 10 meters
+		min_distance_filter = 30.0 // 30 meters
 		prop_step = 3
 		margin_size = 30.0
 		region_size = 352.0
