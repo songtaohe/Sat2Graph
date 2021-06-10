@@ -117,18 +117,21 @@ func LoadGraphFromJson(filename string) *graph{
 	g.loc2index = make(map[string]int)
 	g.neighbors = make(map[int]map[int]bool)
 
-	jsonFile, _ := os.Open(filename)
+	jsonFile, err := os.Open(filename)
+	if err != nil {
+		panic(err)
+    }
 	defer jsonFile.Close()
 
 	byteValue, err := ioutil.ReadAll(jsonFile)
 
 	if err != nil {
-        fmt.Println(err)
+		panic(err)
     }
 
 	var rawresult []interface{}
 	json.Unmarshal([]byte(byteValue), &rawresult)
-
+	
 	nodes := rawresult[0].([]interface{})
 	edges := rawresult[1].([]interface{})
 
