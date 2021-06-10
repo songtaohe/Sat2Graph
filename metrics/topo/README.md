@@ -3,7 +3,7 @@
 python main.py -graph_gt example/gt.p -graph_prop example/prop.p -output toporesult.txt
 ```
 
-Here, the graph files gt.p and prop.p are all in the same format as what we used in Sat2Graph - a python dictionary where each key is the coordinate of a vertex (note as x) and the corresponding value is a list of x's neighboring vertices.  
+Here, the graph files gt.p and prop.p are all in the same format as what we used in Sat2Graph - a python dictionary where each key is the coordinate of a vertex (denoted by x) and the corresponding value is a list of x's neighboring vertices.  
 
 
 # TOPO Parameters
