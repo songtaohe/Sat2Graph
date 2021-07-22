@@ -18,7 +18,7 @@ In this paper, we propose a new method, Sat2Graph, which combines the advantages
 
 # About
 
-**All the pretrained models, the dataset, and the docker container are for non-commercial academic use only.**
+### **All the pretrained models, the dataset, and the docker container are for non-commercial academic use only.**
 
 
 # Change Log
