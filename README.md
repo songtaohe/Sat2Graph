@@ -97,7 +97,7 @@ python train.py -model_save tmp -instance_id test -image_size 352
 
 **SpaceNet dataset**
 
-TODO
+Please email me at songtao@alum.mit.edu for the dataset split, the pre-processed dataset, and the sat2graph outputs. 
 
 
 # APLS and TOPO metrics
