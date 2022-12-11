@@ -67,6 +67,7 @@ Global-V2 | Trained on 80 cities at 50cm resolution. When apply this model to a 
 # Usage
 ## Download the Dataset and Pre-Trained Model
 
+(The following script is no longer work, please download from [here](https://drive.google.com/drive/folders/1FlMcO3Jr8W4qboZUwxgRn6AlYc-AuxQ2?usp=sharing))
 ```bash
 ./download.sh
 ```
