@@ -22,6 +22,9 @@ In this paper, we propose a new method, Sat2Graph, which combines the advantages
 
 
 # Change Log
+## 2023-04-08 Updates.
+* For SpaceNet, please find the dataset split, the pre-processed dataset and the sat2graph outputs from this [link](https://drive.google.com/drive/folders/1uABt127ehNBQyfCnv6OND841ZrUlhmNB?usp=sharing).
+* The demo website is no longer working. Please check out the Sat2Graph docker container for demo.
 
 <!-- ## 2021-05-05 --- Bug in APLS implementation
 * There was an implementation bug in the APLS metric which makes the 'recall' part of the score very low. After this fix, the overall APLS score should be 10-20 points higher than before.
